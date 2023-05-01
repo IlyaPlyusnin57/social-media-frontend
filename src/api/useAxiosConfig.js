@@ -3,16 +3,17 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 
-axios.defaults.baseURL = "http://localhost:8800/api";
+axios.defaults.baseURL =
+  "http://https://social-media-backend-virid.vercel.app/:8800/api";
 axios.defaults.withCredentials = true;
 
 const refresh_api = axios.create({
-  baseURL: "http://localhost:8800/api",
+  baseURL: "http://https://social-media-backend-virid.vercel.app/:8800/api",
   withCredentials: true,
 });
 
 const main_api = axios.create({
-  baseURL: "http://localhost:8800/api",
+  baseURL: "http://https://social-media-backend-virid.vercel.app/:8800/api",
   withCredentials: true,
 });
 
