@@ -1,0 +1,57 @@
+$post-bg-color: #222222;
+$post-border-color: #6b6b6b;
+$post-border-radius: 12px;
+$post-margin: 1rem;
+$post-padding: 1rem;
+
+$input-bg-color: #424242;
+$button-bg-color: #424242;
+$button-text-color: #e1e3e6;
+$button-highlight-color: #555555;
+
+@mixin btn-styling {
+  .button {
+    outline: none;
+    border: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    background-color: $button-bg-color;
+    color: $button-text-color;
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+  }
+  .btn:hover {
+    background-color: $button-highlight-color;
+  }
+}
+
+@mixin image-styling($height, $width) {
+  width: $width;
+  height: $height;
+  border-radius: 50%;
+}
+
+@mixin post-display {
+  display: flex;
+  align-items: center;
+}
+
+@mixin post-border-margin-padding($margin-top: 1rem, $margin-bottom: 0) {
+  background-color: $post-bg-color;
+  width: 100%;
+  border: 0.1px solid $post-border-color;
+  border-radius: $post-border-radius;
+  padding: $post-padding;
+  margin-top: $margin-top;
+  margin-bottom: $margin-bottom;
+  //margin: 1rem 1rem $margin-bottom 1rem;
+}
+
+@mixin post-style($margin-bottom: 1rem) {
+  @include post-display;
+  @include post-border-margin-padding($margin-bottom);
+}
+
+@mixin margin-left() {
+  margin-left: 1rem;
+}

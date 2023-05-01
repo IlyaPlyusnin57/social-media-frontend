@@ -1,0 +1,71 @@
+@use "../../sass_vars/global-vars.scss" as *;
+
+::-webkit-scrollbar {
+  width: 1px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(179, 179, 179);
+}
+
+.leftbar {
+  height: max-content;
+  background-color: none;
+  margin-top: 1rem;
+  padding-right: 1rem;
+  width: inherit;
+
+  &::after {
+    content: "";
+    display: block;
+    margin-top: 0.5rem;
+    width: 100%;
+    border-bottom: 1px solid gray;
+  }
+
+  ul {
+    width: inherit;
+    list-style: none;
+
+    a {
+      color: white;
+    }
+
+    a:link {
+      text-decoration: none;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    a:active {
+      text-decoration: none;
+    }
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.2s ease-in;
+
+    &:hover {
+      background-color: $button-highlight-color;
+    }
+  }
+
+  .leftbar-icon {
+    margin-right: 1rem;
+    color: #71aaeb;
+  }
+}

@@ -1,0 +1,21 @@
+@use "../../../sass_vars/global-vars.scss" as *;
+
+.subs {
+  @include post-border-margin-padding;
+
+  height: 300px;
+  // position: sticky;
+  // top: calc(50px + 1rem);
+  h4 {
+    margin-bottom: 1rem;
+  }
+
+  .sub-image {
+    padding: 0.3rem;
+
+    img {
+      @include image-styling($height: 50px, $width: 50px);
+      cursor: pointer;
+    }
+  }
+}

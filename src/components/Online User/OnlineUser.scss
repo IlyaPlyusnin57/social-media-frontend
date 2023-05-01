@@ -1,0 +1,21 @@
+@use "../../sass_vars/global-vars.scss" as *;
+
+.online-user {
+  position: relative;
+
+  img {
+    @include image-styling($height: 40px, $width: 40px);
+  }
+
+  .circle {
+    display: inline-block;
+    position: absolute;
+    top: 62%;
+    left: 63%;
+    height: 15px;
+    width: 15px;
+    background-color: #0cb50c;
+    border-radius: 50%;
+    border: 3px solid $post-bg-color;
+  }
+}

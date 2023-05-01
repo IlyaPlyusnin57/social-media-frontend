@@ -1,0 +1,31 @@
+@use "../../sass_vars/global-vars.scss" as *;
+
+.sub-container {
+  @include post-border-margin-padding;
+  width: 100%;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
+
+  .sub {
+    .left-sub {
+      display: flex;
+      margin-right: 1rem;
+      cursor: pointer;
+    }
+
+    @include post-border-margin-padding($margin-top: 0, $margin-bottom: 1rem);
+    display: flex;
+
+    .vertical-center {
+      align-self: center;
+    }
+
+    img {
+      @include image-styling($height: 40px, $width: 40px);
+    }
+
+    @include btn-styling;
+  }
+}

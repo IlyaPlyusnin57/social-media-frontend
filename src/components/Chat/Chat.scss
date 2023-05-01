@@ -1,0 +1,12 @@
+@use "../../sass_vars/global-vars.scss" as *;
+
+.chat {
+  display: flex;
+  align-items: center;
+  @include post-border-margin-padding($margin-top: 0, $margin-bottom: 1rem);
+  cursor: pointer;
+
+  img {
+    @include image-styling($height: 40px, $width: 40px);
+  }
+}

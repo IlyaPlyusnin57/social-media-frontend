@@ -1,0 +1,12 @@
+//@use "../../sass_vars/global-vars.scss" as *;
+
+@use "../../sass_vars/global-vars.scss" as *;
+
+.chats {
+  @include post-border-margin-padding;
+  width: 100%;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
+}

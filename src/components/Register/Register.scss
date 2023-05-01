@@ -1,0 +1,67 @@
+@use "../../sass_vars/global-vars.scss" as *;
+
+.signup-container {
+  max-width: 600px;
+  margin: 1rem auto 0;
+  padding: 1rem;
+  background-color: $post-bg-color;
+  border-radius: $post-border-radius;
+
+  h2 {
+    text-align: center;
+    color: white;
+  }
+
+  .login-form {
+    & > *:first-child {
+      margin-top: 1rem;
+    }
+
+    & input,
+    & button {
+      display: block;
+      width: 80%;
+      height: 40px;
+      margin: 0 auto 1rem;
+      padding: 0.6rem 1.2rem;
+      outline: none;
+      appearance: none;
+      border: none;
+      border-radius: 8px;
+    }
+
+    input {
+      color: white;
+      background-color: $input-bg-color;
+    }
+
+    .password-container {
+      position: relative;
+
+      .visibility-icon {
+        position: absolute;
+        color: white;
+        top: 10px;
+        right: 15%;
+
+        & * {
+          font-size: 18px;
+        }
+      }
+    }
+
+    button {
+      cursor: pointer;
+    }
+  }
+}
+
+.btn-sign-in.btn-sign-in.btn-sign-in {
+  background-color: white;
+  padding: 0;
+}
+
+.btn-sign-up {
+  color: white;
+  background-color: #4bb34b;
+}

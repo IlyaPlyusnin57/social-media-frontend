@@ -1,0 +1,56 @@
+@use "../../sass_vars/global-vars.scss" as *;
+
+.chat-modal-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  background-color: rgba($color: #5d5d5d, $alpha: 0.6);
+
+  .chat-modal {
+    background-color: $post-bg-color;
+    color: white;
+    border: 1px solid $post-border-color;
+    border-radius: $post-border-radius;
+    height: 300px;
+    width: clamp(300px, 55vw, 600px);
+    padding: 1rem;
+
+    .close-icon-wrapper {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .chat-form {
+      display: flex;
+      flex-direction: column;
+
+      #textarea {
+        margin-top: 1rem;
+        resize: none;
+        width: 100% !important;
+        height: 150px !important;
+        outline: none;
+        background-color: $input-bg-color;
+        border: none;
+        color: white;
+      }
+
+      @include btn-styling;
+
+      .button {
+        margin-top: 1rem;
+      }
+
+      .button[disabled] {
+        background-color: #aaa0a0 !important;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

@@ -1,0 +1,87 @@
+@use "../../sass_vars/global-vars.scss" as *;
+
+.conversation-container {
+  // max-height: 80vh;
+  // height: 80vh;
+  height: 100%;
+  transform: translateZ(0);
+}
+
+.conversation-image-container {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  background-color: #4a4a4a;
+  padding: 0.5rem;
+  border: 0.1px solid $post-border-color;
+  border-radius: 12px 12px 0 0;
+}
+
+.conversation {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  @include post-border-margin-padding;
+  padding-bottom: 0;
+  width: 100%;
+  height: 65vh;
+  overflow-y: scroll;
+  border-radius: 0;
+  margin-top: 0;
+}
+
+.circle-down-icon-wrapper {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  width: min-content;
+  top: 68vh;
+  left: 3%;
+  z-index: 999;
+
+  .unseen-messages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2b2bb8;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    padding: 0.2rem;
+    margin-left: -26px;
+    margin-top: -31px;
+    font-size: 16px;
+  }
+
+  .circle-down-icon {
+    font-size: 2rem;
+  }
+}
+
+.message-input-container {
+  grid-area: 2/2/3/3;
+  background-color: $post-bg-color;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0 0 $post-border-radius $post-border-radius;
+  border: 0.1px solid $post-border-color;
+}
+
+.message-input {
+  background-color: $input-bg-color;
+  color: white;
+  border: 0.1px solid $post-border-color;
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  appearance: none;
+  outline: none;
+}
+
+.btn {
+  appearance: none;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}

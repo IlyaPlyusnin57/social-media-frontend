@@ -1,0 +1,69 @@
+@use "../../../sass_vars/global-vars" as *;
+
+.header {
+  position: relative;
+  @include post-style($margin-bottom: 0px);
+
+  .header-info {
+    width: 100%;
+    margin-left: 1rem;
+  }
+
+  .user-name {
+    font-size: 1.2rem;
+    margin: 0.3rem;
+  }
+
+  .user-info {
+    display: flex;
+  }
+
+  .user-info-item {
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .user-icon {
+    margin-right: 0.2rem;
+  }
+
+  .btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .header-btn {
+    outline: none;
+    border: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    background-color: $button-bg-color;
+    color: $button-text-color;
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+  }
+  .header-btn:hover {
+    background-color: $button-highlight-color;
+  }
+
+  .user-contact {
+    padding: 1rem;
+
+    .btn {
+      color: $button-text-color;
+      background-color: $button-bg-color;
+      appearance: none;
+      border: none;
+      padding: 0.3rem 1rem;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease-in;
+    }
+
+    .btn:hover {
+      background: $button-highlight-color;
+    }
+  }
+}

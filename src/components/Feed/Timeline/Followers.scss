@@ -1,0 +1,7 @@
+@use "../../../sass_vars/global-vars.scss" as *;
+
+.followers {
+  @include post-border-margin-padding;
+
+  height: 300px;
+}

@@ -1,0 +1,294 @@
+@use "../../sass_vars/global-vars.scss" as *;
+
+.side-nav {
+  position: fixed;
+  left: 0;
+  top: calc(50px);
+  width: 0;
+  height: 100%;
+  overflow: hidden; // hide the children
+  display: flex;
+  justify-content: center;
+  transition: width 0.2s ease-in;
+  z-index: 1000;
+  background-color: $post-bg-color;
+
+  .leftbar {
+    li {
+      width: max-content;
+      //font-size: 32px;
+    }
+
+    margin: 0;
+    padding: 0;
+    overflow: hidden; // hide the children
+    height: 100%;
+    width: min-content;
+    //border: 1px solid red;
+
+    &::after {
+      content: "";
+      border: none;
+    }
+  }
+}
+
+.topbar {
+  //position: -webkit-sticky;
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $post-bg-color;
+  height: 50px;
+  width: 100%;
+
+  .topbar-grouping {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+
+    @media (max-width: 830px) {
+      width: 100%;
+    }
+
+    .topbar-left {
+      flex-grow: 1.1;
+
+      .logo {
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    }
+
+    .topbar-center {
+      flex-grow: 5;
+      display: flex;
+      align-items: center;
+      position: relative;
+      height: 50px;
+
+      @media (max-width: 830px) {
+        flex-grow: 0;
+        width: 60%;
+      }
+
+      .search-bar {
+        background-color: $input-bg-color;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        border-radius: 30px;
+        margin-left: 1rem;
+
+        .search-icon {
+          color: $button-text-color;
+          margin-left: 0.5rem;
+          font-size: 1.2rem !important;
+        }
+
+        input {
+          color: white;
+          background-color: $input-bg-color;
+          width: 80%;
+          outline: none;
+          padding: 0.5rem;
+          border: none;
+          border-radius: 10px;
+        }
+      }
+
+      // .search-drop-down {
+      //   position: absolute;
+      //   display: none;
+      //   top: 50px;
+      //   background-color: white;
+      //   border-radius: $post-border-radius;
+      //   width: 100%;
+
+      //   ul {
+      //     border: 1px solid $post-border-color;
+      //     border-radius: $post-border-radius;
+      //     background-color: $post-bg-color;
+      //   }
+
+      //   ul li {
+      //     list-style: none;
+      //     padding: 0.5rem 1.5rem;
+      //     color: $button-text-color;
+      //     cursor: pointer;
+
+      //     &:not(:last-child) {
+      //       border-bottom: 1px solid $post-border-color;
+      //     }
+      //   }
+      // }
+      // .show {
+      //   display: block;
+      // }
+    }
+
+    .topbar-right {
+      position: relative;
+      flex-grow: 4;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      color: white;
+
+      @media (max-width: 830px) {
+        justify-content: flex-start;
+        flex-grow: 0;
+      }
+
+      .topbar-link {
+        margin-right: 0.8rem;
+      }
+
+      .topbar-icons {
+        display: flex;
+        height: 50px;
+      }
+
+      .topbar-icon-item {
+        display: flex;
+        align-items: center;
+        position: relative;
+        height: 100%;
+        padding: 1rem;
+        transition: all 0.2s ease-in;
+      }
+
+      .topbar-icon-item:hover {
+        background-color: $button-highlight-color;
+      }
+
+      .topbar-icon-badge {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.8rem;
+        background-color: red;
+        border-radius: 50%;
+        height: 0.8rem;
+        width: 0.8rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.6rem;
+      }
+
+      .avatar-wrapper {
+        height: 50px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding: 0 0.5rem;
+        margin-left: 1rem;
+
+        &:hover {
+          background-color: $button-highlight-color;
+        }
+      }
+
+      .show-avatar {
+        display: flex;
+
+        .my-avatar {
+          height: 32px;
+          width: 32px;
+          border-radius: 50%;
+        }
+
+        .avatar-arrow-down {
+          height: 100%;
+          color: $button-text-color;
+          height: 100%;
+          align-self: center;
+        }
+      }
+
+      .drop-down {
+        display: none;
+        position: absolute;
+        top: calc(50px + 1rem);
+        right: 0;
+        width: max-content;
+
+        ul {
+          border: 1px solid $post-border-color;
+          border-radius: $post-border-radius;
+          background-color: $post-bg-color;
+        }
+
+        ul li {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          list-style: none;
+          padding: 0.5rem 1.5rem;
+          color: $button-text-color;
+          transition: all 0.3s ease-in;
+          cursor: pointer;
+
+          &:first-child {
+            border-radius: $post-border-radius $post-border-radius 0 0;
+          }
+
+          &:last-child {
+            border-radius: 0 0 $post-border-radius $post-border-radius;
+          }
+
+          &:hover {
+            background-color: $button-highlight-color;
+          }
+        }
+
+        .drop-down-icon {
+          margin-right: 0.5rem;
+        }
+      }
+
+      .show {
+        display: block;
+      }
+    }
+  }
+}
+
+.search-drop-down {
+  position: absolute;
+  display: none;
+  top: 50px;
+  background-color: $post-bg-color;
+  border-radius: $post-border-radius;
+  width: 90%;
+
+  ul {
+    border: 1px solid $post-border-color;
+    border-radius: $post-border-radius;
+    background-color: $post-bg-color;
+  }
+
+  ul li {
+    list-style: none;
+    padding: 0.5rem 1.5rem;
+    color: $button-text-color;
+    cursor: pointer;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $post-border-color;
+    }
+  }
+}
+.show {
+  display: block;
+}
+
+.clicked {
+  background-color: $button-highlight-color !important;
+}

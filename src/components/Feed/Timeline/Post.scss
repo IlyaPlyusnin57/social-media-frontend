@@ -1,0 +1,78 @@
+@use "../../../sass_vars/global-vars" as *;
+
+.post {
+  @include post-border-margin-padding;
+
+  .delete-icon-container {
+    display: flex;
+    justify-content: flex-end;
+
+    .delete-icon {
+      font-size: 16px;
+      cursor: pointer;
+    }
+  }
+
+  .post-title {
+    @include post-display;
+    img {
+      @include image-styling($width: 40px, $height: 40px);
+    }
+
+    .post-info {
+      .username {
+        font-weight: 700;
+      }
+      .post-date {
+        font-weight: 200;
+        font-size: 12px;
+        margin-top: 0.3rem;
+      }
+    }
+  }
+
+  .post-content {
+    .text-content {
+      margin-top: 1rem;
+    }
+
+    .img-content {
+      margin-top: 1rem;
+    }
+
+    .img-content img {
+      height: 200px;
+    }
+  }
+
+  .post-footer {
+    margin-top: 1rem;
+    display: flex;
+
+    .icon-wrapper {
+      display: flex;
+      align-items: center;
+      padding: 8px 20px 5px;
+      background-color: #333;
+      margin-right: 1rem;
+      border-radius: 32px;
+      transition: all 0.2s ease-in;
+
+      & > *:first-child {
+        margin-right: 0.4rem;
+      }
+
+      &:hover {
+        background-color: $button-highlight-color;
+      }
+
+      .red-heart-icon {
+        color: red;
+      }
+    }
+
+    .post-footer-icon {
+      font-size: 1.2rem;
+    }
+  }
+}
