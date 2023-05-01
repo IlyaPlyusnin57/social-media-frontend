@@ -3,16 +3,16 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 
-axios.defaults.baseURL = process.env.BASE_URL;
+axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
 axios.defaults.withCredentials = true;
 
 const refresh_api = axios.create({
-  baseURL: process.env.BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_URL,
   withCredentials: true,
 });
 
 const main_api = axios.create({
-  baseURL: process.env.BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_URL,
   withCredentials: true,
 });
 
