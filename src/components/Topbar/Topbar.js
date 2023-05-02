@@ -201,7 +201,7 @@ function Topbar() {
           )}
 
           <div className="topbar-center">
-            {/* <div className="search-bar">
+            <div className="search-bar">
               <SearchIcon className="search-icon" />
               <input
                 type="text"
@@ -228,7 +228,7 @@ function Topbar() {
                   })}
                 </ul>
               </div>
-            </div> */}
+            </div>
           </div>
 
           <div className="topbar-right">
