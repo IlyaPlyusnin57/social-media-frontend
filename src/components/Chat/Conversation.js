@@ -45,6 +45,8 @@ function Conversation() {
     };
   }, [dispatch]);
 
+  console.log({ socketIs: socket });
+
   useEffect(() => {
     socket?.on("getMessage", (message) => {
       console.log("got the message!");
