@@ -93,6 +93,8 @@ function Conversation() {
       conversationId: conversation._id,
     });
 
+    console.log({ resIs: res });
+
     if (res.statusText === "OK") {
       socket?.emit("sendMessage", friend._id, res.data);
       console.log("message was just sent");
