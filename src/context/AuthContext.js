@@ -39,7 +39,7 @@ function AuthContextProvider({ children }) {
 
   useEffect(() => {
     if (state.user?._id) {
-      socket.current = io("ws://localhost:8900", {
+      socket.current = io(process.env.REACT_APP_SOCKET_URL, {
         query: { userId: state.user._id },
       });
 
