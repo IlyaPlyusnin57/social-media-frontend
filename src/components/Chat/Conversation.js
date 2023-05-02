@@ -95,7 +95,7 @@ function Conversation() {
 
     if (res.statusText === "OK") {
       socket?.emit("sendMessage", friend._id, res.data);
-
+      console.log("message was just sent");
       input.current.value = "";
       setMessages([res.data, ...messages]);
       setMessageSent((prev) => !prev);
