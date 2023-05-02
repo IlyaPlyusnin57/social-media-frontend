@@ -78,7 +78,10 @@ function Conversation() {
   });
 
   function handleInput(e) {
-    if (e.key === "Enter") {
+    console.log({ eventIs: e });
+    console.log({ inputIs: input.current.value });
+    if (e.key === "Enter" && input.current.value.length > 0) {
+      console.log("about to send the message");
       sendMessage();
     }
   }
