@@ -4,6 +4,7 @@ import profilePicture from "../../helper_functions/profilePicture";
 import { useNavigate } from "react-router-dom";
 import useAxiosConfig from "../../api/useAxiosConfig";
 import { getUser } from "../../apiCalls";
+import OnlineUser from "../Online User/OnlineUser";
 
 function ChatList({ friendId }) {
   const navigate = useNavigate();
@@ -36,8 +37,7 @@ function ChatList({ friendId }) {
 
   return (
     <div className="chat" onClick={handleConversation}>
-      <img src={profile_picture} alt="" />
-
+      <OnlineUser profilePicture={profile_picture} userId={friendId} />
       <p className="margin-left">{user?.username}</p>
     </div>
   );
