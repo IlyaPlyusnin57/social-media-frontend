@@ -36,9 +36,12 @@ function ChatList({ friendId }) {
   const profile_picture = profilePicture(user);
 
   return (
-    <div className="chat" onClick={handleConversation}>
+    <div className="chat">
       <OnlineUser profilePicture={profile_picture} userId={friendId} />
       <p className="margin-left">{user?.username}</p>
+      <button className="button" onClick={handleConversation}>
+        View Chat
+      </button>
     </div>
   );
 }
