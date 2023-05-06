@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import profilePicture from "../../helper_functions/profilePicture";
+import OnlineUser from "../../components/Online User/OnlineUser";
 
 function SearchResults() {
   const { state: searchQuery } = useLocation();
@@ -32,9 +33,7 @@ function SearchResults() {
 
         return (
           <div className="search-results-names" key={i}>
-            <div className="user-image">
-              {<img src={profile_picture} alt="" />}
-            </div>
+            <OnlineUser profilePicture={profile_picture} userId={user._id} />
             {/* <div className="user-name">{user.full_name}</div> */}
             <div className="user-name">{user.username}</div>
             <p onClick={() => handleSearchUser(user)} className="link-styling">
