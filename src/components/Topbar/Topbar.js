@@ -40,17 +40,11 @@ function Topbar() {
   const [friendNotification, setFriendNotification] = useState([]);
   const [notification, setNotification] = useState([]);
 
-  console.log({ messageNotifications });
   const [viewMessage, setViewMessage] = useState(new Map());
 
-  // useEffect(() => {
-  //   socket?.on("getMessageNotification", (message) => {
-  //     console.log("Got the message!");
-  //     console.log({ message });
-  //     setMessageNotification((prev) => [...prev, message]);
-  //   });
-  // }, [socket]);
   const [parent] = useAutoAnimate();
+
+  console.log({ messageNotifications });
 
   // useEffect(() => {
   //   const logout = document.querySelector(".logout");
@@ -161,24 +155,6 @@ function Topbar() {
       document.querySelector(".home-children-section").style.marginLeft = "0px";
     }
   }
-
-  // useEffect(() => {
-  //   const getUsers = async () => {
-  //     const results = await Promise.all(
-  //       messageNotification?.map(async (message) => {
-  //         const user = await getUser(api, message.senderId);
-  //         console.log("calling the async useffect!");
-  //         return { user, message };
-  //       })
-  //     );
-
-  //     setMessagesDropDown(results);
-  //   };
-
-  //   getUsers();
-  // }, [messageNotification, api]);
-
-  // console.log({ messagesDropDown });
 
   function handleMessageNotifications() {
     document.getElementById("message-drop-down")?.classList.toggle("show");
