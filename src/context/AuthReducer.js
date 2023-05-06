@@ -148,10 +148,31 @@ export default function AuthReducer(state, action) {
       };
     }
     case "CLEAR_MESSAGE_NOTIFICATION": {
-      console.log("CLEARRRING");
+      const messageId = action.payload;
+
+      const newMessageNotifications = state.messageNotifications.filter(
+        (obj) => {
+          return obj.message._id !== messageId;
+        }
+      );
+
       return {
         ...state,
-        messageNotifications: [],
+        messageNotifications: newMessageNotifications,
+      };
+    }
+    case "CLEAR_MESSAGE_NOTIFICATION_FOR_CONVERSATION": {
+      const conversationId = action.payload;
+
+      const newMessageNotifications = state.messageNotifications.filter(
+        (obj) => {
+          return obj.message.conversationId !== conversationId;
+        }
+      );
+
+      return {
+        ...state,
+        messageNotifications: newMessageNotifications,
       };
     }
     case "SET_VIEWING_CONVERSATION": {
