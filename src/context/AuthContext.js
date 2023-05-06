@@ -17,7 +17,7 @@ const INITIAL_STATE = {
   socket: null,
   messageNotifications: [],
   messageDropDown: [],
-  viewingMessages: false,
+  viewingConversation: false,
 };
 
 const AuthContext = createContext(INITIAL_STATE);
@@ -73,6 +73,7 @@ function AuthContextProvider({ children }) {
       });
 
       socket.current.on("getMessageNotification", (message) => {
+        console.log({ receivedMessageIs: message });
         dispatch({ type: "SET_MESSAGE_NOTIFICATION", payload: message });
       });
     }
@@ -89,7 +90,7 @@ function AuthContextProvider({ children }) {
         dispatch,
         socket: state.socket,
         messageNotifications: state.messageNotifications,
-        viewingMessages: state.viewingMessages,
+        viewingConversation: state.viewingConversation,
       }}
     >
       {children}

@@ -133,14 +133,18 @@ export default function AuthReducer(state, action) {
       };
     }
     case "SET_MESSAGE_NOTIFICATION": {
-      if (state.viewingMessages) {
+      const message = action.payload;
+
+      if (
+        state.viewingConversation &&
+        state.viewingConversation === message.message.conversationId
+      ) {
         return state;
       }
 
-      console.log("Setting message notification");
       return {
         ...state,
-        messageNotifications: [...state.messageNotifications, action.payload],
+        messageNotifications: [...state.messageNotifications, message],
       };
     }
     case "CLEAR_MESSAGE_NOTIFICATION": {
@@ -150,10 +154,10 @@ export default function AuthReducer(state, action) {
         messageNotifications: [],
       };
     }
-    case "SET_VIEWING_MESSAGES": {
+    case "SET_VIEWING_CONVERSATION": {
       return {
         ...state,
-        viewingMessages: action.payload,
+        viewingConversation: action.payload,
       };
     }
     default:
