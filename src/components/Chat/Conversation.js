@@ -205,7 +205,11 @@ function Conversation() {
         </div>
       )}
       <div className="conversation-image-container">
-        <OnlineUser profilePicture={profile_picture} userId={friend?._id} />
+        <OnlineUser
+          profilePicture={profile_picture}
+          userId={friend?._id}
+          backgroundColor="#4a4a4a"
+        />
         <h4 className="margin-left">{friend?.username}</h4>
       </div>
       <div className="conversation">
