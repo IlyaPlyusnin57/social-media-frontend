@@ -217,7 +217,6 @@
         position: absolute;
         top: calc(50px + 1rem);
         right: 0;
-        width: max-content;
 
         ul {
           border: 1px solid $post-border-color;
@@ -266,7 +265,6 @@
   top: 50px;
   background-color: $post-bg-color;
   border-radius: $post-border-radius;
-  width: 90%;
 
   ul {
     border: 1px solid $post-border-color;
@@ -276,13 +274,30 @@
 
   ul li {
     list-style: none;
-    padding: 0.5rem 1.5rem;
+    padding: 1rem 1.5rem;
     color: $button-text-color;
     cursor: pointer;
 
     &:not(:last-child) {
       border-bottom: 1px solid $post-border-color;
     }
+  }
+
+  .notification {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    width: clamp(150px, 50vw, 400px);
+  }
+
+  .notification-message {
+    background-color: #7e7575;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: clamp(100px, 50vw, 350px);
   }
 }
 .show {
