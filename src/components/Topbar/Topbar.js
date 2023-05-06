@@ -214,7 +214,7 @@ function Topbar() {
                     <li>
                       {isFound ? (
                         <span onClick={handleSearchResults}>
-                          View the results
+                          View all results
                         </span>
                       ) : (
                         "No results"
