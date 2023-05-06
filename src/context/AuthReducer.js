@@ -11,10 +11,16 @@ export default function AuthReducer(state, action) {
         user: null,
         isFetching: false,
         error: null,
+        onlineFriends: new Map(),
+        socket: null,
+        messageNotifications: [],
+        messageDropDown: [],
+        viewingConversation: false,
       };
     }
     case "LOGIN_START": {
       return {
+        ...state,
         user: null,
         isFetching: true,
         error: null,
@@ -30,6 +36,7 @@ export default function AuthReducer(state, action) {
     }
     case "LOGIN_FAILURE": {
       return {
+        ...state,
         user: null,
         isFetching: false,
         error: action.payload,
@@ -37,6 +44,7 @@ export default function AuthReducer(state, action) {
     }
     case "REGISTER_START": {
       return {
+        ...state,
         user: null,
         isFetching: true,
         error: null,
@@ -44,6 +52,7 @@ export default function AuthReducer(state, action) {
     }
     case "SET_ERROR": {
       return {
+        ...state,
         user: null,
         isFetching: false,
         error: action.payload,
@@ -51,6 +60,7 @@ export default function AuthReducer(state, action) {
     }
     case "REGISTER_SUCCESS": {
       return {
+        ...state,
         user: action.payload,
         isFetching: false,
         error: null,
