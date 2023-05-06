@@ -15,6 +15,9 @@ import axios from "axios";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Hamburger from "hamburger-react";
 import LeftBar from "../Leftbar/Leftbar";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import { CircularProgress } from "@mui/material";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import useAxiosConfig from "../../api/useAxiosConfig";
@@ -38,6 +41,7 @@ function Topbar() {
   const [notification, setNotification] = useState([]);
 
   console.log({ messageNotifications });
+  const [viewMessage, setViewMessage] = useState(new Map());
 
   // useEffect(() => {
   //   socket?.on("getMessageNotification", (message) => {
@@ -46,6 +50,7 @@ function Topbar() {
   //     setMessageNotification((prev) => [...prev, message]);
   //   });
   // }, [socket]);
+  const [parent] = useAutoAnimate();
 
   // useEffect(() => {
   //   const logout = document.querySelector(".logout");
@@ -176,8 +181,26 @@ function Topbar() {
   // console.log({ messagesDropDown });
 
   function handleMessageNotifications() {
-    document.getElementById("message-drop-down").classList.toggle("show");
+    document.getElementById("message-drop-down")?.classList.toggle("show");
     document.getElementById("chat-icon").classList.toggle("clicked");
+  }
+
+  function handleMarkAsRead(messageId) {
+    dispatch({ type: "CLEAR_MESSAGE_NOTIFICATION", payload: messageId });
+  }
+
+  function handleViewMessage(messageId) {
+    if (viewMessage.has(messageId)) {
+      setViewMessage((map) => {
+        map.delete(messageId);
+        return new Map(map);
+      });
+    } else {
+      setViewMessage((map) => {
+        map.set(messageId, "");
+        return new Map(map);
+      });
+    }
   }
 
   return (
@@ -232,17 +255,67 @@ function Topbar() {
           </div>
 
           <div className="topbar-right">
-            <div className="search-drop-down" id="message-drop-down">
-              <ul>
+            {messageNotifications.length > 0 && (
+              <div className="search-drop-down" id="message-drop-down">
+                <ul>
+                  {messageNotifications?.map((obj) => {
+                    return (
+                      <li key={obj.message._id}>
+                        <section className="notification">
+                          <span>{`${obj.senderName} sent you a message`}</span>
+
+                          <ChatBubbleIcon
+                            onClick={() => handleViewMessage(obj.message._id)}
+                          />
+
+                          <MarkChatReadIcon
+                            onClick={() => handleMarkAsRead(obj.message._id)}
+                          />
+                        </section>
+
+                        <div ref={parent}>
+                          {viewMessage.has(obj.message._id) && (
+                            <div className="notification-message">
+                              {obj.message.message}
+                            </div>
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+
+            {/* <div className="search-drop-down" id="message-drop-down">
+              <ul ref={parent}>
                 {messageNotifications?.map((obj) => {
                   return (
-                    <li
-                      key={obj.message._id}
-                    >{`${obj.senderName} sent you a message`}</li>
+                    <li key={obj.message._id}>
+                      <section className="notification">
+                        <span>{`${obj.senderName} sent you a message`}</span>
+
+                        <ChatBubbleIcon
+                          onClick={() => handleViewMessage(obj.message._id)}
+                        />
+
+                        <MarkChatReadIcon
+                          onClick={() => handleMarkAsRead(obj.message._id)}
+                        />
+                      </section>
+
+                      <div ref={parent}>
+                        {viewMessage.has(obj.message._id) && (
+                          <div className="notification-message">
+                            {obj.message.message}
+                          </div>
+                        )}
+                      </div>
+                    </li>
                   );
                 })}
               </ul>
-            </div>
+            </div> */}
 
             {/* matchesMediaQuery && */}
             {
