@@ -167,6 +167,7 @@ function Conversation() {
           key={message._id}
           message={message.message}
           own={userId === message.senderId}
+          time={message.createdAt}
         />
       );
     }
@@ -178,6 +179,7 @@ function Conversation() {
           key={message._id}
           message={message.message}
           own={userId === message.senderId}
+          time={message.createdAt}
         />
       );
     }
@@ -187,6 +189,7 @@ function Conversation() {
         key={message._id}
         message={message.message}
         own={userId === message.senderId}
+        time={message.createdAt}
       />
     );
   });
