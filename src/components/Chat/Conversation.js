@@ -37,17 +37,6 @@ function Conversation() {
   console.log({ unseenMessages });
 
   useEffect(() => {
-    dispatch({ type: "CLEAR_MESSAGE_NOTIFICATION" });
-    dispatch({ type: "SET_VIEWING_MESSAGES", payload: true });
-
-    return () => {
-      dispatch({ type: "SET_VIEWING_MESSAGES", payload: false });
-    };
-  }, [dispatch]);
-
-  console.log({ socketIs: socket });
-
-  useEffect(() => {
     socket?.on("getMessage", (message) => {
       console.log("got the message!");
       message.arrived = true;
@@ -58,7 +47,7 @@ function Conversation() {
   useEffect(() => {
     if (arrivalMsg && arrivalMsg.senderId === friend._id) {
       setMessages((prev) => [arrivalMsg, ...prev]);
-      dispatch({ type: "CLEAR_MESSAGE_NOTIFICATION" });
+      //dispatch({ type: "CLEAR_MESSAGE_NOTIFICATION" });
     }
   }, [arrivalMsg, friend._id, dispatch]);
 
@@ -78,6 +67,23 @@ function Conversation() {
     queryKey: ["get-conversation", userId, friend._id],
     refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    if (conversation?._id) {
+      dispatch({
+        type: "CLEAR_MESSAGE_NOTIFICATION_FOR_CONVERSATION",
+        payload: conversation._id,
+      });
+      dispatch({
+        type: "SET_VIEWING_CONVERSATION",
+        payload: conversation._id,
+      });
+    }
+
+    return () => {
+      dispatch({ type: "SET_VIEWING_CONVERSATION", payload: false });
+    };
+  }, [dispatch, conversation]);
 
   function handleInput(e) {
     console.log({ eventIs: e });
