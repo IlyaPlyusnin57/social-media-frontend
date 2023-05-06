@@ -12,8 +12,8 @@
     align-items: center;
     gap: 1rem;
 
-    &:not(:last-of-type) {
-      margin-bottom: 1rem;
+    &:first-of-type {
+      margin-top: 0;
     }
 
     .user-image img {
