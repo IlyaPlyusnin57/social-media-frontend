@@ -17,6 +17,7 @@ import { CircularProgress } from "@mui/material";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import { useWatchRef } from "../../hooks/useWatchRef";
 import SendIcon from "@mui/icons-material/Send";
+import { useGetLastRef } from "../../hooks/useGetLastRef";
 
 function Conversation() {
   const {
@@ -122,24 +123,11 @@ function Conversation() {
     },
   });
 
-  const intObserver = useRef(null);
-
-  const lastPostRef = useCallback(
-    (message) => {
-      if (isFetching) return;
-
-      if (intObserver.current) intObserver.current.disconnect();
-
-      intObserver.current = new IntersectionObserver((message) => {
-        if (message[0].isIntersecting && hasNextPage) {
-          if (nextPostId.current) setLastPostId(nextPostId.current);
-          console.log("Intersecting at the top");
-        }
-      });
-
-      if (message) intObserver.current.observe(message);
-    },
-    [isFetching, hasNextPage]
+  const lastPostRef = useGetLastRef(
+    isFetching,
+    hasNextPage,
+    nextPostId,
+    setLastPostId
   );
 
   if (status === "error") {
