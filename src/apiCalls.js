@@ -133,3 +133,13 @@ export async function searchAllUsers(api, options = {}) {
     return error;
   }
 }
+
+export async function sendMessagetoUser(api, options = {}) {
+  try {
+    const res = await api.post("/messages", options);
+    return res;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
