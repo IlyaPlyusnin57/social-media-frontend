@@ -34,7 +34,6 @@ function Topbar() {
   const navigate = useNavigate();
   const searchBar = useRef(null);
   const [searchResults, setResults] = useState([]);
-  const [isFound, setFound] = useState(false);
   const matchesMediaQuery = useMediaQuery("(min-width: 830px)");
 
   const [friendNotification, setFriendNotification] = useState([]);
@@ -126,10 +125,8 @@ function Topbar() {
     try {
       const res = await axios.post("/users/search", { name });
       if (res.data.length === 0) {
-        setFound(false);
         setResults([]);
       } else {
-        setFound(true);
         setResults(res.data);
       }
     } catch (error) {
@@ -212,7 +209,7 @@ function Topbar() {
                 <ul>
                   {
                     <li>
-                      {isFound ? (
+                      {searchResults.length > 0 ? (
                         <span onClick={handleSearchResults}>
                           View all results
                         </span>
