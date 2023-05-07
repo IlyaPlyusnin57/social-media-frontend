@@ -86,16 +86,10 @@ function Conversation() {
     };
   }, [dispatch, conversation]);
 
-  function handleInput(e) {
-    console.log({ eventIs: e });
-    console.log({ inputIs: input.current.value });
-    if (e.key === "Enter" && input.current.value.length > 0) {
-      console.log("about to send the message");
-      sendMessage();
-    }
-  }
+  async function sendMessage(e) {
+    if (input.current.value.length === 0) return;
+    if (e.key !== "Enter" && e.type !== "click") return;
 
-  async function sendMessage() {
     const res = await axios.post("/messages", {
       senderId: userId,
       message: input.current.value,
@@ -219,7 +213,7 @@ function Conversation() {
       </div>
       <div className="message-input-container">
         <input
-          onKeyDown={handleInput}
+          onKeyDown={sendMessage}
           ref={input}
           className="message-input"
           type="text"
