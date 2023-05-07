@@ -5,7 +5,6 @@ import NewPost from "./Timeline/NewPost";
 import Followers from "./Timeline/Followers";
 import Subs from "./Timeline/Subscriptions";
 import Post from "../../components/Feed/Timeline/Post";
-import { useRef, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useLocation } from "react-router-dom";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -13,6 +12,7 @@ import profilePicture from "../../helper_functions/profilePicture";
 import useAxiosConfig from "../../api/useAxiosConfig";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import usePosts from "../../api/usePosts";
+import { useGetLastRef } from "../../hooks/useGetLastRef";
 
 function Feed({ profile }) {
   const api = useAxiosConfig();
@@ -41,24 +41,11 @@ function Feed({ profile }) {
     nextPostId,
   } = usePosts(profile, api, currentUser);
 
-  const intObserver = useRef();
-
-  const lastPostRef = useCallback(
-    (post) => {
-      if (isFetching) return;
-
-      if (intObserver.current) intObserver.current.disconnect();
-
-      intObserver.current = new IntersectionObserver((posts) => {
-        if (posts[0].isIntersecting && hasNextPage) {
-          console.log("We are near the last post");
-          if (nextPostId.current) setLastPostId(nextPostId.current);
-        }
-      });
-
-      if (post) intObserver.current.observe(post);
-    },
-    [isFetching, hasNextPage, setLastPostId, nextPostId]
+  const lastPostRef = useGetLastRef(
+    isFetching,
+    hasNextPage,
+    nextPostId,
+    setLastPostId
   );
 
   const postContent = posts?.map((post, i) => {
