@@ -61,10 +61,6 @@ function Feed({ profile }) {
     [isFetching, hasNextPage, setLastPostId, nextPostId]
   );
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
-
   const postContent = posts?.map((post, i) => {
     if (posts.length - 1 === i) {
       return (
@@ -101,6 +97,7 @@ function Feed({ profile }) {
           {displayNewPost && <NewPost setPosts={setPosts} />}
           <main ref={parent}>{postContent}</main>
           {isFetching && <p className="center">Loading More Posts...</p>}
+          {isError && <span>Error: {error.message}</span>}
         </div>
 
         {profile && matchesMediaQuery && (
