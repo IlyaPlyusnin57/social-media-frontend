@@ -48,22 +48,10 @@ function Feed({ profile }) {
     setLastPostId
   );
 
-  const postContent = posts?.map((post, i) => {
-    if (posts.length - 1 === i) {
-      return (
-        <Post
-          ref={lastPostRef}
-          key={post._id}
-          post={post}
-          user={currentUser}
-          profile_picture={profile_picture}
-          setPosts={setPosts}
-        />
-      );
-    }
-
+  const postContent = posts?.map((post, i, postArray) => {
     return (
       <Post
+        ref={i === postArray.length - 1 ? lastPostRef : null}
         key={post._id}
         post={post}
         user={currentUser}
