@@ -6,7 +6,11 @@ import axios from "axios";
 import Message from "./Message";
 import { useState, useEffect, useCallback, useRef } from "react";
 import profilePicture from "../../helper_functions/profilePicture";
-import { getConversation, getMessages } from "../../apiCalls";
+import {
+  getConversation,
+  getMessages,
+  sendMessagetoUser,
+} from "../../apiCalls";
 import useAxiosConfig from "../../api/useAxiosConfig";
 import OnlineUser from "../Online User/OnlineUser";
 import { CircularProgress } from "@mui/material";
@@ -90,13 +94,11 @@ function Conversation() {
     if (input.current.value.length === 0) return;
     if (e.key !== "Enter" && e.type !== "click") return;
 
-    const res = await axios.post("/messages", {
+    const res = await sendMessagetoUser(api, {
       senderId: userId,
       message: input.current.value,
       conversationId: conversation._id,
     });
-
-    console.log({ resIs: res });
 
     if (res.status === 200) {
       socket?.emit("sendMessage", friend._id, res.data);
