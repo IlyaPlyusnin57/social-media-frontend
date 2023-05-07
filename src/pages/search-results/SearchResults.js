@@ -3,10 +3,12 @@ import "./SearchResults.scss";
 import "../../components/Feed/Feed.scss";
 
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState, useCallback } from "react";
 import profilePicture from "../../helper_functions/profilePicture";
-import OnlineUser from "../../components/Online User/OnlineUser";
+import { searchAllUsers } from "../../apiCalls";
+import DisplayUser from "../../components/DisplayUser/DisplayUser";
+import { useGetLastRef } from "../../hooks/useGetLastRef";
+import { useNextQuery } from "../../hooks/useNextQuery";
 
 function SearchResults() {
   const { state: searchQuery } = useLocation();
