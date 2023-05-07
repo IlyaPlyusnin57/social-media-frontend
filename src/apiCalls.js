@@ -122,3 +122,14 @@ export async function getMessages(api, conversation, options = {}) {
     return error;
   }
 }
+
+export async function searchAllUsers(api, options = {}) {
+  try {
+    const res = await api.post("/users/searchAllUsers", options);
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
