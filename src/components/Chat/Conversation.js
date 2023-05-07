@@ -157,20 +157,9 @@ function Conversation() {
       );
     }
 
-    if (i === messages.length - 1) {
-      return (
-        <Message
-          ref={lastPostRef}
-          key={message._id}
-          message={message.message}
-          own={userId === message.senderId}
-          time={message.createdAt}
-        />
-      );
-    }
-
     return (
       <Message
+        ref={i === messages.length - 1 ? lastPostRef : null}
         key={message._id}
         message={message.message}
         own={userId === message.senderId}
