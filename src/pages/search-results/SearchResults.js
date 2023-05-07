@@ -13,37 +13,52 @@ import { useNextQuery } from "../../hooks/useNextQuery";
 function SearchResults() {
   const { state: searchQuery } = useLocation();
   const navigate = useNavigate();
-  const [nameResults, setNameResults] = useState([]);
+  const [lastUserId, setLastUserId] = useState(null);
 
-  useEffect(() => {
-    const getNames = async () => {
-      const res = await axios.post("/users/search", { name: searchQuery });
-      setNameResults(res.data);
-    };
+  const {
+    isError,
+    error,
+    isFetching,
+    results: nameResults,
+    hasNextPage,
+    nextUserId,
+  } = useNextQuery(
+    ["searchAllUsers", searchQuery, lastUserId],
+    searchAllUsers,
+    { name: searchQuery, lastUserId }
+  );
 
-    getNames();
-  }, [searchQuery]);
+  const lastUserRef = useGetLastRef(
+    isFetching,
+    hasNextPage,
+    nextUserId,
+    setLastUserId
+  );
 
-  function handleSearchUser(user) {
-    navigate("/search-profile", { state: user });
-  }
+  const handleSearchUser = useCallback(
+    (user) => {
+      navigate("/search-profile", { state: user });
+    },
+    [navigate]
+  );
+
+  const userResults = nameResults.map((user, i, nameArray) => {
+    return (
+      <DisplayUser
+        ref={i === nameArray.length - 1 ? lastUserRef : null}
+        key={user._id}
+        profile_picture={profilePicture(user)}
+        user={user}
+        handleSearchUser={handleSearchUser}
+      />
+    );
+  });
 
   return (
     <div className="search-results">
-      {nameResults.map((user, i) => {
-        const profile_picture = profilePicture(user);
-
-        return (
-          <div className="search-results-names" key={i}>
-            <OnlineUser profilePicture={profile_picture} userId={user._id} />
-            {/* <div className="user-name">{user.full_name}</div> */}
-            <div className="user-name">{user.username}</div>
-            <p onClick={() => handleSearchUser(user)} className="link-styling">
-              View Page
-            </p>
-          </div>
-        );
-      })}
+      {userResults}
+      {isFetching && <p>Loading More Posts...</p>}
+      {isError && <span>Error: {error.message}</span>}
     </div>
   );
 }
