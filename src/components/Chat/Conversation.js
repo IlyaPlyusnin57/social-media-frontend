@@ -12,6 +12,7 @@ import OnlineUser from "../Online User/OnlineUser";
 import { CircularProgress } from "@mui/material";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import { useWatchRef } from "../../hooks/useWatchRef";
+import SendIcon from "@mui/icons-material/Send";
 
 function Conversation() {
   const {
@@ -224,6 +225,7 @@ function Conversation() {
           type="text"
           placeholder="Send a message"
         />
+        <SendIcon onClick={sendMessage} className="send-icon" />
       </div>
     </div>
   );

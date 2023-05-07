@@ -60,6 +60,8 @@
 }
 
 .message-input-container {
+  display: flex;
+  align-items: center;
   grid-area: 2/2/3/3;
   background-color: $post-bg-color;
   width: 100%;
@@ -77,6 +79,10 @@
   border-radius: 0.5rem;
   appearance: none;
   outline: none;
+}
+
+.send-icon {
+  margin: -30px;
 }
 
 .btn {
