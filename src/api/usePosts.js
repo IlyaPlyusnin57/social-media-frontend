@@ -11,7 +11,7 @@ function usePosts(profile, api, currentUser) {
   useEffect(() => {
     setPosts([]);
     setLastPostId(null);
-  }, [profile]);
+  }, [profile, currentUser]);
 
   const url = profile ? `/posts/user2/` : `/posts/${currentUser._id}/all`;
 
