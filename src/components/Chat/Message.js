@@ -11,6 +11,14 @@ function getTime(time) {
   }).format(newTime);
 }
 
+function getMonthAndDay(time) {
+  const date = new Date(time);
+  return new Intl.DateTimeFormat("default", {
+    month: "long",
+    day: "numeric",
+  }).format(date);
+}
+
 const Message = memo(
   forwardRef(({ message, own, time }, ref) => {
     return (
