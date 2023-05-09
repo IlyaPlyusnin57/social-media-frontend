@@ -177,6 +177,7 @@ function Conversation() {
           <div className="unseen-messages">{unseenMessages}</div>
         </div>
       )}
+      <div className="current-conversation-month"></div>
       <div className="conversation-image-container">
         <OnlineUser
           profilePicture={profile_picture}
