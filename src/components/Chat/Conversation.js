@@ -2,9 +2,8 @@ import "./Conversation.scss";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import Message from "./Message";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import profilePicture from "../../helper_functions/profilePicture";
 import {
   getConversation,
