@@ -1,6 +1,6 @@
 import "./Message.scss";
 
-import { forwardRef, memo } from "react";
+import { forwardRef, memo, useRef, useCallback } from "react";
 
 function getTime(time) {
   const newTime = new Date(time);
