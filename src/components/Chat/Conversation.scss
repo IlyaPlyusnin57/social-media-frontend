@@ -7,6 +7,18 @@
   transform: translateZ(0);
 }
 
+.current-conversation-month {
+  position: fixed;
+  top: 70px;
+  left: 44%;
+  z-index: 1000;
+  border: 0.1px solid #827575;
+  border-radius: 10px;
+  padding: 0.3rem;
+  background-color: #4a4a4a;
+  font-size: 12px;
+}
+
 .conversation-image-container {
   display: flex;
   align-items: center;
