@@ -39,7 +39,7 @@ function Conversation() {
   const [unseenMessages, setUnseenMessages] = useState(0);
   const arrivedRef = useWatchRef(setUnseenMessages);
 
-  console.log({ unseenMessages });
+  // console.log({ unseenMessages });
 
   useEffect(() => {
     socket?.on("getMessage", (message) => {
