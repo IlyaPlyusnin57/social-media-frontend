@@ -1,7 +1,7 @@
 .message-container {
   display: flex;
+  flex-wrap: wrap;
   margin-bottom: 1rem;
-
   // &:not(:last-of-type) {
   //   margin-bottom: 1rem;
   // }
@@ -33,4 +33,20 @@
 
 .message-content {
   padding: 0.5rem 1rem 0.1rem 1rem;
+}
+
+.date-separator-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  .date-separator {
+    border: 0.1px solid #827575;
+    border-radius: 10px;
+    padding: 0.3rem;
+    background-color: #4a4a4a;
+    font-size: 12px;
+    width: max-content;
+    margin: 1rem;
+  }
 }
