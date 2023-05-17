@@ -17,6 +17,7 @@ import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import { useWatchRef } from "../../hooks/useWatchRef";
 import SendIcon from "@mui/icons-material/Send";
 import { useGetLastRef } from "../../hooks/useGetLastRef";
+import { getMonthAndDay } from "../../helper_functions/monthAndDay";
 
 function Conversation() {
   const {
@@ -38,6 +39,8 @@ function Conversation() {
 
   const [unseenMessages, setUnseenMessages] = useState(0);
   const arrivedRef = useWatchRef(setUnseenMessages);
+
+  const monthArray = useRef([]);
 
   // console.log({ unseenMessages });
 
@@ -66,6 +69,10 @@ function Conversation() {
   useEffect(() => {
     scrollBottom();
   }, [messageSent]);
+
+  useEffect(() => {
+    handleIntersection();
+  }, [messages]);
 
   const { data: conversation } = useQuery({
     queryFn: () => getConversation(api, userId, friend),
@@ -141,12 +148,66 @@ function Conversation() {
     }
   }
 
-  const messageContent = messages.map((message, i) => {
+  function handleIntersection() {
+    const currentMonthContainer = document.querySelector(
+      ".current-conversation-month"
+    );
+
+    const { top: currMonthTop } = currentMonthContainer.getBoundingClientRect();
+
+    monthArray.current.forEach((month) => {
+      const domElements = document.querySelectorAll(
+        `.message-container[data-time='${month}']`
+      );
+
+      let top = 0;
+      let bottom = 0;
+
+      domElements.forEach((element, i, elementsArray) => {
+        if (i === 0) {
+          bottom = element.getBoundingClientRect().bottom;
+          bottom += 25;
+        }
+
+        if (i === elementsArray.length - 1) {
+          top = element.getBoundingClientRect().top;
+
+          if (top > currMonthTop || bottom > currMonthTop) {
+            currentMonthContainer.innerHTML = month;
+          }
+        }
+      });
+    });
+  }
+
+  monthArray.current.length = 0;
+
+  const messageContent = messages.map((message, index, messageArray) => {
+    const currDate = getMonthAndDay(message.createdAt);
+    let separate = false;
+
+    const len = monthArray.current.length;
+    const lastDate = monthArray.current[len - 1];
+
+    if (len === 0 || currDate !== lastDate) {
+      monthArray.current.push(currDate);
+    }
+
+    const nextMonth =
+      index + 1 < messageArray.length
+        ? getMonthAndDay(messageArray[index + 1].createdAt)
+        : currDate;
+
+    if (currDate !== nextMonth || index === messageArray.length - 1) {
+      separate = true;
+    }
+
     if (message?.arrived) {
       message["arrived"] = false;
 
       return (
         <Message
+          separate={separate}
           ref={arrivedRef}
           key={message._id}
           message={message.message}
@@ -158,7 +219,8 @@ function Conversation() {
 
     return (
       <Message
-        ref={i === messages.length - 1 ? lastPostRef : null}
+        separate={separate}
+        ref={index === messages.length - 1 ? lastPostRef : null}
         key={message._id}
         message={message.message}
         own={userId === message.senderId}
@@ -177,6 +239,7 @@ function Conversation() {
           <div className="unseen-messages">{unseenMessages}</div>
         </div>
       )}
+
       <div className="current-conversation-month"></div>
       <div className="conversation-image-container">
         <OnlineUser
@@ -186,8 +249,9 @@ function Conversation() {
         />
         <h4 className="margin-left">{friend?.username}</h4>
       </div>
-      <div className="conversation">
+      <div className="conversation" onScroll={handleIntersection}>
         {messageContent}
+
         {isFetching && <div className="spinner">{<CircularProgress />}</div>}
       </div>
       <div className="message-input-container">
