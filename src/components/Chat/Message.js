@@ -6,36 +6,6 @@ import { getTime } from "../../helper_functions/getTime";
 
 const Message = memo(
   forwardRef(({ message, own, time }, ref) => {
-    const intObserver = useRef();
-    const refPosition = useRef();
-
-    const messageRef = useCallback(
-      (element) => {
-        if (intObserver.current) intObserver.current.disconnect();
-
-        intObserver.current = new IntersectionObserver((elements) => {
-          if (elements[0].isIntersecting && refPosition.current) {
-            const lastMessageDatePosition = document.querySelector(
-              ".current-conversation-month"
-            );
-
-            const messagePositionY =
-              refPosition.current.getBoundingClientRect().y;
-            const lastMessageDatePositionY = document
-              .querySelector(".current-conversation-month")
-              ?.getBoundingClientRect().y;
-
-            if (messagePositionY > lastMessageDatePositionY) {
-              lastMessageDatePosition.innerHTML = getMonthAndDay(time);
-            }
-          }
-        });
-
-        if (element) intObserver.current.observe(element);
-      },
-      [time]
-    );
-
     return (
       <div
         ref={ref}
