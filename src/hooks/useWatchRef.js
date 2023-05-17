@@ -1,5 +1,4 @@
-import { useRef, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useRef, useEffect, useCallback } from "react";
 
 export function useWatchRef(setUnseenMessages) {
   const observer = useRef();
@@ -43,11 +42,11 @@ export function useWatchRef(setUnseenMessages) {
     });
   }, [setUnseenMessages]);
 
-  const ref = (message) => {
+  const ref = useCallback((message) => {
     if (message) {
       observer.current.observe(message);
     }
-  };
+  }, []);
 
   return ref;
 }
