@@ -11,7 +11,6 @@ export function useGetLastRef(isFetching, hasNextPage, nextId, setLastId) {
 
       intObserver.current = new IntersectionObserver((elements) => {
         if (elements[0].isIntersecting && hasNextPage) {
-          console.log("We are near the last user!");
           if (nextId.current) setLastId(nextId.current);
         }
       });
