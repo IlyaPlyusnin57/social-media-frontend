@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 import ChatModal from "../../components/ChatModal/ChatModal";
 import { createPortal } from "react-dom";
-import { getConv } from "../../apiCalls";
+import { getConversation } from "../../apiCalls";
 import useAxiosConfig from "../../api/useAxiosConfig";
 import OnlineUser from "../../components/Online User/OnlineUser";
 
@@ -34,7 +34,7 @@ function Sub({ friend }) {
     error,
     refetch,
   } = useQuery({
-    queryFn: () => getConv(api, friend, currentUser),
+    queryFn: () => getConversation(api, friend?._id, currentUser._id),
     queryKey: ["conv", currentUser._id, friend?._id],
     refetchOnWindowFocus: false,
   });
