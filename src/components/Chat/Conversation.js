@@ -18,6 +18,7 @@ import { useWatchRef } from "../../hooks/useWatchRef";
 import SendIcon from "@mui/icons-material/Send";
 import { useGetLastRef } from "../../hooks/useGetLastRef";
 import { getMonthAndDay } from "../../helper_functions/monthAndDay";
+import CryptoJS from "crypto-js";
 
 function Conversation() {
   const {
@@ -184,6 +185,11 @@ function Conversation() {
   monthArray.current.length = 0;
 
   const messageContent = messages.map((message, index, messageArray) => {
+    const decryptedMessage = CryptoJS.AES.decrypt(
+      message.message,
+      process.env.REACT_APP_MESSAGE_SECRET
+    ).toString(CryptoJS.enc.Utf8);
+
     const currDate = getMonthAndDay(message.createdAt);
     let separate = false;
 
@@ -211,7 +217,7 @@ function Conversation() {
           separate={separate}
           ref={arrivedRef}
           key={message._id}
-          message={message.message}
+          message={decryptedMessage}
           own={userId === message.senderId}
           time={message.createdAt}
         />
@@ -223,7 +229,7 @@ function Conversation() {
         separate={separate}
         ref={index === messages.length - 1 ? lastPostRef : null}
         key={message._id}
-        message={message.message}
+        message={decryptedMessage}
         own={userId === message.senderId}
         time={message.createdAt}
       />
