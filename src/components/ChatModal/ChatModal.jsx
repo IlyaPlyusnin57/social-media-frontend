@@ -21,25 +21,16 @@ function ChatModal({ onClose, friend, refetch }) {
   const api = useAxiosConfig();
 
   async function sendMessage(formData) {
-    try {
-      const res = await axios.post("/conversations", {
-        senderId: user._id,
-        receiverId: friend._id,
-      });
+    const conversation = await createConversation(api, {
+      senderId: user._id,
+      receiverId: friend._id,
+    });
 
-      const message = await axios.post("/messages", {
-        senderId: user._id,
-        message: formData.message,
-        conversationId: res.data._id,
-      });
+    await sendMessagetoUser(api, user._id, formData.message, conversation?._id);
 
-      setDisabled(true);
-      refetch();
-      onClose();
-      console.log(message);
-    } catch (error) {
-      console.log(error);
-    }
+    setDisabled(true);
+    refetch();
+    onClose();
   }
 
   return (
