@@ -101,11 +101,12 @@ function Conversation() {
     if (input.current.value.length === 0) return;
     if (e.key !== "Enter" && e.type !== "click") return;
 
-    const res = await sendMessagetoUser(api, {
-      senderId: userId,
-      message: input.current.value,
-      conversationId: conversation._id,
-    });
+    const res = await sendMessagetoUser(
+      api,
+      userId,
+      input.current.value,
+      conversation._id
+    );
 
     if (res.status === 200) {
       socket?.emit("sendMessage", friend._id, res.data);
