@@ -4,8 +4,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useAuth } from "../../context/AuthContext";
-import axios from "axios";
 import { useState } from "react";
+import useAxiosConfig from "../../api/useAxiosConfig";
+import { sendMessagetoUser, createConversation } from "../../apiCalls";
 
 function ChatModal({ onClose, friend, refetch }) {
   const [disabled, setDisabled] = useState(false);
