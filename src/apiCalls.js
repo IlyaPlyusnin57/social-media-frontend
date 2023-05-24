@@ -93,15 +93,12 @@ export async function getUser(api, friendId) {
   }
 }
 
-export async function getConv(api, friend, currentUser) {
+export async function getConversation(api, userId, friendId) {
   try {
-    const res = await api.get(
-      `/conversations/${friend._id}/${currentUser._id}`
-    );
+    const res = await api.get(`conversations/${userId}/${friendId}`);
     return res.data;
   } catch (error) {
     console.log(error);
-    throw error;
   }
 }
 
