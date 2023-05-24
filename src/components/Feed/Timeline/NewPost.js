@@ -42,7 +42,7 @@ function NewPost({ setPosts }) {
         className="input-send"
         onKeyDown={handleKeyPress}
       />
-      <SendIcon className="send-icon" onClick={handleSendIconClick} />
+      <SendIcon className="new-post-send-icon" onClick={handleSendIconClick} />
     </div>
   );
 }
