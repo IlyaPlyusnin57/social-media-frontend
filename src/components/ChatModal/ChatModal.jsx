@@ -18,6 +18,7 @@ function ChatModal({ onClose, friend, refetch }) {
   });
 
   const { user } = useAuth();
+  const api = useAxiosConfig();
 
   async function sendMessage(formData) {
     try {
