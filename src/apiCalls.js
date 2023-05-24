@@ -102,9 +102,9 @@ export async function getConversation(api, userId, friendId) {
   }
 }
 
-export async function getConversation(api, userId, friend) {
+export async function createConversation(api, options = {}) {
   try {
-    const res = await api.get(`conversations/${userId}/${friend._id}`);
+    const res = await api.post("/conversations", options);
     return res.data;
   } catch (error) {
     console.log(error);
