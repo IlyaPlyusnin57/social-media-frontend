@@ -132,9 +132,23 @@ export async function searchAllUsers(api, options = {}) {
   }
 }
 
-export async function sendMessagetoUser(api, options = {}) {
+export async function sendMessagetoUser(
+  api,
+  senderId,
+  message,
+  conversationId
+) {
   try {
-    const res = await api.post("/messages", options);
+    const enryptedMessage = CryptoJS.AES.encrypt(
+      message,
+      process.env.REACT_APP_MESSAGE_SECRET
+    ).toString();
+
+    const res = await api.post("/messages", {
+      senderId,
+      message: enryptedMessage,
+      conversationId,
+    });
     return res;
   } catch (error) {
     console.log(error);
