@@ -18,7 +18,7 @@ import { useWatchRef } from "../../hooks/useWatchRef";
 import SendIcon from "@mui/icons-material/Send";
 import { useGetLastRef } from "../../hooks/useGetLastRef";
 import { getMonthAndDay } from "../../helper_functions/monthAndDay";
-import CryptoJS from "crypto-js";
+import decryptMessage from "../../helper_functions/decryptMessage";
 
 function Conversation() {
   const {
@@ -185,10 +185,7 @@ function Conversation() {
   monthArray.current.length = 0;
 
   const messageContent = messages.map((message, index, messageArray) => {
-    const decryptedMessage = CryptoJS.AES.decrypt(
-      message.message,
-      process.env.REACT_APP_MESSAGE_SECRET
-    ).toString(CryptoJS.enc.Utf8);
+    const decryptedMessage = decryptMessage(message.message);
 
     const currDate = getMonthAndDay(message.createdAt);
     let separate = false;

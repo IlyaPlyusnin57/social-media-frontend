@@ -22,6 +22,7 @@ import { CircularProgress } from "@mui/material";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import useAxiosConfig from "../../api/useAxiosConfig";
 import { getUser } from "../../apiCalls";
+import decryptMessage from "../../helper_functions/decryptMessage";
 
 function Topbar() {
   const {
@@ -249,7 +250,7 @@ function Topbar() {
                         <div ref={parent}>
                           {viewMessage.has(obj.message._id) && (
                             <div className="notification-message">
-                              {obj.message.message}
+                              {decryptMessage(obj.message.message)}
                             </div>
                           )}
                         </div>
