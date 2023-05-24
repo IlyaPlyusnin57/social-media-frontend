@@ -75,7 +75,7 @@ function Conversation() {
   }, [messages]);
 
   const { data: conversation } = useQuery({
-    queryFn: () => getConversation(api, userId, friend),
+    queryFn: () => getConversation(api, userId, friend._id),
     queryKey: ["get-conversation", userId, friend._id],
     refetchOnWindowFocus: false,
   });

@@ -49,7 +49,7 @@ const Messages = memo(function Messages() {
   }, [arrivalMsg, friend._id]);
 
   const { data: conversation } = useQuery({
-    queryFn: () => getConversation(api, userId, friend),
+    queryFn: () => getConversation(api, userId, friend._id),
     queryKey: ["get-conversation", userId, friend._id],
     refetchOnWindowFocus: false,
   });
