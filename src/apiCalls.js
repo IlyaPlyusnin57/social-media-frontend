@@ -1,4 +1,5 @@
 import axios from "axios";
+import CryptoJS from "crypto-js";
 
 export async function loginCall(userCredentials, dispatch) {
   dispatch({ type: "LOGIN_START" });
