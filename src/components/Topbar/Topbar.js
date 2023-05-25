@@ -11,7 +11,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { logoutCall } from "../../apiCalls";
-import axios from "axios";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Hamburger from "hamburger-react";
 import LeftBar from "../Leftbar/Leftbar";
@@ -23,6 +22,7 @@ import { useQueries, useQuery } from "@tanstack/react-query";
 import useAxiosConfig from "../../api/useAxiosConfig";
 import { getUser } from "../../apiCalls";
 import decryptMessage from "../../helper_functions/decryptMessage";
+import { searchUsers } from "../../apiCalls";
 
 function Topbar() {
   const {
@@ -43,6 +43,8 @@ function Topbar() {
   const [viewMessage, setViewMessage] = useState(new Map());
 
   const [parent] = useAutoAnimate();
+
+  const api = useAxiosConfig();
 
   console.log({ messageNotifications });
 
@@ -123,15 +125,12 @@ function Topbar() {
 
     if (name === "") dropDown.classList.remove("show");
 
-    try {
-      const res = await axios.post("/users/search", { name });
-      if (res.data.length === 0) {
-        setResults([]);
-      } else {
-        setResults(res.data);
-      }
-    } catch (error) {
-      console.log(error);
+    const res = await searchUsers(api, name);
+
+    if (res.length === 0) {
+      setResults([]);
+    } else {
+      setResults(res);
     }
   }
 

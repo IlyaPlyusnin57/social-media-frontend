@@ -155,3 +155,13 @@ export async function sendMessagetoUser(
     return error;
   }
 }
+
+export async function searchUsers(api, name) {
+  try {
+    const res = await api.post("/users/search", { name });
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
