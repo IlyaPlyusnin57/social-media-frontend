@@ -263,6 +263,7 @@
   position: absolute;
   display: none;
   top: 50px;
+  right: 1rem;
   background-color: $post-bg-color;
   border-radius: $post-border-radius;
 
@@ -287,7 +288,10 @@
     display: flex;
     align-items: center;
     gap: 2rem;
-    width: clamp(150px, 50vw, 400px);
+
+    .notification-sender {
+      width: clamp(130px, 25vw, 250px);
+    }
   }
 
   .notification-message {

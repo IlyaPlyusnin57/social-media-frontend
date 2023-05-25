@@ -236,7 +236,7 @@ function Topbar() {
                     return (
                       <li key={obj.message._id}>
                         <section className="notification">
-                          <span>{`${obj.senderName} sent you a message`}</span>
+                          <span className="notification-sender">{`${obj.senderName} sent you a message`}</span>
 
                           <ChatBubbleIcon
                             onClick={() => handleViewMessage(obj.message._id)}
