@@ -178,3 +178,44 @@ export async function getNotifications(api, userId) {
     console.log(error);
   }
 }
+
+export async function getFollowingStatus(api, user, currentUser) {
+  try {
+    const res = await api.post(`users/${user._id}/is-following`, {
+      id: currentUser._id,
+    });
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function followUser(api, user, currentUser, refetch, socket) {
+  try {
+    const res = await api.patch(`/users/${user._id}/follow`, {
+      userId: currentUser._id,
+    });
+
+    if (res?.status === 200) {
+      console.log({ res });
+      socket?.emit("sendFollow", res.data);
+    }
+
+    refetch();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function unfollowUser(api, user, currentUser, refetch) {
+  try {
+    await api.patch(`/users/${user._id}/unfollow`, {
+      userId: currentUser._id,
+    });
+
+    refetch();
+  } catch (error) {
+    console.log(error);
+  }
+}
