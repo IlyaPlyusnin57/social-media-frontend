@@ -13,8 +13,11 @@ export default function AuthReducer(state, action) {
         error: null,
         onlineFriends: new Map(),
         socket: null,
-        messageNotifications: [],
-        messageDropDown: [],
+        notifications: {
+          messages: [],
+          follows: [],
+          variousNotifications: [],
+        },
         viewingConversation: false,
       };
     }
