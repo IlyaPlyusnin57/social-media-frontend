@@ -26,7 +26,13 @@ function ChatModal({ onClose, friend, refetch }) {
       receiverId: friend._id,
     });
 
-    await sendMessagetoUser(api, user._id, formData.message, conversation?._id);
+    await sendMessagetoUser(
+      api,
+      user._id,
+      formData.message,
+      conversation?._id,
+      friend._id
+    );
 
     setDisabled(true);
     refetch();

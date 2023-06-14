@@ -43,7 +43,7 @@ function Conversation() {
 
   const monthArray = useRef([]);
 
-  // console.log({ unseenMessages });
+  console.log({ unseenMessages });
 
   useEffect(() => {
     socket?.on("getMessage", (message) => {
@@ -106,7 +106,8 @@ function Conversation() {
       api,
       userId,
       input.current.value,
-      conversation._id
+      conversation._id,
+      friend._id
     );
 
     if (res.status === 200) {
