@@ -3,53 +3,32 @@ import SchoolIcon from "@mui/icons-material/School";
 
 import "./Header.scss";
 import { useAuth } from "../../../context/AuthContext";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import OnlineUser from "../../Online User/OnlineUser";
+import useAxiosConfig from "../../../api/useAxiosConfig";
+import {
+  getFollowingStatus,
+  followUser,
+  unfollowUser,
+} from "../../../apiCalls";
 
 function Header({ user, profile_picture }) {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, socket } = useAuth();
 
   const onlineUser = user._id === currentUser._id ? currentUser : user;
 
-  async function getFollowingStatus() {
-    console.log("getFollowingStatus ran");
-    const res = await axios.post(`users/${user._id}/is-following`, {
-      id: currentUser._id,
-    });
-
-    return res.data;
-  }
+  const api = useAxiosConfig();
 
   const { data: isFollowing, refetch } = useQuery({
     queryKey: ["following-user"],
-    queryFn: getFollowingStatus,
+    queryFn: () => getFollowingStatus(api, user, currentUser),
     enabled: user._id !== currentUser._id,
   });
 
   useEffect(() => {
     console.log(`isFollowing is ${isFollowing}`);
   }, [isFollowing]);
-
-  async function followUser() {
-    const res = await axios.patch(`/users/${user._id}/follow`, {
-      userId: currentUser._id,
-    });
-    console.log(res.data);
-    refetch();
-  }
-
-  async function unfollowUser() {
-    const res = await axios.patch(`/users/${user._id}/unfollow`, {
-      userId: currentUser._id,
-    });
-
-    console.log(res.data);
-    refetch();
-  }
-
-  function handleFriends() {}
 
   return (
     <section className="header">
@@ -70,9 +49,19 @@ function Header({ user, profile_picture }) {
           <div className="user-contact">
             <button className="btn">
               {isFollowing ? (
-                <span onClick={unfollowUser}>Unfollow</span>
+                <span
+                  onClick={() => unfollowUser(api, user, currentUser, refetch)}
+                >
+                  Unfollow
+                </span>
               ) : (
-                <span onClick={followUser}>Follow</span>
+                <span
+                  onClick={() =>
+                    followUser(api, user, currentUser, refetch, socket)
+                  }
+                >
+                  Follow
+                </span>
               )}
             </button>
           </div>
