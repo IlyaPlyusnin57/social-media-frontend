@@ -219,3 +219,11 @@ export async function unfollowUser(api, user, currentUser, refetch) {
     console.log(error);
   }
 }
+
+export async function removeNotification(api, userId, options = {}) {
+  try {
+    await api.patch(`/notifications/${userId}`, options);
+  } catch (error) {
+    console.log(error);
+  }
+}
