@@ -168,3 +168,13 @@ export async function searchUsers(api, name) {
     console.log(error);
   }
 }
+
+export async function getNotifications(api, userId) {
+  try {
+    const res = await api.get(`/notifications/${userId}`);
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
