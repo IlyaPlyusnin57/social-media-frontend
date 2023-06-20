@@ -6,8 +6,8 @@ import { getConversations } from "../../apiCalls";
 import useAxiosConfig from "../../api/useAxiosConfig";
 
 function Chats() {
-  const { user } = useAuth();
-  const api = useAxiosConfig();
+  const { user, dispatch, socket } = useAuth();
+  const api = useAxiosConfig(user, dispatch, socket);
 
   const { status, data, error } = useQuery({
     queryKey: ["convos"],

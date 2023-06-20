@@ -27,13 +27,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import removeMessageFromStorage from "../../helper_functions/removeMessageFromStorage";
 
 function Topbar() {
-  const {
-    user: { _id: userId },
-    dispatch,
-    profile_picture,
-    socket,
-    notifications,
-  } = useAuth();
+  const { user, dispatch, profile_picture, socket, notifications } = useAuth();
 
   const navigate = useNavigate();
   const searchBar = useRef(null);
@@ -44,7 +38,7 @@ function Topbar() {
 
   const [parent] = useAutoAnimate();
 
-  const api = useAxiosConfig();
+  const api = useAxiosConfig(user, dispatch, socket);
 
   useEffect(() => {
     if (notifications.follows.length === 0) {
@@ -180,10 +174,10 @@ function Topbar() {
   async function handleMarkAsRead(id, type) {
     if (type === "message") {
       removeMessageFromStorage(id);
-      await removeNotification(api, userId, { messageId: id });
+      await removeNotification(api, user._id, { messageId: id });
       dispatch({ type: "CLEAR_MESSAGE_NOTIFICATION", payload: id });
     } else if (type === "follow") {
-      await removeNotification(api, userId, { followId: id });
+      await removeNotification(api, user._id, { followId: id });
       dispatch({ type: "CLEAR_FOLLOW_NOTIFICATION", payload: id });
     }
   }

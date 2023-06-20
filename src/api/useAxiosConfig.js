@@ -1,22 +1,8 @@
 import { isExpired } from "react-jwt";
-import axios from "axios";
-import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { handleLogout } from "../apiCalls";
-
-axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
-axios.defaults.withCredentials = true;
-
-const refresh_api = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
-  withCredentials: true,
-});
-
-const main_api = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
-  withCredentials: true,
-});
+import { refresh_api, main_api } from "./axiosDefaultSettings";
+import { useNavigate } from "react-router-dom";
 
 async function refreshToken(user, socket, dispatch, navigate) {
   try {
@@ -32,8 +18,7 @@ async function refreshToken(user, socket, dispatch, navigate) {
   }
 }
 
-export default function useAxiosConfig() {
-  const { user, dispatch, socket } = useAuth();
+export default function useAxiosConfig(user, dispatch, socket) {
   const navigate = useNavigate();
 
   useEffect(() => {

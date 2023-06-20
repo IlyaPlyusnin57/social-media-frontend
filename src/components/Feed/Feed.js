@@ -15,12 +15,14 @@ import usePosts from "../../api/usePosts";
 import { useGetLastRef } from "../../hooks/useGetLastRef";
 
 function Feed({ profile }) {
-  const api = useAxiosConfig();
   const matchesMediaQuery = useMediaQuery("(min-width: 440px)");
   const { state: searchedUser } = useLocation();
   const [parent] = useAutoAnimate();
 
-  let { user, profile_picture } = useAuth();
+  let { user, profile_picture, dispatch, socket } = useAuth();
+
+  const api = useAxiosConfig(user, dispatch, socket);
+
   let currentUser = user;
 
   if (searchedUser) {

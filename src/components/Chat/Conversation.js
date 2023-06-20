@@ -21,17 +21,14 @@ import { getMonthAndDay } from "../../helper_functions/monthAndDay";
 import decryptMessage from "../../helper_functions/decryptMessage";
 
 function Conversation() {
-  const {
-    user: { _id: userId },
-    socket,
-    dispatch,
-  } = useAuth();
+  const { user, socket, dispatch } = useAuth();
 
   const input = useRef(null); // ref for the input
   const [messages, setMessages] = useState([]);
   const { state: friend } = useLocation();
   const [arrivalMsg, setArrivalMsg] = useState(null);
-  const api = useAxiosConfig();
+
+  const api = useAxiosConfig(user, dispatch, socket);
 
   const [hasNextPage, setNextPage] = useState(false);
   const nextPostId = useRef(null);
@@ -75,8 +72,8 @@ function Conversation() {
   }, [messages]);
 
   const { data: conversation } = useQuery({
-    queryFn: () => getConversation(api, userId, friend._id),
-    queryKey: ["get-conversation", userId, friend._id],
+    queryFn: () => getConversation(api, user._id, friend._id),
+    queryKey: ["get-conversation", user._id, friend._id],
     refetchOnWindowFocus: false,
   });
 
@@ -99,7 +96,7 @@ function Conversation() {
 
     const res = await sendMessagetoUser(
       api,
-      userId,
+      user._id,
       input.current.value,
       conversation._id,
       friend._id
@@ -211,7 +208,7 @@ function Conversation() {
           ref={arrivedRef}
           key={message._id}
           message={decryptedMessage}
-          own={userId === message.senderId}
+          own={user._id === message.senderId}
           time={message.createdAt}
         />
       );
@@ -223,7 +220,7 @@ function Conversation() {
         ref={index === messages.length - 1 ? lastPostRef : null}
         key={message._id}
         message={decryptedMessage}
-        own={userId === message.senderId}
+        own={user._id === message.senderId}
         time={message.createdAt}
       />
     );

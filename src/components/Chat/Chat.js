@@ -5,10 +5,12 @@ import { useNavigate } from "react-router-dom";
 import useAxiosConfig from "../../api/useAxiosConfig";
 import { getUser } from "../../apiCalls";
 import OnlineUser from "../Online User/OnlineUser";
+import { useAuth } from "../../context/AuthContext";
 
 function ChatList({ friendId }) {
   const navigate = useNavigate();
-  const api = useAxiosConfig();
+
+  const { dispatch, socket } = useAuth();
 
   const {
     status,
@@ -18,6 +20,8 @@ function ChatList({ friendId }) {
     queryKey: ["get-user", friendId],
     queryFn: () => getUser(api, friendId),
   });
+
+  const api = useAxiosConfig(user, dispatch, socket);
 
   function handleConversation() {
     navigate("/conversation", { state: user });

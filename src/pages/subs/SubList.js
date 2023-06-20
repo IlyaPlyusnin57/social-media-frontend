@@ -9,8 +9,8 @@ import UnknowUser from "../../components/Helpers/UnknownUser";
 import Sub from "./Sub";
 
 function SubList() {
-  const { user } = useAuth();
-  const api = useAxiosConfig();
+  const { user, dispatch, socket } = useAuth();
+  const api = useAxiosConfig(user, dispatch, socket);
 
   const {
     status,

@@ -13,8 +13,8 @@ function Sub({ friend }) {
   const navigate = useNavigate();
   const [chatModal, setChatModal] = useState(false);
   const profile_picture = profilePicture(friend);
-  const { user: currentUser } = useAuth();
-  const api = useAxiosConfig();
+  const { user: currentUser, dispatch, socket } = useAuth();
+  const api = useAxiosConfig(currentUser, dispatch, socket);
 
   function handleSub(friend) {
     navigate("/search-profile", { state: friend });

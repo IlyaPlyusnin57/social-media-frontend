@@ -8,7 +8,7 @@ import {
 import { io } from "socket.io-client";
 import AuthReducer from "./AuthReducer";
 import profilePicture from "../helper_functions/profilePicture";
-import useAxiosConfig2 from "../api/useAxiosConfig2";
+import useAxiosConfig from "../api/useAxiosConfig";
 import { getNotifications } from "../apiCalls";
 
 const INITIAL_STATE = {
@@ -35,7 +35,7 @@ function AuthContextProvider({ children }) {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
   const socket = useRef(null);
   const profile_picture = profilePicture(state.user);
-  const api = useAxiosConfig2(state.user, dispatch);
+  const api = useAxiosConfig(state.user, dispatch, socket);
 
   useEffect(() => {
     sessionStorage.setItem("user", JSON.stringify(state.user));

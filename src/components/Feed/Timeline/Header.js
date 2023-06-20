@@ -14,11 +14,11 @@ import {
 } from "../../../apiCalls";
 
 function Header({ user, profile_picture }) {
-  const { user: currentUser, socket } = useAuth();
+  const { user: currentUser, dispatch, socket } = useAuth();
 
   const onlineUser = user._id === currentUser._id ? currentUser : user;
 
-  const api = useAxiosConfig();
+  const api = useAxiosConfig(currentUser, dispatch, socket);
 
   const { data: isFollowing, refetch } = useQuery({
     queryKey: ["following-user"],

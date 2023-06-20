@@ -3,24 +3,20 @@ import { useRef, useState, useEffect, useCallback, useMemo, memo } from "react";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../context/AuthContext";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import useAxiosConfig from "../../api/useAxiosConfig";
 import { getMessages } from "../../apiCalls";
 import { getConversation } from "../../apiCalls";
 import axios from "axios";
 
 const Messages = memo(function Messages() {
-  const {
-    user: { _id: userId },
-    socket,
-  } = useAuth();
+  const { user, dispatch, socket } = useAuth();
 
   const input = useRef(null); // ref for the input
   const [messages, setMessages] = useState([]);
   const { state: friend } = useLocation();
   const [arrivalMsg, setArrivalMsg] = useState(null);
-  // const [parent] = useAutoAnimate();
-  const api = useAxiosConfig();
+
+  const api = useAxiosConfig(user, dispatch, socket);
 
   const [hasNextPage, setNextPage] = useState(false);
   const nextPostId = useRef(null);
@@ -49,8 +45,8 @@ const Messages = memo(function Messages() {
   }, [arrivalMsg, friend._id]);
 
   const { data: conversation } = useQuery({
-    queryFn: () => getConversation(api, userId, friend._id),
-    queryKey: ["get-conversation", userId, friend._id],
+    queryFn: () => getConversation(api, user._id, friend._id),
+    queryKey: ["get-conversation", user._id, friend._id],
     refetchOnWindowFocus: false,
   });
 
@@ -62,14 +58,14 @@ const Messages = memo(function Messages() {
 
   async function sendMessage() {
     const res = await axios.post("/messages", {
-      senderId: userId,
+      senderId: user._id,
       message: input.current.value,
       conversationId: conversation._id,
     });
 
     if (res.statusText === "OK") {
       socket?.emit("sendMessage", {
-        senderId: userId,
+        senderId: user._id,
         receiverId: friend._id,
         message: input.current.value,
       });
@@ -120,7 +116,7 @@ const Messages = memo(function Messages() {
   //             ref={lastPostRef}
   //             key={message._id}
   //             message={message.message}
-  //             own={userId === message.senderId}
+  //             own={user._id === message.senderId}
   //           />
   //         );
   //       }
@@ -129,11 +125,11 @@ const Messages = memo(function Messages() {
   //         <Message
   //           key={message._id}
   //           message={message.message}
-  //           own={userId === message.senderId}
+  //           own={user._id === message.senderId}
   //         />
   //       );
   //     });
-  //   }, [messages, userId, lastPostRef]);
+  //   }, [messages, user._id, lastPostRef]);
 
   //   if (status === "loading") {
   //     return <span>Loading...</span>;
@@ -150,7 +146,7 @@ const Messages = memo(function Messages() {
           ref={lastPostRef}
           key={message._id}
           message={message.message}
-          own={userId === message.senderId}
+          own={user._id === message.senderId}
         />
       );
     }
@@ -159,7 +155,7 @@ const Messages = memo(function Messages() {
       <Message
         key={message._id}
         message={message.message}
-        own={userId === message.senderId}
+        own={user._id === message.senderId}
       />
     );
   });
@@ -185,7 +181,7 @@ const Messages = memo(function Messages() {
 
 // function Messages() {
 //   const {
-//     user: { _id: userId },
+//     user: { _id: user._id },
 //     socket,
 //   } = useAuth();
 
@@ -223,8 +219,8 @@ const Messages = memo(function Messages() {
 //   }, [arrivalMsg, friend._id]);
 
 //   const { data: conversation } = useQuery({
-//     queryFn: () => getConversation(api, userId, friend),
-//     queryKey: ["get-conversation", userId, friend._id],
+//     queryFn: () => getConversation(api, user._id, friend),
+//     queryKey: ["get-conversation", user._id, friend._id],
 //     refetchOnWindowFocus: false,
 //   });
 
@@ -236,14 +232,14 @@ const Messages = memo(function Messages() {
 
 //   async function sendMessage() {
 //     const res = await axios.post("/messages", {
-//       senderId: userId,
+//       senderId: user._id,
 //       message: input.current.value,
 //       conversationId: conversation._id,
 //     });
 
 //     if (res.statusText === "OK") {
 //       socket?.emit("sendMessage", {
-//         senderId: userId,
+//         senderId: user._id,
 //         receiverId: friend._id,
 //         message: input.current.value,
 //       });
@@ -294,7 +290,7 @@ const Messages = memo(function Messages() {
 //   //             ref={lastPostRef}
 //   //             key={message._id}
 //   //             message={message.message}
-//   //             own={userId === message.senderId}
+//   //             own={user._id === message.senderId}
 //   //           />
 //   //         );
 //   //       }
@@ -303,11 +299,11 @@ const Messages = memo(function Messages() {
 //   //         <Message
 //   //           key={message._id}
 //   //           message={message.message}
-//   //           own={userId === message.senderId}
+//   //           own={user._id === message.senderId}
 //   //         />
 //   //       );
 //   //     });
-//   //   }, [messages, userId, lastPostRef]);
+//   //   }, [messages, user._id, lastPostRef]);
 
 //   if (status === "loading") {
 //     return <span>Loading...</span>;
@@ -324,7 +320,7 @@ const Messages = memo(function Messages() {
 //           ref={lastPostRef}
 //           key={message._id}
 //           message={message.message}
-//           own={userId === message.senderId}
+//           own={user._id === message.senderId}
 //         />
 //       );
 //     }
@@ -333,7 +329,7 @@ const Messages = memo(function Messages() {
 //       <Message
 //         key={message._id}
 //         message={message.message}
-//         own={userId === message.senderId}
+//         own={user._id === message.senderId}
 //       />
 //     );
 //   });
