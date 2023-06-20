@@ -22,7 +22,9 @@ import { useQueries, useQuery } from "@tanstack/react-query";
 import useAxiosConfig from "../../api/useAxiosConfig";
 import { getUser } from "../../apiCalls";
 import decryptMessage from "../../helper_functions/decryptMessage";
-import { searchUsers } from "../../apiCalls";
+import { searchUsers, removeNotification } from "../../apiCalls";
+import CheckIcon from "@mui/icons-material/Check";
+import removeMessageFromStorage from "../../helper_functions/removeMessageFromStorage";
 
 function Topbar() {
   const {
@@ -30,15 +32,13 @@ function Topbar() {
     dispatch,
     profile_picture,
     socket,
-    messageNotifications,
+    notifications,
   } = useAuth();
+
   const navigate = useNavigate();
   const searchBar = useRef(null);
   const [searchResults, setResults] = useState([]);
   const matchesMediaQuery = useMediaQuery("(min-width: 830px)");
-
-  const [friendNotification, setFriendNotification] = useState([]);
-  const [notification, setNotification] = useState([]);
 
   const [viewMessage, setViewMessage] = useState(new Map());
 
@@ -46,7 +46,15 @@ function Topbar() {
 
   const api = useAxiosConfig();
 
-  console.log({ messageNotifications });
+  useEffect(() => {
+    if (notifications.follows.length === 0) {
+      document.getElementById("follow-icon").classList.remove("clicked");
+    }
+
+    if (notifications.messages.length === 0) {
+      document.getElementById("chat-icon").classList.remove("clicked");
+    }
+  });
 
   // useEffect(() => {
   //   const logout = document.querySelector(".logout");
@@ -147,13 +155,37 @@ function Topbar() {
     }
   }
 
-  function handleMessageNotifications() {
-    document.getElementById("message-drop-down")?.classList.toggle("show");
-    document.getElementById("chat-icon").classList.toggle("clicked");
+  const notificationIds = {
+    follow: ["follow-icon", "follow-drop-down"],
+    message: ["chat-icon", "message-drop-down"],
+    //various: ["various-icon", "various-drop-down"], this property is for the future feature
+  };
+
+  function showSelectedNotifications(id) {
+    for (let key in notificationIds) {
+      if (key !== id) {
+        document
+          .getElementById(notificationIds[key][0])
+          .classList.remove("clicked");
+        document
+          .getElementById(notificationIds[key][1])
+          ?.classList.remove("show");
+      }
+    }
+
+    document.getElementById(notificationIds[id][0]).classList.toggle("clicked");
+    document.getElementById(notificationIds[id][1])?.classList.toggle("show");
   }
 
-  function handleMarkAsRead(messageId) {
-    dispatch({ type: "CLEAR_MESSAGE_NOTIFICATION", payload: messageId });
+  async function handleMarkAsRead(id, type) {
+    if (type === "message") {
+      removeMessageFromStorage(id);
+      await removeNotification(api, userId, { messageId: id });
+      dispatch({ type: "CLEAR_MESSAGE_NOTIFICATION", payload: id });
+    } else if (type === "follow") {
+      await removeNotification(api, userId, { followId: id });
+      dispatch({ type: "CLEAR_FOLLOW_NOTIFICATION", payload: id });
+    }
   }
 
   function handleViewMessage(messageId) {
@@ -204,7 +236,10 @@ function Topbar() {
                   {
                     <li>
                       {searchResults.length > 0 ? (
-                        <span onClick={handleSearchResults}>
+                        <span
+                          onClick={handleSearchResults}
+                          className="search-username"
+                        >
                           View all results
                         </span>
                       ) : (
@@ -214,7 +249,11 @@ function Topbar() {
                   }
                   {searchResults.map((res, i) => {
                     // return <li key={i}>{res.full_name}</li>;
-                    return <li key={i}>{res.username}</li>;
+                    return (
+                      <li key={i} className="search-username">
+                        {res.username}
+                      </li>
+                    );
                   })}
                 </ul>
               </div>
@@ -222,28 +261,58 @@ function Topbar() {
           </div>
 
           <div className="topbar-right">
-            {messageNotifications.length > 0 && (
+            {notifications?.follows.length > 0 && (
+              <div className="search-drop-down" id="follow-drop-down">
+                <ul>
+                  {notifications.follows?.map(({ id, follower }) => {
+                    return (
+                      <li key={id}>
+                        <section className="notification">
+                          <span className="notification-sender">
+                            {`You have been followed by ${follower.first_name} ${follower.last_name}`}
+                          </span>
+
+                          <CheckIcon
+                            className="cursor-icon"
+                            onClick={() => handleMarkAsRead(id, "follow")}
+                          />
+                        </section>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+
+            {notifications?.messages.length > 0 && (
               <div className="search-drop-down" id="message-drop-down">
                 <ul>
-                  {messageNotifications?.map((obj) => {
+                  {notifications.messages?.map((message) => {
                     return (
-                      <li key={obj.message._id}>
+                      <li key={message._id}>
                         <section className="notification">
-                          <span className="notification-sender">{`${obj.senderName} sent you a message`}</span>
+                          <span className="notification-sender">{`${message.senderName} sent you a message`}</span>
 
                           <ChatBubbleIcon
-                            onClick={() => handleViewMessage(obj.message._id)}
+                            className="cursor-icon"
+                            onClick={() => handleViewMessage(message._id)}
                           />
 
                           <MarkChatReadIcon
-                            onClick={() => handleMarkAsRead(obj.message._id)}
+                            className="cursor-icon"
+                            onClick={() =>
+                              handleMarkAsRead(message._id, "message")
+                            }
                           />
                         </section>
 
-                        <div ref={parent}>
-                          {viewMessage.has(obj.message._id) && (
+                        <div
+                          ref={parent}
+                          className="notification-message-wrapper"
+                        >
+                          {viewMessage.has(message._id) && (
                             <div className="notification-message">
-                              {decryptMessage(obj.message.message)}
+                              {decryptMessage(message.message)}
                             </div>
                           )}
                         </div>
@@ -253,45 +322,18 @@ function Topbar() {
                 </ul>
               </div>
             )}
-
-            {/* <div className="search-drop-down" id="message-drop-down">
-              <ul ref={parent}>
-                {messageNotifications?.map((obj) => {
-                  return (
-                    <li key={obj.message._id}>
-                      <section className="notification">
-                        <span>{`${obj.senderName} sent you a message`}</span>
-
-                        <ChatBubbleIcon
-                          onClick={() => handleViewMessage(obj.message._id)}
-                        />
-
-                        <MarkChatReadIcon
-                          onClick={() => handleMarkAsRead(obj.message._id)}
-                        />
-                      </section>
-
-                      <div ref={parent}>
-                        {viewMessage.has(obj.message._id) && (
-                          <div className="notification-message">
-                            {obj.message.message}
-                          </div>
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div> */}
-
             {/* matchesMediaQuery && */}
             {
               <div className="topbar-icons">
-                <div className="topbar-icon-item">
+                <div
+                  className="topbar-icon-item"
+                  id="follow-icon"
+                  onClick={() => showSelectedNotifications("follow")}
+                >
                   <PersonIcon />
-                  {friendNotification?.length > 0 && (
+                  {notifications?.follows?.length > 0 && (
                     <span className="topbar-icon-badge">
-                      {friendNotification.length}
+                      {notifications.follows.length}
                     </span>
                   )}
                 </div>
@@ -299,20 +341,20 @@ function Topbar() {
                 <div
                   className="topbar-icon-item"
                   id="chat-icon"
-                  onClick={handleMessageNotifications}
+                  onClick={() => showSelectedNotifications("message")}
                 >
                   <ChatIcon />
-                  {messageNotifications?.length > 0 && (
+                  {notifications?.messages?.length > 0 && (
                     <span className="topbar-icon-badge">
-                      {messageNotifications.length}
+                      {notifications.messages.length}
                     </span>
                   )}
                 </div>
                 <div className="topbar-icon-item">
                   <NotificationsIcon />
-                  {notification?.length > 0 && (
+                  {notifications?.variousNotifications?.length > 0 && (
                     <span className="topbar-icon-badge">
-                      {notification.length}
+                      {notifications.variousNotifications.length}
                     </span>
                   )}
                 </div>
