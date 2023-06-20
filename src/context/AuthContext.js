@@ -8,6 +8,8 @@ import {
 import { io } from "socket.io-client";
 import AuthReducer from "./AuthReducer";
 import profilePicture from "../helper_functions/profilePicture";
+import useAxiosConfig2 from "../api/useAxiosConfig2";
+import { getNotifications } from "../apiCalls";
 
 const INITIAL_STATE = {
   user: JSON.parse(sessionStorage.getItem("user")) || null,
@@ -15,8 +17,11 @@ const INITIAL_STATE = {
   error: null,
   onlineFriends: new Map(),
   socket: null,
-  messageNotifications: [],
-  messageDropDown: [],
+  notifications: {
+    messages: JSON.parse(sessionStorage.getItem("messages")) || [],
+    follows: [],
+    variousNotifications: [],
+  },
   viewingConversation: false,
 };
 
@@ -30,6 +35,7 @@ function AuthContextProvider({ children }) {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
   const socket = useRef(null);
   const profile_picture = profilePicture(state.user);
+  const api = useAxiosConfig2(state.user, dispatch);
 
   useEffect(() => {
     sessionStorage.setItem("user", JSON.stringify(state.user));
@@ -73,11 +79,41 @@ function AuthContextProvider({ children }) {
       });
 
       socket.current.on("getMessageNotification", (message) => {
-        console.log({ receivedMessageIs: message });
+        if (state.viewingConversation === message.conversationId) {
+          return;
+        }
+
+        const messages = JSON.parse(sessionStorage.getItem("messages"));
+
+        if (messages) {
+          sessionStorage.setItem(
+            "messages",
+            JSON.stringify([...messages, message])
+          );
+        } else {
+          sessionStorage.setItem("messages", JSON.stringify([message]));
+        }
+
         dispatch({ type: "SET_MESSAGE_NOTIFICATION", payload: message });
       });
+
+      socket.current.on("getFollowNotification", (followObject) => {
+        console.log({ receivedFollowObject: followObject });
+        dispatch({ type: "SET_FOLLOW_NOTIFICATION", payload: followObject });
+      });
     }
-  }, [state.user?._id]);
+  }, [state.user?._id, state.viewingConversation, api]);
+
+  useEffect(() => {
+    const getNotificationObject = async () => {
+      const notifications = await getNotifications(api, state.user._id);
+      if (notifications) {
+        dispatch({ type: "SET_NOTIFICATIONS", payload: notifications });
+      }
+    };
+
+    state.user && getNotificationObject();
+  }, [api, state.user]);
 
   return (
     <AuthContext.Provider
@@ -89,7 +125,7 @@ function AuthContextProvider({ children }) {
         onlineFriends: state.onlineFriends,
         dispatch,
         socket: state.socket,
-        messageNotifications: state.messageNotifications,
+        notifications: state.notifications,
         viewingConversation: state.viewingConversation,
       }}
     >
