@@ -86,6 +86,11 @@
         border-radius: 30px;
         margin-left: 1rem;
 
+        #search-bar-drop-down {
+          left: 0;
+          right: initial;
+        }
+
         .search-icon {
           color: $button-text-color;
           margin-left: 0.5rem;
@@ -216,7 +221,7 @@
         display: none;
         position: absolute;
         top: calc(50px + 1rem);
-        right: 0;
+        right: 0.5rem;
 
         ul {
           border: 1px solid $post-border-color;
@@ -277,11 +282,14 @@
     list-style: none;
     padding: 1rem 1.5rem;
     color: $button-text-color;
-    cursor: pointer;
 
     &:not(:last-child) {
       border-bottom: 1px solid $post-border-color;
     }
+  }
+
+  .search-username {
+    cursor: pointer;
   }
 
   .notification {
@@ -294,6 +302,11 @@
     }
   }
 
+  .notification-message-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
   .notification-message {
     background-color: #7e7575;
     padding: 0.5rem 1rem;
@@ -301,9 +314,14 @@
     margin-top: 0.5rem;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: clamp(100px, 50vw, 350px);
+    width: clamp(240px, 38vw, 350px);
   }
 }
+
+.cursor-icon {
+  cursor: pointer;
+}
+
 .show {
   display: block;
 }

@@ -231,7 +231,7 @@ function Topbar() {
                 ref={searchBar}
                 onChange={handleSearch}
               />
-              <div className="search-drop-down">
+              <div id="search-bar-drop-down" className="search-drop-down">
                 <ul>
                   {
                     <li>
