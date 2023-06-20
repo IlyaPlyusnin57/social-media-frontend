@@ -10,7 +10,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { logoutCall } from "../../apiCalls";
+import { handleLogout } from "../../apiCalls";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Hamburger from "hamburger-react";
 import LeftBar from "../Leftbar/Leftbar";
@@ -63,12 +63,6 @@ function Topbar() {
   //     window.removeEventListener("click", handler);
   //   };
   // }, []);
-
-  function handleLogout() {
-    socket?.emit("manualDisconnect");
-    logoutCall(dispatch);
-    navigate("/login", { replace: true });
-  }
 
   // useEffect(() => {
   //   const handler = (e) => {
@@ -336,7 +330,10 @@ function Topbar() {
                     <SettingsIcon className="drop-down-icon" />
                     <span>Settings</span>
                   </li>
-                  <li className="logout" onClick={handleLogout}>
+                  <li
+                    className="logout"
+                    onClick={() => handleLogout(socket, dispatch, navigate)}
+                  >
                     <LogoutIcon className="drop-down-icon" />{" "}
                     <span>Logout</span>
                   </li>

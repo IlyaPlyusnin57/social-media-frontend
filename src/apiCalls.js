@@ -16,7 +16,7 @@ export async function loginCall(userCredentials, dispatch) {
   }
 }
 
-export async function logoutCall(dispatch) {
+async function logoutCall(dispatch) {
   try {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
@@ -26,6 +26,12 @@ export async function logoutCall(dispatch) {
     console.log(error);
     return error;
   }
+}
+
+export function handleLogout(socket, dispatch, navigate) {
+  socket?.emit("manualDisconnect");
+  logoutCall(dispatch);
+  navigate("/login", { replace: true });
 }
 
 export async function register_user(userInfo, dispatch) {
@@ -222,7 +228,11 @@ export async function unfollowUser(api, user, currentUser, refetch) {
 
 export async function removeNotification(api, userId, options = {}) {
   try {
-    await api.patch(`/notifications/${userId}`, options);
+    console.log({ api, userId, options });
+
+    const res = await api.patch(`/notifications/${userId}`, options);
+
+    return res.data;
   } catch (error) {
     console.log(error);
   }
