@@ -138,50 +138,94 @@ export default function AuthReducer(state, action) {
     case "SET_MESSAGE_NOTIFICATION": {
       const message = action.payload;
 
-      if (
-        state.viewingConversation &&
-        state.viewingConversation === message.message.conversationId
-      ) {
-        return state;
-      }
+      const newNotifications = state.notifications;
+      newNotifications.messages = [...state.notifications.messages, message];
 
       return {
         ...state,
-        messageNotifications: [...state.messageNotifications, message],
+        notifications: newNotifications,
+      };
+    }
+    case "SET_FOLLOW_NOTIFICATION": {
+      const follow = action.payload;
+      const newNotifications = state.notifications;
+      newNotifications.follows = [...state.notifications.follows, follow];
+
+      return {
+        ...state,
+        notifications: newNotifications,
       };
     }
     case "CLEAR_MESSAGE_NOTIFICATION": {
       const messageId = action.payload;
 
-      const newMessageNotifications = state.messageNotifications.filter(
-        (obj) => {
-          return obj.message._id !== messageId;
+      const newMessageNotifications = state.notifications.messages.filter(
+        (notification) => {
+          return notification._id !== messageId;
         }
       );
 
+      const newNotifications = state.notifications;
+      newNotifications.messages = newMessageNotifications;
+
       return {
         ...state,
-        messageNotifications: newMessageNotifications,
+        notifications: newNotifications,
+      };
+    }
+    case "CLEAR_FOLLOW_NOTIFICATION": {
+      const followId = action.payload;
+
+      const newFollowNotifications = state.notifications.follows.filter(
+        (follow) => {
+          return follow.id !== followId;
+        }
+      );
+
+      const newNotifications = state.notifications;
+      newNotifications.follows = newFollowNotifications;
+
+      return {
+        ...state,
+        notifications: newNotifications,
       };
     }
     case "CLEAR_MESSAGE_NOTIFICATION_FOR_CONVERSATION": {
       const conversationId = action.payload;
 
-      const newMessageNotifications = state.messageNotifications.filter(
-        (obj) => {
-          return obj.message.conversationId !== conversationId;
+      const newMessageNotifications = state.notifications.messages.filter(
+        (message) => {
+          return message.conversationId !== conversationId;
         }
       );
 
+      const newNotifications = state.notifications;
+      newNotifications.messages = newMessageNotifications;
+
       return {
         ...state,
-        messageNotifications: newMessageNotifications,
+        notifications: newNotifications,
       };
     }
     case "SET_VIEWING_CONVERSATION": {
       return {
         ...state,
         viewingConversation: action.payload,
+      };
+    }
+    case "SET_NOTIFICATIONS": {
+      const newNotifications = action.payload;
+
+      // check if there are any messages in the storage
+      const storageMessages = JSON.parse(sessionStorage.getItem("messages"));
+
+      if (storageMessages) {
+        newNotifications.messages.push(...storageMessages);
+      }
+
+      return {
+        ...state,
+        notifications: newNotifications,
       };
     }
     default:
