@@ -56,7 +56,6 @@ function Conversation() {
   useEffect(() => {
     if (arrivalMsg && arrivalMsg.senderId === friend._id) {
       setMessages((prev) => [arrivalMsg, ...prev]);
-      //dispatch({ type: "CLEAR_MESSAGE_NOTIFICATION" });
     }
   }, [arrivalMsg, friend._id, dispatch]);
 
@@ -83,10 +82,6 @@ function Conversation() {
 
   useEffect(() => {
     if (conversation?._id) {
-      dispatch({
-        type: "CLEAR_MESSAGE_NOTIFICATION_FOR_CONVERSATION",
-        payload: conversation._id,
-      });
       dispatch({
         type: "SET_VIEWING_CONVERSATION",
         payload: conversation._id,
