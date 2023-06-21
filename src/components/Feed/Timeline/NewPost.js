@@ -4,10 +4,12 @@ import SendIcon from "@mui/icons-material/Send";
 import { useAuth } from "../../../context/AuthContext";
 import axios from "axios";
 import { useRef } from "react";
+import useAxiosConfig2 from "../../../api/useAxiosConfig2";
 
 function NewPost({ setPosts }) {
   const { user, profile_picture } = useAuth();
   const post_content = useRef(null);
+  const api = useAxiosConfig2();
 
   function handleKeyPress(e) {
     if (e.key === "Enter") {
@@ -23,7 +25,7 @@ function NewPost({ setPosts }) {
     };
 
     try {
-      const res = await axios.post("posts/", post);
+      const res = await api.post("posts/", post);
       setPosts((prev) => [res.data, ...prev]);
       let sendIcon = document.querySelector(".input-send");
       sendIcon.value = "";
