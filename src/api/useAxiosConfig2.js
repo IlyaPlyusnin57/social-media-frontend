@@ -1,9 +1,14 @@
 import { isExpired } from "react-jwt";
 import { useEffect } from "react";
-import { main_api } from "./axiosDefaultSettings";
 import { useNavigate } from "react-router-dom";
 import { refreshToken } from "../helper_functions/refreshToken";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+
+const main_api = axios.create({
+  baseURL: process.env.REACT_APP_BASE_URL,
+  withCredentials: true,
+});
 
 export default function useAxiosConfig2() {
   const navigate = useNavigate();
