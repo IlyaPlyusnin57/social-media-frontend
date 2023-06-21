@@ -17,7 +17,13 @@ export default function useAxiosConfig(user, dispatch, socket) {
         config.headers["Authorization"] = `Bearer ${user.accessToken}`;
 
         if (isExpired(user.accessToken)) {
-          const token = await refreshToken(user, socket, dispatch, navigate);
+          const token = await refreshToken(
+            user,
+            socket,
+            dispatch,
+            navigate,
+            "useAxiosConfig"
+          );
 
           console.log({ RECEIVED_TOKEN: token });
 
