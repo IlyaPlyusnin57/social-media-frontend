@@ -26,7 +26,6 @@ export default function useAxiosConfig(user, dispatch, socket) {
   console.log({ useAxiosConfig: user });
 
   useEffect(() => {
-    if (!user || !socket) return;
     //main_api.defaults.headers = { authorization: `Bearer ${user.accessToken}` };
 
     const axiosInterceptor = main_api.interceptors.request.use(
