@@ -21,9 +21,11 @@ export default function useAxiosConfig2() {
 
     const axiosInterceptor = main_api.interceptors.request.use(
       async (config) => {
-        config.headers["Authorization"] = `Bearer ${user.accessToken}`;
+        const accessToken = sessionStorage.getItem("accessToken");
 
-        if (isExpired(user.accessToken)) {
+        config.headers["Authorization"] = `Bearer ${accessToken}`;
+
+        if (isExpired(accessToken)) {
           const token = await refreshToken(
             user,
             socket,
@@ -34,10 +36,12 @@ export default function useAxiosConfig2() {
 
           console.log({ RECEIVED_TOKEN: token });
 
-          dispatch({
-            type: "UPDATE_TOKEN",
-            payload: token.accessToken,
-          });
+          // dispatch({
+          //   type: "UPDATE_TOKEN",
+          //   payload: token.accessToken,
+          // });
+
+          sessionStorage.setItem("accessToken", token.accessToken);
 
           console.log("token has expired and has been updated!");
 

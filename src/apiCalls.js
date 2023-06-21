@@ -9,6 +9,8 @@ export async function loginCall(userCredentials, dispatch) {
     const { password, ...new_user } = res.data;
     dispatch({ type: "LOGIN_SUCCESS", payload: new_user });
 
+    sessionStorage.setItem("accessToken", new_user.accessToken);
+
     return res;
   } catch (error) {
     dispatch({ type: "LOGIN_FAILURE", payload: error.response.data });
@@ -19,6 +21,7 @@ export async function loginCall(userCredentials, dispatch) {
 async function logoutCall(dispatch) {
   try {
     sessionStorage.removeItem("user");
+    sessionStorage.removeItem("accessToken");
     await axios.post("/auth/logout");
     dispatch({ type: "LOGOUT" });
   } catch (error) {
