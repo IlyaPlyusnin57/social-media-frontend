@@ -7,8 +7,8 @@ export async function loginCall(userCredentials, dispatch) {
   try {
     const res = await axios.post("/auth/login", userCredentials);
     const { password, ...new_user } = res.data;
-    sessionStorage.setItem("token", res.data.accessToken);
     dispatch({ type: "LOGIN_SUCCESS", payload: new_user });
+
     return res;
   } catch (error) {
     dispatch({ type: "LOGIN_FAILURE", payload: error.response.data });
@@ -18,7 +18,6 @@ export async function loginCall(userCredentials, dispatch) {
 
 async function logoutCall(dispatch) {
   try {
-    sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
     await axios.post("/auth/logout");
     dispatch({ type: "LOGOUT" });
