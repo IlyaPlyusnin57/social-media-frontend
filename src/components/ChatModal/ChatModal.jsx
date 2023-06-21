@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
-import useAxiosConfig from "../../api/useAxiosConfig";
+import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import { sendMessagetoUser, createConversation } from "../../apiCalls";
 
 function ChatModal({ onClose, friend, refetch }) {
@@ -17,9 +17,9 @@ function ChatModal({ onClose, friend, refetch }) {
     },
   });
 
-  const { user, dispatch, socket } = useAuth();
+  const { user } = useAuth();
 
-  const api = useAxiosConfig(user, dispatch, socket);
+  const api = useAxiosConfig2();
 
   async function sendMessage(formData) {
     const conversation = await createConversation(api, {

@@ -1,15 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState, useRef } from "react";
-import useAxiosConfig from "../api/useAxiosConfig";
-import { useAuth } from "../context/AuthContext";
+import useAxiosConfig2 from "../api/useAxiosConfig2";
 
 export function useNextQuery(queryKeys, queryFunction, queryFunctionOptions) {
   const [results, setResults] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(false);
   const nextUserId = useRef(null);
 
-  const { user, dispatch, socket } = useAuth();
-  const api = useAxiosConfig(user, dispatch, socket);
+  const api = useAxiosConfig2();
 
   const { isError, error, isFetching } = useQuery({
     queryKey: [...queryKeys],

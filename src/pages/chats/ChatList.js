@@ -3,11 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../context/AuthContext";
 import Chat from "../../components/Chat/Chat";
 import { getConversations } from "../../apiCalls";
-import useAxiosConfig from "../../api/useAxiosConfig";
+import useAxiosConfig2 from "../../api/useAxiosConfig2";
 
 function Chats() {
-  const { user, dispatch, socket } = useAuth();
-  const api = useAxiosConfig(user, dispatch, socket);
+  const { user } = useAuth();
+  const api = useAxiosConfig2();
 
   const { status, data, error } = useQuery({
     queryKey: ["convos"],

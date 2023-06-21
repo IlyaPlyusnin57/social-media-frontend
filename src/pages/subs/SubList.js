@@ -3,14 +3,14 @@ import "./SubList.scss";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../context/AuthContext";
 import { getSubs } from "../../apiCalls";
-import useAxiosConfig from "../../api/useAxiosConfig";
+import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import UnknowUser from "../../components/Helpers/UnknownUser";
 
 import Sub from "./Sub";
 
 function SubList() {
-  const { user, dispatch, socket } = useAuth();
-  const api = useAxiosConfig(user, dispatch, socket);
+  const { user } = useAuth();
+  const api = useAxiosConfig2();
 
   const {
     status,

@@ -2,15 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import "./Chat.scss";
 import profilePicture from "../../helper_functions/profilePicture";
 import { useNavigate } from "react-router-dom";
-import useAxiosConfig from "../../api/useAxiosConfig";
+import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import { getUser } from "../../apiCalls";
 import OnlineUser from "../Online User/OnlineUser";
-import { useAuth } from "../../context/AuthContext";
 
 function ChatList({ friendId }) {
   const navigate = useNavigate();
-
-  const { dispatch, socket } = useAuth();
 
   const {
     status,
@@ -21,7 +18,7 @@ function ChatList({ friendId }) {
     queryFn: () => getUser(api, friendId),
   });
 
-  const api = useAxiosConfig(user, dispatch, socket);
+  const api = useAxiosConfig2();
 
   function handleConversation() {
     navigate("/conversation", { state: user });

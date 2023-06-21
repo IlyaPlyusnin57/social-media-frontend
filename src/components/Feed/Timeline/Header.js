@@ -6,7 +6,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import OnlineUser from "../../Online User/OnlineUser";
-import useAxiosConfig from "../../../api/useAxiosConfig";
+import useAxiosConfig2 from "../../../api/useAxiosConfig2";
 import {
   getFollowingStatus,
   followUser,
@@ -14,11 +14,11 @@ import {
 } from "../../../apiCalls";
 
 function Header({ user, profile_picture }) {
-  const { user: currentUser, dispatch, socket } = useAuth();
+  const { user: currentUser, socket } = useAuth();
 
   const onlineUser = user._id === currentUser._id ? currentUser : user;
 
-  const api = useAxiosConfig(currentUser, dispatch, socket);
+  const api = useAxiosConfig2();
 
   const { data: isFollowing, refetch } = useQuery({
     queryKey: ["following-user"],

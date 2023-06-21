@@ -4,16 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import profilePicture from "../../../helper_functions/profilePicture";
 import { getSubs } from "../../../apiCalls";
-import useAxiosConfig from "../../../api/useAxiosConfig";
+import useAxiosConfig2 from "../../../api/useAxiosConfig2";
 import { memo } from "react";
-import { useAuth } from "../../../context/AuthContext";
 
 const Subscriptions = memo(({ user }) => {
   const navigate = useNavigate();
 
-  const { user: currentUser, dispatch, socket } = useAuth();
-
-  const api = useAxiosConfig(currentUser, dispatch, socket);
+  const api = useAxiosConfig2();
 
   function handleSearchUser(user) {
     navigate("/search-profile", { state: user });

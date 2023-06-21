@@ -3,20 +3,20 @@ import { useRef, useState, useEffect, useCallback, useMemo, memo } from "react";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../context/AuthContext";
-import useAxiosConfig from "../../api/useAxiosConfig";
+import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import { getMessages } from "../../apiCalls";
 import { getConversation } from "../../apiCalls";
 import axios from "axios";
 
 const Messages = memo(function Messages() {
-  const { user, dispatch, socket } = useAuth();
+  const { user, socket } = useAuth();
 
   const input = useRef(null); // ref for the input
   const [messages, setMessages] = useState([]);
   const { state: friend } = useLocation();
   const [arrivalMsg, setArrivalMsg] = useState(null);
 
-  const api = useAxiosConfig(user, dispatch, socket);
+  const api = useAxiosConfig2();
 
   const [hasNextPage, setNextPage] = useState(false);
   const nextPostId = useRef(null);

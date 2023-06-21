@@ -10,7 +10,7 @@ import {
   getMessages,
   sendMessagetoUser,
 } from "../../apiCalls";
-import useAxiosConfig from "../../api/useAxiosConfig";
+import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import OnlineUser from "../Online User/OnlineUser";
 import { CircularProgress } from "@mui/material";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
@@ -28,7 +28,7 @@ function Conversation() {
   const { state: friend } = useLocation();
   const [arrivalMsg, setArrivalMsg] = useState(null);
 
-  const api = useAxiosConfig(user, dispatch, socket);
+  const api = useAxiosConfig2();
 
   const [hasNextPage, setNextPage] = useState(false);
   const nextPostId = useRef(null);

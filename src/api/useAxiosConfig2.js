@@ -3,9 +3,11 @@ import { useEffect } from "react";
 import { main_api } from "./axiosDefaultSettings";
 import { useNavigate } from "react-router-dom";
 import { refreshToken } from "../helper_functions/refreshToken";
+import { useAuth } from "../context/AuthContext";
 
-export default function useAxiosConfig(user, dispatch, socket) {
+export default function useAxiosConfig2() {
   const navigate = useNavigate();
+  const { user, dispatch, socket } = useAuth();
 
   console.log({ useAxiosConfig: user });
 

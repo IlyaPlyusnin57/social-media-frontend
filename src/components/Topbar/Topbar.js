@@ -19,7 +19,7 @@ import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import { CircularProgress } from "@mui/material";
 import { useQueries, useQuery } from "@tanstack/react-query";
-import useAxiosConfig from "../../api/useAxiosConfig";
+import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import { getUser } from "../../apiCalls";
 import decryptMessage from "../../helper_functions/decryptMessage";
 import { searchUsers, removeNotification } from "../../apiCalls";
@@ -38,7 +38,7 @@ function Topbar() {
 
   const [parent] = useAutoAnimate();
 
-  const api = useAxiosConfig(user, dispatch, socket);
+  const api = useAxiosConfig2();
 
   useEffect(() => {
     if (notifications.follows.length === 0) {

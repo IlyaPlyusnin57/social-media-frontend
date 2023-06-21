@@ -6,15 +6,15 @@ import { useState } from "react";
 import ChatModal from "../../components/ChatModal/ChatModal";
 import { createPortal } from "react-dom";
 import { getConversation } from "../../apiCalls";
-import useAxiosConfig from "../../api/useAxiosConfig";
+import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import OnlineUser from "../../components/Online User/OnlineUser";
 
 function Sub({ friend }) {
   const navigate = useNavigate();
   const [chatModal, setChatModal] = useState(false);
   const profile_picture = profilePicture(friend);
-  const { user: currentUser, dispatch, socket } = useAuth();
-  const api = useAxiosConfig(currentUser, dispatch, socket);
+  const { user: currentUser } = useAuth();
+  const api = useAxiosConfig2();
 
   function handleSub(friend) {
     navigate("/search-profile", { state: friend });

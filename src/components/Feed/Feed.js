@@ -9,7 +9,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useLocation } from "react-router-dom";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import profilePicture from "../../helper_functions/profilePicture";
-import useAxiosConfig from "../../api/useAxiosConfig";
+import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import usePosts from "../../api/usePosts";
 import { useGetLastRef } from "../../hooks/useGetLastRef";
@@ -19,9 +19,9 @@ function Feed({ profile }) {
   const { state: searchedUser } = useLocation();
   const [parent] = useAutoAnimate();
 
-  let { user, profile_picture, dispatch, socket } = useAuth();
+  let { user, profile_picture } = useAuth();
 
-  const api = useAxiosConfig(user, dispatch, socket);
+  const api = useAxiosConfig2();
 
   let currentUser = user;
 
