@@ -11,6 +11,7 @@ import { format } from "timeago.js";
 import { useAuth } from "../../../context/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import useAxiosConfig2 from "../../../api/useAxiosConfig2";
 
 function reducer(state, action) {
   let new_likes = state.isLiked ? state.likes - 1 : state.likes + 1;
@@ -105,6 +106,7 @@ function reducer(state, action) {
 const Post = forwardRef(({ post, setPosts, user, profile_picture }, ref) => {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user: currentUser } = useAuth();
+  const api = useAxiosConfig2();
 
   const [state, dispatch] = useReducer(reducer, {
     likes: post.likes.length,
@@ -113,7 +115,7 @@ const Post = forwardRef(({ post, setPosts, user, profile_picture }, ref) => {
 
   async function updateLikes() {
     try {
-      axios.put(`posts/${post._id}/like`, { userId: `${currentUser._id}` });
+      await api.put(`posts/${post._id}/like`, { userId: `${currentUser._id}` });
       dispatch({ type: "update_likes" });
     } catch (error) {
       console.log(error);
@@ -123,7 +125,7 @@ const Post = forwardRef(({ post, setPosts, user, profile_picture }, ref) => {
   async function handleDelete() {
     const userId = { data: { userId: user._id } };
     try {
-      await axios.delete(`posts/${post._id}`, userId);
+      await api.delete(`posts/${post._id}`, userId);
       setPosts((prev) => prev.filter((p) => p._id !== post._id));
     } catch (error) {
       console.log(error);
