@@ -42,6 +42,9 @@ export async function register_user(userInfo, dispatch) {
   try {
     const res = await axios.post("/auth/register", userInfo);
     const { password, ...new_user } = res.data;
+
+    sessionStorage.setItem("accessToken", new_user.accessToken);
+
     dispatch({ type: "REGISTER_SUCCESS", payload: new_user });
     return res;
   } catch (error) {
