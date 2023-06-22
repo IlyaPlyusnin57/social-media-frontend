@@ -26,20 +26,7 @@ export default function useAxiosConfig2() {
         config.headers["Authorization"] = `Bearer ${accessToken}`;
 
         if (isExpired(accessToken)) {
-          const token = await refreshToken(
-            user,
-            socket,
-            dispatch,
-            navigate,
-            "useAxiosConfig2"
-          );
-
-          console.log({ RECEIVED_TOKEN: token });
-
-          // dispatch({
-          //   type: "UPDATE_TOKEN",
-          //   payload: token.accessToken,
-          // });
+          const token = await refreshToken(user, socket, dispatch, navigate);
 
           sessionStorage.setItem("accessToken", token.accessToken);
 

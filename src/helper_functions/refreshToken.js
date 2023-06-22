@@ -1,13 +1,7 @@
 import { refresh_api } from "../api/axiosDefaultSettings";
 import { handleLogout } from "../apiCalls";
 
-export async function refreshToken(
-  user,
-  socket,
-  dispatch,
-  navigate,
-  functionType
-) {
+export async function refreshToken(user, socket, dispatch, navigate) {
   console.log({ userInRefreshToken: user });
 
   try {
@@ -16,7 +10,7 @@ export async function refreshToken(
     });
     return res.data;
   } catch (error) {
-    console.log({ refreshTokenError: error, from: functionType });
+    console.log({ refreshTokenError: error });
     if (error?.response?.status === 403) {
       handleLogout(socket, dispatch, navigate);
     }
