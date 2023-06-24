@@ -25,6 +25,7 @@ import decryptMessage from "../../helper_functions/decryptMessage";
 import { searchUsers, removeNotification } from "../../apiCalls";
 import CheckIcon from "@mui/icons-material/Check";
 import removeMessageFromStorage from "../../helper_functions/removeMessageFromStorage";
+import SearchBar from "./SearchBar";
 
 function Topbar() {
   const { user, dispatch, profile_picture, socket, notifications } = useAuth();
@@ -33,6 +34,7 @@ function Topbar() {
   const searchBar = useRef(null);
   const [searchResults, setResults] = useState([]);
   const matchesMediaQuery = useMediaQuery("(min-width: 830px)");
+  const matches478 = useMediaQuery("(max-width: 478px)");
 
   const [viewMessage, setViewMessage] = useState(new Map());
 
@@ -217,40 +219,37 @@ function Topbar() {
           )}
 
           <div className="topbar-center">
-            <div className="search-bar">
+            {matches478 ? (
               <SearchIcon className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search for friend"
-                ref={searchBar}
-                onChange={handleSearch}
-              />
-              <div id="search-bar-drop-down" className="search-drop-down">
-                <ul>
-                  {
-                    <li>
-                      {searchResults.length > 0 ? (
-                        <span
-                          onClick={handleSearchResults}
-                          className="search-username"
-                        >
-                          View all results
-                        </span>
-                      ) : (
-                        "No results"
-                      )}
+            ) : (
+              <SearchBar searchBar={searchBar} handleSearch={handleSearch} />
+            )}
+
+            <div id="search-bar-drop-down" className="search-drop-down">
+              <ul>
+                {
+                  <li>
+                    {searchResults.length > 0 ? (
+                      <span
+                        onClick={handleSearchResults}
+                        className="search-username"
+                      >
+                        View all results
+                      </span>
+                    ) : (
+                      "No results"
+                    )}
+                  </li>
+                }
+                {searchResults.map((res, i) => {
+                  // return <li key={i}>{res.full_name}</li>;
+                  return (
+                    <li key={i} className="search-username">
+                      {res.username}
                     </li>
-                  }
-                  {searchResults.map((res, i) => {
-                    // return <li key={i}>{res.full_name}</li>;
-                    return (
-                      <li key={i} className="search-username">
-                        {res.username}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
+                  );
+                })}
+              </ul>
             </div>
           </div>
 
