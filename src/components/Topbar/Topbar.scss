@@ -70,12 +70,22 @@
       flex-grow: 5;
       display: flex;
       align-items: center;
+      justify-content: center;
       position: relative;
       height: 50px;
 
-      @media (max-width: 830px) {
-        flex-grow: 0;
-        width: 60%;
+      @media (max-width: 478px) {
+        padding: 1rem;
+      }
+
+      .search-icon {
+        color: $button-text-color;
+        font-size: 1.2rem !important;
+        margin-left: 0.5rem;
+
+        @media (max-width: 478px) {
+          margin: 0;
+        }
       }
 
       .search-bar {
@@ -84,28 +94,22 @@
         display: flex;
         align-items: center;
         border-radius: 30px;
-        margin-left: 1rem;
-
-        #search-bar-drop-down {
-          left: 0;
-          right: initial;
-        }
-
-        .search-icon {
-          color: $button-text-color;
-          margin-left: 0.5rem;
-          font-size: 1.2rem !important;
-        }
 
         input {
           color: white;
           background-color: $input-bg-color;
-          width: 80%;
+          width: 100%;
           outline: none;
           padding: 0.5rem;
           border: none;
-          border-radius: 10px;
+          border-radius: 30px;
         }
+      }
+
+      #search-bar-drop-down {
+        border-color: red;
+        left: 0;
+        right: initial;
       }
 
       // .search-drop-down {
@@ -169,6 +173,10 @@
         transition: all 0.2s ease-in;
       }
 
+      .notification-icon {
+        font-size: clamp(1.1rem, 5vw, 1.5rem);
+      }
+
       .topbar-icon-item:hover {
         background-color: $button-highlight-color;
       }
@@ -193,7 +201,6 @@
         align-items: center;
         position: relative;
         padding: 0 0.5rem;
-        margin-left: 1rem;
 
         &:hover {
           background-color: $button-highlight-color;
@@ -328,4 +335,8 @@
 
 .clicked {
   background-color: $button-highlight-color !important;
+}
+
+.hamburger {
+  margin-left: 8px;
 }

@@ -215,7 +215,9 @@ function Topbar() {
               </div>
             </div>
           ) : (
-            <Hamburger size={24} onToggle={handleSideNav} color="white" />
+            <div className="hamburger">
+              <Hamburger size={24} onToggle={handleSideNav} color="white" />
+            </div>
           )}
 
           <div className="topbar-center">
@@ -323,7 +325,7 @@ function Topbar() {
                   id="follow-icon"
                   onClick={() => showSelectedNotifications("follow")}
                 >
-                  <PersonIcon />
+                  <PersonIcon className="notification-icon" />
                   {notifications?.follows?.length > 0 && (
                     <span className="topbar-icon-badge">
                       {notifications.follows.length}
@@ -336,7 +338,7 @@ function Topbar() {
                   id="chat-icon"
                   onClick={() => showSelectedNotifications("message")}
                 >
-                  <ChatIcon />
+                  <ChatIcon className="notification-icon" />
                   {notifications?.messages?.length > 0 && (
                     <span className="topbar-icon-badge">
                       {notifications.messages.length}
@@ -344,7 +346,7 @@ function Topbar() {
                   )}
                 </div>
                 <div className="topbar-icon-item">
-                  <NotificationsIcon />
+                  <NotificationsIcon className="notification-icon" />
                   {notifications?.variousNotifications?.length > 0 && (
                     <span className="topbar-icon-badge">
                       {notifications.variousNotifications.length}
