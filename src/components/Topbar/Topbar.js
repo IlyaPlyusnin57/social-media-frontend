@@ -140,6 +140,10 @@ function Topbar() {
     navigate("/search-results", { state: searchValue });
   }
 
+  function navigateToSearchResults() {
+    navigate("/search-results", { state: "" });
+  }
+
   function handleSideNav(toggled) {
     if (toggled) {
       document.querySelector(".side-nav").style.width = "150px";
@@ -222,7 +226,10 @@ function Topbar() {
 
           <div className="topbar-center">
             {matches478 ? (
-              <SearchIcon className="search-icon" />
+              <SearchIcon
+                className="search-icon"
+                onClick={navigateToSearchResults}
+              />
             ) : (
               <SearchBar searchBar={searchBar} handleSearch={handleSearch} />
             )}

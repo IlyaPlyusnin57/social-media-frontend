@@ -70,7 +70,7 @@
       flex-grow: 5;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: left;
       position: relative;
       height: 50px;
 
@@ -107,7 +107,6 @@
       }
 
       #search-bar-drop-down {
-        border-color: red;
         left: 0;
         right: initial;
       }

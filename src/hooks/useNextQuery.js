@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import useAxiosConfig2 from "../api/useAxiosConfig2";
 
 export function useNextQuery(queryKeys, queryFunction, queryFunctionOptions) {
@@ -8,6 +8,10 @@ export function useNextQuery(queryKeys, queryFunction, queryFunctionOptions) {
   const nextUserId = useRef(null);
 
   const api = useAxiosConfig2();
+
+  useEffect(() => {
+    setResults([]);
+  }, [queryFunctionOptions.name]);
 
   const { isError, error, isFetching } = useQuery({
     queryKey: [...queryKeys],
