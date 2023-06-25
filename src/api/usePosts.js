@@ -11,7 +11,7 @@ function usePosts(profile, api, currentUser) {
   useEffect(() => {
     setPosts([]);
     setLastPostId(null);
-  }, [profile, currentUser]);
+  }, [profile, currentUser._id]);
 
   const url = profile ? `/posts/user2/` : `/posts/${currentUser._id}/all`;
 
@@ -24,7 +24,7 @@ function usePosts(profile, api, currentUser) {
     : () => getFeedOrPage(api, url);
 
   const { status, error, isFetching } = useQuery({
-    queryKey: ["posts", currentUser, profile, lastPostId],
+    queryKey: ["posts", currentUser._id, profile, lastPostId],
     queryFn: queryFunction,
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
