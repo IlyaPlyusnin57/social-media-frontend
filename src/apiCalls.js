@@ -209,7 +209,6 @@ export async function followUser(api, user, currentUser, refetch, socket) {
     });
 
     if (res?.status === 200) {
-      console.log({ res });
       socket?.emit("sendFollow", res.data);
     }
 
