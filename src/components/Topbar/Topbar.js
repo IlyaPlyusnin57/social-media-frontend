@@ -135,13 +135,18 @@ function Topbar() {
   function handleSearchResults() {
     const searchValue = searchBar.current.value;
     searchBar.current.value = "";
-    let dropDown = document.querySelector(".search-drop-down");
-    dropDown.classList.remove("show");
+    document.querySelector(".search-drop-down").classList.remove("show");
     navigate("/search-results", { state: searchValue });
   }
 
   function navigateToSearchResults() {
     navigate("/search-results", { state: "" });
+  }
+
+  function navigateToSearchProfile(user) {
+    searchBar.current.value = "";
+    document.querySelector(".search-drop-down").classList.remove("show");
+    navigate("/search-profile", { state: user });
   }
 
   function handleSideNav(toggled) {
@@ -250,11 +255,14 @@ function Topbar() {
                     )}
                   </li>
                 }
-                {searchResults.map((res, i) => {
-                  // return <li key={i}>{res.full_name}</li>;
+                {searchResults.map((user) => {
                   return (
-                    <li key={i} className="search-username">
-                      {res.username}
+                    <li
+                      key={user._id}
+                      className="search-username"
+                      onClick={() => navigateToSearchProfile(user)}
+                    >
+                      {user.username}
                     </li>
                   );
                 })}
