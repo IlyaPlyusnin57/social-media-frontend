@@ -17,7 +17,7 @@ function ChatModal({ onClose, friend, refetch }) {
     },
   });
 
-  const { user } = useAuth();
+  const { user, socket } = useAuth();
 
   const api = useAxiosConfig2();
 
@@ -27,13 +27,17 @@ function ChatModal({ onClose, friend, refetch }) {
       receiverId: friend._id,
     });
 
-    await sendMessagetoUser(
+    const res = await sendMessagetoUser(
       api,
       user._id,
       formData.message,
       conversation?._id,
       friend._id
     );
+
+    if (res.status === 200) {
+      socket?.emit("sendMessage", friend._id, res.data);
+    }
 
     setDisabled(true);
     refetch();
