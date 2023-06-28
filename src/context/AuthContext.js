@@ -98,8 +98,11 @@ function AuthContextProvider({ children }) {
       });
 
       socket.current.on("getFollowNotification", (followObject) => {
-        console.log({ receivedFollowObject: followObject });
         dispatch({ type: "SET_FOLLOW_NOTIFICATION", payload: followObject });
+      });
+
+      socket.current.on("getLikeNotification", (likeObject) => {
+        dispatch({ type: "SET_VARIOUS_NOTIFICATION", payload: likeObject });
       });
     }
   }, [state.user?._id, state.viewingConversation, api]);

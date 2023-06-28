@@ -156,6 +156,17 @@ export default function AuthReducer(state, action) {
         notifications: newNotifications,
       };
     }
+    case "SET_VARIOUS_NOTIFICATION": {
+      const various = action.payload;
+      const newNotifications = state.notifications;
+      newNotifications.variousNotifications = [
+        ...state.notifications.variousNotifications,
+        various,
+      ];
+
+      return { ...state, notifications: newNotifications };
+    }
+
     case "CLEAR_MESSAGE_NOTIFICATION": {
       const messageId = action.payload;
 
