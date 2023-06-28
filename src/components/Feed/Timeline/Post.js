@@ -105,7 +105,7 @@ function reducer(state, action) {
 
 const Post = forwardRef(({ post, setPosts, user, profile_picture }, ref) => {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, socket } = useAuth();
   const api = useAxiosConfig2();
 
   const [state, dispatch] = useReducer(reducer, {
@@ -115,7 +115,14 @@ const Post = forwardRef(({ post, setPosts, user, profile_picture }, ref) => {
 
   async function updateLikes() {
     try {
-      await api.put(`posts/${post._id}/like`, { userId: `${currentUser._id}` });
+      const res = await api.put(`posts/${post._id}/like`, {
+        user: currentUser,
+      });
+
+      if (res?.status === 200) {
+        socket?.emit("sendLike", res.data);
+      }
+
       dispatch({ type: "update_likes" });
     } catch (error) {
       console.log(error);
