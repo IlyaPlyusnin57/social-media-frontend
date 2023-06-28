@@ -190,6 +190,19 @@ export default function AuthReducer(state, action) {
         notifications: newNotifications,
       };
     }
+    case "CLEAR_VARIOUS_NOTIFICATION": {
+      const variousId = action.payload;
+
+      const newVariousNotifications =
+        state.notifications.variousNotifications.filter((various) => {
+          return various.id !== variousId;
+        });
+
+      const newNotifications = state.notifications;
+      newNotifications.variousNotifications = newVariousNotifications;
+
+      return { ...state, notifications: newNotifications };
+    }
     case "CLEAR_MESSAGE_NOTIFICATION_FOR_CONVERSATION": {
       const conversationId = action.payload;
 

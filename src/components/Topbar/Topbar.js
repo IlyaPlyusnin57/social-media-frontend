@@ -50,6 +50,10 @@ function Topbar() {
     if (notifications.messages.length === 0) {
       document.getElementById("chat-icon").classList.remove("clicked");
     }
+
+    if (notifications.variousNotifications.length === 0) {
+      document.getElementById("various-icon").classList.remove("clicked");
+    }
   });
 
   // useEffect(() => {
@@ -163,7 +167,7 @@ function Topbar() {
   const notificationIds = {
     follow: ["follow-icon", "follow-drop-down"],
     message: ["chat-icon", "message-drop-down"],
-    //various: ["various-icon", "various-drop-down"], this property is for the future feature
+    various: ["various-icon", "various-drop-down"],
   };
 
   function showSelectedNotifications(id) {
@@ -190,6 +194,9 @@ function Topbar() {
     } else if (type === "follow") {
       await removeNotification(api, user._id, { followId: id });
       dispatch({ type: "CLEAR_FOLLOW_NOTIFICATION", payload: id });
+    } else if (type === "various") {
+      await removeNotification(api, user._id, { variousId: id });
+      dispatch({ type: "CLEAR_VARIOUS_NOTIFICATION", payload: id });
     }
   }
 
@@ -332,6 +339,38 @@ function Topbar() {
                 </ul>
               </div>
             )}
+
+            {notifications.variousNotifications.length > 0 && (
+              <div className="search-drop-down" id="various-drop-down">
+                <ul>
+                  {notifications.variousNotifications.map(
+                    ({ id, message, liker }) => {
+                      return (
+                        <li key={id}>
+                          <section className="notification">
+                            <div>
+                              <span
+                                className="navigate-user"
+                                onClick={() => navigateToSearchProfile(liker)}
+                              >
+                                {`${liker.first_name} ${liker.last_name}`}
+                              </span>
+                              {` ${message}`}
+                            </div>
+
+                            <CheckIcon
+                              className="cursor-icon"
+                              onClick={() => handleMarkAsRead(id, "various")}
+                            />
+                          </section>
+                        </li>
+                      );
+                    }
+                  )}
+                </ul>
+              </div>
+            )}
+
             {/* matchesMediaQuery && */}
             {
               <div className="topbar-icons">
@@ -360,7 +399,11 @@ function Topbar() {
                     </span>
                   )}
                 </div>
-                <div className="topbar-icon-item">
+                <div
+                  className="topbar-icon-item"
+                  id="various-icon"
+                  onClick={() => showSelectedNotifications("various")}
+                >
                   <NotificationsIcon className="notification-icon" />
                   {notifications?.variousNotifications?.length > 0 && (
                     <span className="topbar-icon-badge">

@@ -301,7 +301,7 @@
   .notification {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
 
     .notification-sender {
       width: clamp(130px, 25vw, 250px);
@@ -338,4 +338,10 @@
 
 .hamburger {
   margin-left: 8px;
+}
+
+.navigate-user {
+  cursor: pointer;
+  font-weight: 900;
+  color: #8a8a8a;
 }
