@@ -9,7 +9,9 @@ export async function refreshToken(user, socket, dispatch, navigate) {
     return res.data;
   } catch (error) {
     console.log({ refreshTokenError: error });
-    if (error?.response?.status === 403) {
+    const status = error?.response?.status;
+
+    if (status === 403 || status === 401) {
       handleLogout(socket, dispatch, navigate);
     }
   }
