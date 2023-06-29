@@ -8,6 +8,7 @@ import Feed from "./components/Feed/Feed";
 import ChatList from "./pages/chats/ChatList";
 import Conversation from "./components/Chat/Conversation";
 import SubList from "./pages/subs/SubList";
+import ShowPost from "./pages/post/ShowPost";
 
 function App() {
   return (
@@ -69,6 +70,14 @@ function App() {
             element={
               <Home>
                 <Conversation />
+              </Home>
+            }
+          ></Route>
+          <Route
+            path="/post"
+            element={
+              <Home>
+                <ShowPost />
               </Home>
             }
           ></Route>
