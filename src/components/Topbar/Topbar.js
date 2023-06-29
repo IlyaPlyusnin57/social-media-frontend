@@ -153,6 +153,10 @@ function Topbar() {
     navigate("/search-profile", { state: user });
   }
 
+  function navigateToPost(postId) {
+    navigate("/post", { state: postId });
+  }
+
   function handleSideNav(toggled) {
     if (toggled) {
       document.querySelector(".side-nav").style.width = "150px";
@@ -344,7 +348,7 @@ function Topbar() {
               <div className="search-drop-down" id="various-drop-down">
                 <ul>
                   {notifications.variousNotifications.map(
-                    ({ id, message, liker }) => {
+                    ({ id, message, liker, type, typeId }) => {
                       return (
                         <li key={id}>
                           <section className="notification">
@@ -356,6 +360,10 @@ function Topbar() {
                                 {`${liker.first_name} ${liker.last_name}`}
                               </span>
                               {` ${message}`}
+                              <span
+                                className="navigate-user"
+                                onClick={() => navigateToPost(typeId)}
+                              >{` ${type}`}</span>
                             </div>
 
                             <CheckIcon
