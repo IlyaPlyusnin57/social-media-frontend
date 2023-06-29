@@ -232,9 +232,17 @@ export async function unfollowUser(api, user, currentUser, refetch) {
 
 export async function removeNotification(api, userId, options = {}) {
   try {
-    console.log({ api, userId, options });
-
     const res = await api.patch(`/notifications/${userId}`, options);
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getPost(api, postId) {
+  try {
+    const res = await api.get(`/posts/${postId}`);
 
     return res.data;
   } catch (error) {
