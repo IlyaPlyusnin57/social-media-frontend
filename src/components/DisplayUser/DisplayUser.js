@@ -1,5 +1,6 @@
 import OnlineUser from "../Online User/OnlineUser";
 import { forwardRef, memo } from "react";
+import "./DisplayUser.scss";
 
 const DisplayUser = memo(
   forwardRef(function DisplayUser(
