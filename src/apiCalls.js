@@ -249,3 +249,13 @@ export async function getPost(api, postId) {
     console.log(error);
   }
 }
+
+export async function getPostLikers(api, postId) {
+  try {
+    const res = await api.get(`posts/${postId}/postLikers`);
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
