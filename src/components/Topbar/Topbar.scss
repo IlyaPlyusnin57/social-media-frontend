@@ -94,6 +94,7 @@
         display: flex;
         align-items: center;
         border-radius: 30px;
+        margin-right: 0.5rem;
 
         input {
           color: white;
@@ -277,6 +278,9 @@
   right: 1rem;
   background-color: $post-bg-color;
   border-radius: $post-border-radius;
+  height: 250px;
+  overflow-y: scroll;
+  border: 1px solid $post-border-color;
 
   ul {
     border: 1px solid $post-border-color;
