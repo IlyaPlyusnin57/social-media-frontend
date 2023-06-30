@@ -10,6 +10,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import LikerList from "../../components/LikerList/LikerList";
 
 function ShowPost() {
   const { state: postId } = useLocation();
@@ -37,6 +38,14 @@ function ShowPost() {
     return <span>Error: {error.message}</span>;
   }
 
+  function addDislay() {
+    document.getElementById("liker-list-container").classList.add("display");
+  }
+
+  function removeDisplay() {
+    document.getElementById("liker-list-container").classList.remove("display");
+  }
+
   return (
     <div className="post">
       <div className="post-title">
@@ -46,31 +55,37 @@ function ShowPost() {
           <div className="post-date">{format(post.createdAt)}</div>
         </div>
       </div>
-      <div className="post-content">
-        <div className="text-content">{post?.desc + " " + post.userId}</div>
-        {post?.img && (
-          <div className="img-content">
-            <img src={PF + post.img} alt="" />
-          </div>
-        )}
-      </div>
-      <div className="post-footer">
-        <Box className="icon-wrapper post-likes">
-          {isLiked ? (
-            <FavoriteIcon className="post-footer-icon red-heart-icon" />
-          ) : (
-            <FavoriteBorderIcon className="post-footer-icon" />
+
+      <div className="content-wrapper" onMouseLeave={removeDisplay}>
+        <div className="post-content">
+          <div className="text-content">{post?.desc + " " + post.userId}</div>
+          {post?.img && (
+            <div className="img-content">
+              <img src={PF + post.img} alt="" />
+            </div>
           )}
+        </div>
 
-          <span>{post.likes.length}</span>
-        </Box>
+        <LikerList {...{ removeDisplay, post }} />
 
-        <Box className="icon-wrapper">
-          <ChatBubbleOutlineIcon className="post-footer-icon" />
-        </Box>
-        <Box className="icon-wrapper">
-          <ShareIcon className="post-footer-icon" />
-        </Box>
+        <div className="post-footer">
+          <Box className="icon-wrapper post-likes" onMouseEnter={addDislay}>
+            {isLiked ? (
+              <FavoriteIcon className="post-footer-icon red-heart-icon" />
+            ) : (
+              <FavoriteBorderIcon className="post-footer-icon" />
+            )}
+
+            <span>{post.likes.length}</span>
+          </Box>
+
+          <Box className="icon-wrapper">
+            <ChatBubbleOutlineIcon className="post-footer-icon" />
+          </Box>
+          <Box className="icon-wrapper">
+            <ShareIcon className="post-footer-icon" />
+          </Box>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 @use "../../../sass_vars/global-vars" as *;
 
 .post {
+  position: relative;
   @include post-border-margin-padding;
 
   .delete-icon-container {
@@ -46,7 +47,7 @@
   }
 
   .post-footer {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     display: flex;
 
     .icon-wrapper {
