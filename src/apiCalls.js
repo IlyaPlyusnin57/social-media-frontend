@@ -1,5 +1,6 @@
 import axios from "axios";
 import CryptoJS from "crypto-js";
+import { filterArray } from "./helper_functions/filterArray";
 
 export async function loginCall(userCredentials, dispatch) {
   dispatch({ type: "LOGIN_START" });
@@ -56,7 +57,7 @@ export async function register_user(userInfo, dispatch) {
 export async function getSubs(api, user) {
   try {
     const res = await api.get(`/users/${user._id}/subscriptions`);
-    return res.data;
+    return filterArray(res.data);
   } catch (error) {
     console.log(error);
     return error;
@@ -66,7 +67,7 @@ export async function getSubs(api, user) {
 export async function getFollowers(api, user) {
   try {
     const res = await api.get(`/users/${user._id}/followers`);
-    return res.data;
+    return filterArray(res.data);
   } catch (error) {
     console.log(error);
     return error;
