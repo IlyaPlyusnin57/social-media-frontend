@@ -5,11 +5,13 @@ import { useNavigate } from "react-router-dom";
 import profilePicture from "../../../helper_functions/profilePicture";
 import { getSubs } from "../../../apiCalls";
 import useAxiosConfig2 from "../../../api/useAxiosConfig2";
-import { memo } from "react";
+import { memo, useState } from "react";
+import LikerListModal from "../../LikerList/LikerListModal";
+import { createPortal } from "react-dom";
 
 const Subscriptions = memo(({ user }) => {
   const navigate = useNavigate();
-
+  const [showModal, setShowModal] = useState(false);
   const api = useAxiosConfig2();
 
   function handleSearchUser(user) {
@@ -34,26 +36,49 @@ const Subscriptions = memo(({ user }) => {
     return <span>Error: {error.message}</span>;
   }
 
+  const shortFollowingArr = followingArr.slice(0, 3);
+
+  if (shortFollowingArr.length === 0) {
+    return;
+  }
+
+  const userName = "Subscriber";
+  const message = "";
+
   return (
     <div className="subs">
       <h4>Subscriptions</h4>
-
-      {followingArr?.map((user, i) => {
+      {shortFollowingArr?.map((user, i) => {
         const profile_picture = profilePicture(user);
 
         return (
-          <div key={i} className="sub-image">
-            <img
-              onClick={() => handleSearchUser(user)}
-              src={profile_picture}
-              alt=""
-            />
-            <div style={{ fontSize: "10px" }}>
-              {user?.first_name + " " + user?.last_name}
+          <div
+            key={i}
+            className="sub-image pointer"
+            onClick={() => handleSearchUser(user)}
+          >
+            <img src={profile_picture} alt="" />
+            <div style={{ fontSize: "10px" }} className="sub-user-name">
+              {user?.first_name}
             </div>
           </div>
         );
       })}
+      <div className="view-all pointer" onClick={() => setShowModal(true)}>
+        View All
+      </div>
+      {showModal &&
+        createPortal(
+          <LikerListModal
+            {...{
+              userList: followingArr,
+              message,
+              userName,
+              removeModal: () => setShowModal(false),
+            }}
+          />,
+          document.body
+        )}
     </div>
   );
 });

@@ -79,7 +79,7 @@ function Feed({ profile }) {
 
         {profile && matchesMediaQuery && (
           <div className="timeline-right">
-            <Followers />
+            <Followers user={currentUser} />
             <Subs user={currentUser} />
           </div>
         )}
