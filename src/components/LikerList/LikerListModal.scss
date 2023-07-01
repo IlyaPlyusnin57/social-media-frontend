@@ -1,7 +1,7 @@
 @use "../../sass_vars/global-vars.scss" as *;
 
 .liker-list-modal-container {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   height: 100vh;
@@ -14,12 +14,13 @@
 }
 
 .liker-list-modal {
-  margin-top: 70px;
+  margin: 70px 1rem 0;
   border: 1px solid $post-border-color;
   border-radius: $post-border-radius;
   background-color: $post-bg-color;
-  max-height: 25vw;
+  max-height: 80vh;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .list-modal-header {
@@ -28,11 +29,11 @@
 }
 
 .close-icon-wrapper {
-  padding: 1rem 2rem 0rem;
+  padding: 1rem 2rem 1rem;
   display: flex;
   justify-content: flex-end;
 }
 
 .user-list {
-  padding: 0rem 4rem 2rem;
+  padding: 0rem 0.5rem 2rem;
 }
