@@ -63,6 +63,16 @@ export async function getSubs(api, user) {
   }
 }
 
+export async function getFollowers(api, user) {
+  try {
+    const res = await api.get(`/users/${user._id}/followers`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
 export async function getFeedOrPage(api, url, options = {}) {
   try {
     const res = await api.get(url, options);
