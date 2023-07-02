@@ -291,7 +291,10 @@ function Topbar() {
                         <section className="notification">
                           <div className="notification-sender">
                             You have been followed by
-                            <span className="navigate-user">
+                            <span
+                              className="navigate-user"
+                              onClick={() => navigateToSearchProfile(follower)}
+                            >
                               {` ${follower.first_name} ${follower.last_name}`}
                             </span>
                           </div>
