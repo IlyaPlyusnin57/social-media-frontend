@@ -98,12 +98,13 @@ function Conversation() {
       api,
       user._id,
       input.current.value,
-      conversation._id,
-      friend._id
+      conversation._id
     );
 
+    const messageObject = { ...res.data, senderUser: user };
+
     if (res.status === 200) {
-      socket?.emit("sendMessage", friend._id, res.data);
+      socket?.emit("sendMessage", friend._id, messageObject);
       console.log("message was just sent");
       input.current.value = "";
       setMessages([res.data, ...messages]);

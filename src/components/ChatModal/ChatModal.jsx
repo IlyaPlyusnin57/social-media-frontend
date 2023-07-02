@@ -31,8 +31,7 @@ function ChatModal({ onClose, friend, refetch }) {
       api,
       user._id,
       formData.message,
-      conversation?._id,
-      friend._id
+      conversation?._id
     );
 
     if (res.status === 200) {

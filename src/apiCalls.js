@@ -158,8 +158,7 @@ export async function sendMessagetoUser(
   api,
   senderId,
   message,
-  conversationId,
-  receiverId
+  conversationId
 ) {
   try {
     const enryptedMessage = CryptoJS.AES.encrypt(
@@ -171,7 +170,6 @@ export async function sendMessagetoUser(
       senderId,
       message: enryptedMessage,
       conversationId,
-      receiverId,
     });
 
     return res;
