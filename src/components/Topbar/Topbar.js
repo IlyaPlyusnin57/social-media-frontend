@@ -289,9 +289,12 @@ function Topbar() {
                     return (
                       <li key={id}>
                         <section className="notification">
-                          <span className="notification-sender">
-                            {`You have been followed by ${follower.first_name} ${follower.last_name}`}
-                          </span>
+                          <div className="notification-sender">
+                            You have been followed by
+                            <span className="navigate-user">
+                              {` ${follower.first_name} ${follower.last_name}`}
+                            </span>
+                          </div>
 
                           <CheckIcon
                             className="cursor-icon"
@@ -312,7 +315,15 @@ function Topbar() {
                     return (
                       <li key={message._id}>
                         <section className="notification">
-                          <span className="notification-sender">{`${message.senderName} sent you a message`}</span>
+                          <div className="notification-sender">
+                            <span
+                              className="navigate-user"
+                              onClick={() =>
+                                navigateToSearchProfile(message.senderUser)
+                              }
+                            >{`${message.senderUser.first_name} ${message.senderUser.last_name}`}</span>
+                            {" sent you a message"}
+                          </div>
 
                           <ChatBubbleIcon
                             className="cursor-icon"
