@@ -173,12 +173,12 @@ const Post = forwardRef(({ post, setPosts, user, profile_picture }, ref) => {
           <span>{state.likes}</span>
         </Box>
 
-        <Box className="icon-wrapper">
+        {/* <Box className="icon-wrapper">
           <ChatBubbleOutlineIcon className="post-footer-icon" />
         </Box>
         <Box className="icon-wrapper">
           <ShareIcon className="post-footer-icon" />
-        </Box>
+        </Box> */}
       </div>
     </div>
   );
