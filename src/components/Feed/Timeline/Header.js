@@ -14,7 +14,7 @@ import {
 } from "../../../apiCalls";
 
 function Header({ user, profile_picture }) {
-  const { user: currentUser, socket } = useAuth();
+  const { user: currentUser, socket, dispatch } = useAuth();
 
   const onlineUser = user._id === currentUser._id ? currentUser : user;
 
@@ -50,15 +50,19 @@ function Header({ user, profile_picture }) {
             <button className="btn">
               {isFollowing ? (
                 <span
-                  onClick={() => unfollowUser(api, user, currentUser, refetch)}
+                  onClick={() => {
+                    unfollowUser(api, user, currentUser, refetch);
+                    dispatch({ type: "REMOVE_FOLLOW", payload: user._id });
+                  }}
                 >
                   Unfollow
                 </span>
               ) : (
                 <span
-                  onClick={() =>
-                    followUser(api, user, currentUser, refetch, socket)
-                  }
+                  onClick={() => {
+                    followUser(api, user, currentUser, refetch, socket);
+                    dispatch({ type: "SET_FOLLOW", payload: user._id });
+                  }}
                 >
                   Follow
                 </span>

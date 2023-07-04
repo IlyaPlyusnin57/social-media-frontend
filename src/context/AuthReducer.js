@@ -252,6 +252,22 @@ export default function AuthReducer(state, action) {
         notifications: newNotifications,
       };
     }
+    case "SET_FOLLOW": {
+      const followId = action.payload;
+
+      const newFollowingArr = [...state.user.following, followId];
+
+      return { ...state, user: { ...state.user, following: newFollowingArr } };
+    }
+    case "REMOVE_FOLLOW": {
+      const followId = action.payload;
+
+      const newFollowingArr = state.user.following.filter(
+        (userId) => userId !== followId
+      );
+
+      return { ...state, user: { ...state.user, following: newFollowingArr } };
+    }
     default:
       return state;
   }
