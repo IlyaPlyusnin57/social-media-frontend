@@ -57,7 +57,6 @@ function Feed({ profile }) {
         key={post._id}
         post={post}
         user={currentUser}
-        profile_picture={profile_picture}
         setPosts={setPosts}
       />
     );

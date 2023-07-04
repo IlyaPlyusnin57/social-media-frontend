@@ -10,8 +10,11 @@ import { useReducer, forwardRef, memo } from "react";
 import { format } from "timeago.js";
 import { useAuth } from "../../../context/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
 import useAxiosConfig2 from "../../../api/useAxiosConfig2";
+import { getUser } from "../../../apiCalls";
+import profilePicture from "../../../helper_functions/profilePicture";
+import { useQuery } from "@tanstack/react-query";
+import { PF } from "../../../helper_functions/PF";
 
 function reducer(state, action) {
   let new_likes = state.isLiked ? state.likes - 1 : state.likes + 1;
@@ -103,50 +106,26 @@ function reducer(state, action) {
 //   })
 // );
 
-const Post = forwardRef(({ post, setPosts, user, profile_picture }, ref) => {
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const { user: currentUser, socket } = useAuth();
-  const api = useAxiosConfig2();
-
-  const [state, dispatch] = useReducer(reducer, {
-    likes: post.likes.length,
-    isLiked: post.likes.includes(currentUser._id),
-  });
-
-  async function updateLikes() {
-    try {
-      const res = await api.put(`posts/${post._id}/like`, {
-        user: currentUser,
-      });
-
-      if (res?.status === 200) {
-        socket?.emit("sendLike", res.data);
-      }
-
-      dispatch({ type: "update_likes" });
-    } catch (error) {
-      console.log(error);
-    }
+function PostContent({
+  isLoading,
+  isError,
+  error,
+  profile_picture,
+  user,
+  post,
+  state,
+  updateLikes,
+}) {
+  if (isLoading) {
+    return <span>Loading...</span>;
   }
 
-  async function handleDelete() {
-    const userId = { data: { userId: user._id } };
-    try {
-      await api.delete(`posts/${post._id}`, userId);
-      setPosts((prev) => prev.filter((p) => p._id !== post._id));
-    } catch (error) {
-      console.log(error);
-    }
+  if (isError) {
+    return <span>Error: {error.message}</span>;
   }
 
   return (
-    <div className="post" ref={ref}>
-      {currentUser._id === post.userId && currentUser._id === user._id && (
-        <div className="delete-icon-container">
-          <DeleteIcon className="delete-icon" onClick={handleDelete} />
-        </div>
-      )}
-
+    <>
       <div className="post-title">
         <img src={profile_picture} alt="" />
         <div className="post-info margin-left">
@@ -174,12 +153,85 @@ const Post = forwardRef(({ post, setPosts, user, profile_picture }, ref) => {
         </Box>
 
         {/* <Box className="icon-wrapper">
-          <ChatBubbleOutlineIcon className="post-footer-icon" />
-        </Box>
-        <Box className="icon-wrapper">
-          <ShareIcon className="post-footer-icon" />
-        </Box> */}
+      <ChatBubbleOutlineIcon className="post-footer-icon" />
+    </Box>
+    <Box className="icon-wrapper">
+      <ShareIcon className="post-footer-icon" />
+    </Box> */}
       </div>
+    </>
+  );
+}
+
+const Post = forwardRef(({ post, setPosts }, ref) => {
+  const { user: currentUser, socket } = useAuth();
+  const api = useAxiosConfig2();
+
+  const [state, dispatch] = useReducer(reducer, {
+    likes: post.likes.length,
+    isLiked: post.likes.includes(currentUser._id),
+  });
+
+  const {
+    data: user,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["post-user", post.userId],
+    queryFn: () => getUser(api, post.userId),
+    refetchOnWindowFocus: false,
+  });
+
+  const profile_picture = profilePicture(user);
+
+  async function updateLikes() {
+    try {
+      const res = await api.put(`posts/${post._id}/like`, {
+        user: currentUser,
+      });
+
+      if (res?.status === 200) {
+        socket?.emit("sendLike", res.data);
+      }
+
+      dispatch({ type: "update_likes" });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function handleDelete() {
+    const userId = { data: { userId: currentUser._id } };
+    try {
+      await api.delete(`posts/${post._id}`, userId);
+      setPosts((prev) => prev.filter((p) => p._id !== post._id));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return (
+    <div className="post" ref={ref}>
+      {/* && currentUser._id === user._id */}
+      {currentUser._id === post.userId && (
+        <div className="delete-icon-container">
+          <DeleteIcon className="delete-icon" onClick={handleDelete} />
+        </div>
+      )}
+
+      <PostContent
+        {...{
+          isLoading,
+          isError,
+          error,
+          profile_picture,
+          user,
+          post,
+          state,
+          updateLikes,
+        }}
+      />
     </div>
   );
 });
