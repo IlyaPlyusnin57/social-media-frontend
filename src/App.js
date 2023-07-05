@@ -9,6 +9,7 @@ import ChatList from "./pages/chats/ChatList";
 import Conversation from "./components/Chat/Conversation";
 import SubList from "./pages/subs/SubList";
 import ShowPost from "./pages/post/ShowPost";
+import NewFeed from "./components/Feed/NewFeed";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
             path="/"
             element={
               <Home>
-                <Feed profile={false} />
+                <NewFeed />
               </Home>
             }
           ></Route>
