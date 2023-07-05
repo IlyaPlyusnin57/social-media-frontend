@@ -268,3 +268,13 @@ export async function getPostLikers(api, postId) {
     console.log(error);
   }
 }
+
+export async function getUsersFeedForADay(api, userId, options = {}) {
+  try {
+    const res = await api.post(`posts/getFeedForADay/${userId}`, options);
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
