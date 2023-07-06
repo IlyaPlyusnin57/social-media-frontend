@@ -31,81 +31,6 @@ function reducer(state, action) {
   }
 }
 
-// const Post = memo(
-//   forwardRef(({ post, setPosts, user, profile_picture }, ref) => {
-//     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-//     const { user: currentUser } = useAuth();
-
-//     const [state, dispatch] = useReducer(reducer, {
-//       likes: post.likes.length,
-//       isLiked: post.likes.includes(currentUser._id),
-//     });
-
-//     async function updateLikes() {
-//       try {
-//         axios.put(`posts/${post._id}/like`, { userId: `${currentUser._id}` });
-//         dispatch({ type: "update_likes" });
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     }
-
-//     async function handleDelete() {
-//       const userId = { data: { userId: user._id } };
-//       try {
-//         await axios.delete(`posts/${post._id}`, userId);
-//         setPosts((prev) => prev.filter((p) => p._id !== post._id));
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     }
-
-//     return (
-//       <div className="post" ref={ref}>
-//         {currentUser._id === post.userId && currentUser._id === user._id && (
-//           <div className="delete-icon-container">
-//             <DeleteIcon className="delete-icon" onClick={handleDelete} />
-//           </div>
-//         )}
-
-//         <div className="post-title">
-//           <img src={profile_picture} alt="" />
-//           <div className="post-info margin-left">
-//             <div className="username">{user?.username}</div>
-//             <div className="post-date">{format(post.createdAt)}</div>
-//           </div>
-//         </div>
-//         <div className="post-content">
-//           <div className="text-content">{post?.desc + " " + post.userId}</div>
-//           {post?.img && (
-//             <div className="img-content">
-//               <img src={PF + post.img} alt="" />
-//             </div>
-//           )}
-//         </div>
-//         <div className="post-footer">
-//           <Box className="icon-wrapper post-likes" onClick={updateLikes}>
-//             {state.isLiked ? (
-//               <FavoriteIcon className="post-footer-icon red-heart-icon" />
-//             ) : (
-//               <FavoriteBorderIcon className="post-footer-icon" />
-//             )}
-
-//             <span>{state.likes}</span>
-//           </Box>
-
-//           <Box className="icon-wrapper">
-//             <ChatBubbleOutlineIcon className="post-footer-icon" />
-//           </Box>
-//           <Box className="icon-wrapper">
-//             <ShareIcon className="post-footer-icon" />
-//           </Box>
-//         </div>
-//       </div>
-//     );
-//   })
-// );
-
 function PostContent({
   isLoading,
   isError,
@@ -163,77 +88,79 @@ function PostContent({
   );
 }
 
-const Post = forwardRef(({ post, setPosts }, ref) => {
-  const { user: currentUser, socket } = useAuth();
-  const api = useAxiosConfig2();
+const Post = memo(
+  forwardRef(({ post, setPosts }, ref) => {
+    const { user: currentUser, socket } = useAuth();
+    const api = useAxiosConfig2();
 
-  const [state, dispatch] = useReducer(reducer, {
-    likes: post.likes.length,
-    isLiked: post.likes.includes(currentUser._id),
-  });
+    const [state, dispatch] = useReducer(reducer, {
+      likes: post.likes.length,
+      isLiked: post.likes.includes(currentUser._id),
+    });
 
-  const {
-    data: user,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["post-user", post.userId],
-    queryFn: () => getUser(api, post.userId),
-    refetchOnWindowFocus: false,
-  });
+    const {
+      data: user,
+      isLoading,
+      isError,
+      error,
+    } = useQuery({
+      queryKey: ["post-user", post.userId],
+      queryFn: () => getUser(api, post.userId),
+      refetchOnWindowFocus: false,
+    });
 
-  const profile_picture = profilePicture(user);
+    const profile_picture = profilePicture(user);
 
-  async function updateLikes() {
-    try {
-      const res = await api.put(`posts/${post._id}/like`, {
-        user: currentUser,
-      });
+    async function updateLikes() {
+      try {
+        const res = await api.put(`posts/${post._id}/like`, {
+          user: currentUser,
+        });
 
-      if (res?.status === 200) {
-        socket?.emit("sendLike", res.data);
+        if (res?.status === 200) {
+          socket?.emit("sendLike", res.data);
+        }
+
+        dispatch({ type: "update_likes" });
+      } catch (error) {
+        console.log(error);
       }
-
-      dispatch({ type: "update_likes" });
-    } catch (error) {
-      console.log(error);
     }
-  }
 
-  async function handleDelete() {
-    const userId = { data: { userId: currentUser._id } };
-    try {
-      await api.delete(`posts/${post._id}`, userId);
-      setPosts((prev) => prev.filter((p) => p._id !== post._id));
-    } catch (error) {
-      console.log(error);
+    async function handleDelete() {
+      const userId = { data: { userId: currentUser._id } };
+      try {
+        await api.delete(`posts/${post._id}`, userId);
+        setPosts((prev) => prev.filter((p) => p._id !== post._id));
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }
 
-  return (
-    <div className="post" ref={ref}>
-      {/* && currentUser._id === user._id */}
-      {currentUser._id === post.userId && (
-        <div className="delete-icon-container">
-          <DeleteIcon className="delete-icon" onClick={handleDelete} />
-        </div>
-      )}
+    return (
+      <div className="post" ref={ref}>
+        {/* && currentUser._id === user._id */}
+        {currentUser._id === post.userId && (
+          <div className="delete-icon-container">
+            <DeleteIcon className="delete-icon" onClick={handleDelete} />
+          </div>
+        )}
 
-      <PostContent
-        {...{
-          isLoading,
-          isError,
-          error,
-          profile_picture,
-          user,
-          post,
-          state,
-          updateLikes,
-        }}
-      />
-    </div>
-  );
-});
+        <PostContent
+          {...{
+            isLoading,
+            isError,
+            error,
+            profile_picture,
+            user,
+            post,
+            state,
+            updateLikes,
+          }}
+        />
+      </div>
+    );
+  })
+);
 
 export default Post;
