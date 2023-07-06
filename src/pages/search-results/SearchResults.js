@@ -43,7 +43,7 @@ function SearchResults() {
   const lastUserRef = useGetLastRef(
     isFetching,
     hasNextPage,
-    nextUserId,
+    nextUserId.current,
     setLastUserId
   );
 

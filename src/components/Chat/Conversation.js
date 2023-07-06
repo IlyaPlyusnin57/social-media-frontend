@@ -128,7 +128,7 @@ function Conversation() {
   const lastPostRef = useGetLastRef(
     isFetching,
     hasNextPage,
-    nextPostId,
+    nextPostId.current,
     setLastPostId
   );
 

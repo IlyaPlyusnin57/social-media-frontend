@@ -46,7 +46,7 @@ function Feed({ profile }) {
   const lastPostRef = useGetLastRef(
     isFetching,
     hasNextPage,
-    nextPostId,
+    nextPostId.current,
     setLastPostId
   );
 
