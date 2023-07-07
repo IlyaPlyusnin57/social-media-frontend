@@ -7,6 +7,7 @@ import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import { useRef, useState } from "react";
 import Post from "./Timeline/Post";
 import { useGetLastRef2 } from "../../hooks/useGetLastRef2";
+import UsersPosts from "./UsersPosts";
 
 function NewFeed() {
   const { user } = useAuth();
@@ -47,7 +48,7 @@ function NewFeed() {
           currentUser.current.prevDay++;
         }
 
-        if (currentUser.current.prevDay === 4) {
+        if (currentUser.current.prevDay === 5) {
           currentUser.current.hasFinished = true;
         } else {
           setUserId(
@@ -89,9 +90,15 @@ function NewFeed() {
     <div className="feed">
       <div className="timeline">
         <div className="timeline-main">
+          {<UsersPosts />}
           <main>{postContent}</main>
           {isLoading && <span>Loading...</span>}
           {isError && <span>Error: {error.message}</span>}
+          {currentUser.current.hasFinished && (
+            <div className="post" style={{ textAlign: "center" }}>
+              You have seen all posts from past 3 days
+            </div>
+          )}
         </div>
       </div>
     </div>
