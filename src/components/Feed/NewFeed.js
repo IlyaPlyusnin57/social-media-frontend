@@ -39,19 +39,6 @@ function NewFeed() {
       if (data.length === 10) {
         currentUser.current.lastPostId = data[data.length - 1]._id;
         currentUser.current.fetchNext = false;
-      } else if (data.length === 0) {
-        followIndex.current++;
-
-        if (followIndex.current % user.following.length === 0) {
-          currentUser.current.currDay++;
-          currentUser.current.prevDay++;
-        }
-
-        if (currentUser.current.prevDay !== 4) {
-          setUserId(
-            user.following[followIndex.current % user.following.length]
-          );
-        }
       } else {
         followIndex.current++;
 
@@ -62,6 +49,10 @@ function NewFeed() {
 
         if (currentUser.current.prevDay === 4) {
           currentUser.current.hasFinished = true;
+        } else {
+          setUserId(
+            user.following[followIndex.current % user.following.length]
+          );
         }
 
         currentUser.current.lastPostId = null;
