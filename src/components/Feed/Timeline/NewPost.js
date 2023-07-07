@@ -2,7 +2,6 @@ import "./NewPost.scss";
 
 import SendIcon from "@mui/icons-material/Send";
 import { useAuth } from "../../../context/AuthContext";
-import axios from "axios";
 import { useRef } from "react";
 import useAxiosConfig2 from "../../../api/useAxiosConfig2";
 
