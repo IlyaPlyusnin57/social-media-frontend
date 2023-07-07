@@ -118,7 +118,11 @@ const Post = memo(
         });
 
         if (res?.status === 200) {
-          socket?.emit("sendLike", res.data);
+          const { liker, likedUser } = res.data;
+
+          if (liker._id !== likedUser) {
+            socket?.emit("sendLike", res.data);
+          }
         }
 
         dispatch({ type: "update_likes" });
