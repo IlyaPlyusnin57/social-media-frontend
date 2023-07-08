@@ -12,6 +12,7 @@ import {
   followUser,
   unfollowUser,
 } from "../../../apiCalls";
+import { CircularProgress } from "@mui/material";
 
 function Header({ user, profile_picture }) {
   const { user: currentUser, socket, dispatch } = useAuth();
@@ -20,7 +21,11 @@ function Header({ user, profile_picture }) {
 
   const api = useAxiosConfig2();
 
-  const { data: isFollowing, refetch } = useQuery({
+  const {
+    data: isFollowing,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey: ["following-user"],
     queryFn: () => getFollowingStatus(api, user, currentUser),
     enabled: user._id !== currentUser._id,
@@ -48,24 +53,31 @@ function Header({ user, profile_picture }) {
         {user._id !== currentUser._id && (
           <div className="user-contact">
             <button className="btn">
-              {isFollowing ? (
-                <span
+              {isFetching ? (
+                <CircularProgress
+                  sx={{
+                    color: "blue",
+                  }}
+                  size="20px"
+                />
+              ) : isFollowing ? (
+                <div
                   onClick={() => {
                     unfollowUser(api, user, currentUser, refetch);
                     dispatch({ type: "REMOVE_FOLLOW", payload: user._id });
                   }}
                 >
                   Unfollow
-                </span>
+                </div>
               ) : (
-                <span
+                <div
                   onClick={() => {
                     followUser(api, user, currentUser, refetch, socket);
                     dispatch({ type: "SET_FOLLOW", payload: user._id });
                   }}
                 >
                   Follow
-                </span>
+                </div>
               )}
             </button>
           </div>
