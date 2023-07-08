@@ -89,13 +89,6 @@ function Topbar() {
   //   };
   // }, []);
 
-  function handleShow(e) {
-    document.querySelector(".drop-down").classList.toggle("show");
-    // if (e.target.classList.contains("avatar-arrow-down")) {
-
-    // }
-  }
-
   // useEffect(() => {
   //   let avatarWrapper = document.querySelector(".avatar-wrapper");
 
@@ -172,6 +165,7 @@ function Topbar() {
     follow: ["follow-icon", "follow-drop-down"],
     message: ["chat-icon", "message-drop-down"],
     various: ["various-icon", "various-drop-down"],
+    avatar: ["avatar-icon", "avatar-drop-down"],
   };
 
   function showSelectedNotifications(id) {
@@ -437,11 +431,15 @@ function Topbar() {
             }
 
             <div className="avatar-wrapper">
-              <div className="show-avatar" onClick={handleShow}>
+              <div
+                id="avatar-icon"
+                className="show-avatar"
+                onClick={() => showSelectedNotifications("avatar")}
+              >
                 <img className="my-avatar" src={profile_picture} alt="" />
                 <KeyboardArrowDownIcon className="avatar-arrow-down" />
               </div>
-              <div className="drop-down">
+              <div id="avatar-drop-down" className="drop-down">
                 <ul>
                   <li>
                     <SettingsIcon className="drop-down-icon" />
