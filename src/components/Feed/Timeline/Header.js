@@ -26,7 +26,7 @@ function Header({ user, profile_picture }) {
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ["following-user"],
+    queryKey: ["following-user", user._id],
     queryFn: () => getFollowingStatus(api, user, currentUser),
     enabled: user._id !== currentUser._id,
   });
