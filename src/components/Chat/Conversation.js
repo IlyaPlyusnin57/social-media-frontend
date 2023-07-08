@@ -101,9 +101,9 @@ function Conversation() {
       conversation._id
     );
 
-    const messageObject = { ...res.data, senderUser: user };
-
     if (res.status === 200) {
+      const messageObject = { ...res.data, senderUser: user };
+
       socket?.emit("sendMessage", friend._id, messageObject);
       console.log("message was just sent");
       input.current.value = "";
