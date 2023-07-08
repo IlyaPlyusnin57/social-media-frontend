@@ -3,6 +3,7 @@ import DisplayUser from "../DisplayUser/DisplayUser";
 import { useNavigate } from "react-router-dom";
 import profilePicture from "../../helper_functions/profilePicture";
 import CloseIcon from "@mui/icons-material/Close";
+import { useEffect } from "react";
 
 function LikerListModal({ userList, message, removeModal, userName }) {
   const navigate = useNavigate();
@@ -10,6 +11,12 @@ function LikerListModal({ userList, message, removeModal, userName }) {
   function handleSearchUser(user) {
     navigate("/search-profile", { state: user });
   }
+
+  useEffect(() => {
+    return () => {
+      removeModal();
+    };
+  }, [removeModal]);
 
   return (
     <div className="liker-list-modal-container">
