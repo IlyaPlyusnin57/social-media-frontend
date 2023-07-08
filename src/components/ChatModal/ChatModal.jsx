@@ -35,7 +35,9 @@ function ChatModal({ onClose, friend, refetch }) {
     );
 
     if (res.status === 200) {
-      socket?.emit("sendMessage", friend._id, res.data);
+      const messageObject = { ...res.data, senderUser: user };
+
+      socket?.emit("sendMessage", friend._id, messageObject);
     }
 
     setDisabled(true);
