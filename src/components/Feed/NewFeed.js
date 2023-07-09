@@ -16,7 +16,7 @@ function NewFeed() {
   const [lastPostId, setLastPostId] = useState(null);
 
   const followIndex = useRef(0);
-  const [userId, setUserId] = useState(user.following[followIndex]);
+  const [userId, setUserId] = useState(true);
 
   const currentUser = useRef({
     userId: user.following[followIndex.current],
@@ -39,7 +39,6 @@ function NewFeed() {
     onSuccess: (data) => {
       if (data.length === 10) {
         currentUser.current.lastPostId = data[data.length - 1]._id;
-        currentUser.current.fetchNext = false;
       } else {
         followIndex.current++;
 
@@ -51,13 +50,10 @@ function NewFeed() {
         if (currentUser.current.prevDay === 5) {
           currentUser.current.hasFinished = true;
         } else {
-          setUserId(
-            user.following[followIndex.current % user.following.length]
-          );
+          setUserId((prev) => !prev);
         }
 
         currentUser.current.lastPostId = null;
-        currentUser.current.fetchNext = true;
         currentUser.current.userId =
           user.following[followIndex.current % user.following.length];
       }
@@ -70,9 +66,6 @@ function NewFeed() {
     isFetching,
     currentUser.current.lastPostId,
     setLastPostId,
-    currentUser.current.fetchNext,
-    currentUser.current.userId,
-    setUserId,
     currentUser.current.hasFinished
   );
 

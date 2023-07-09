@@ -4,9 +4,6 @@ export function useGetLastRef2(
   isFetching,
   nextPostId,
   setLastPostId,
-  fetchNextUser,
-  nextUserId,
-  setUserId,
   hasFinished
 ) {
   const intObserver = useRef();
@@ -21,23 +18,12 @@ export function useGetLastRef2(
         if (elements[0].isIntersecting) {
           if (hasFinished) return;
           if (nextPostId) setLastPostId(nextPostId);
-          if (fetchNextUser) {
-            setUserId(nextUserId);
-          }
         }
       });
 
       if (element) intObserver.current.observe(element);
     },
-    [
-      isFetching,
-      setLastPostId,
-      nextPostId,
-      fetchNextUser,
-      nextUserId,
-      setUserId,
-      hasFinished,
-    ]
+    [isFetching, setLastPostId, nextPostId, hasFinished]
   );
 
   return lastRef;
