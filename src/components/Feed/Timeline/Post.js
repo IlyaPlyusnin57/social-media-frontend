@@ -15,6 +15,7 @@ import { getUser } from "../../../apiCalls";
 import profilePicture from "../../../helper_functions/profilePicture";
 import { useQuery } from "@tanstack/react-query";
 import { PF } from "../../../helper_functions/PF";
+import { useNavigate } from "react-router-dom";
 
 function reducer(state, action) {
   let new_likes = state.isLiked ? state.likes - 1 : state.likes + 1;
@@ -40,6 +41,7 @@ function PostContent({
   post,
   state,
   updateLikes,
+  navigateToUser,
 }) {
   if (isLoading) {
     return <span>Loading...</span>;
@@ -52,9 +54,12 @@ function PostContent({
   return (
     <>
       <div className="post-title">
-        <img src={profile_picture} alt="" />
+        <img src={profile_picture} alt="" onClick={navigateToUser} />
         <div className="post-info margin-left">
-          <div className="username">{user?.username}</div>
+          <div
+            className="username"
+            onClick={navigateToUser}
+          >{`${user?.first_name} ${user?.last_name}`}</div>
           <div className="post-date">{format(post.createdAt)}</div>
         </div>
       </div>
@@ -92,6 +97,7 @@ const Post = memo(
   forwardRef(({ post, setPosts }, ref) => {
     const { user: currentUser, socket } = useAuth();
     const api = useAxiosConfig2();
+    const navigate = useNavigate();
 
     const [state, dispatch] = useReducer(reducer, {
       likes: post.likes.length,
@@ -141,6 +147,10 @@ const Post = memo(
       }
     }
 
+    function navigateToUser() {
+      navigate("/search-profile", { state: user });
+    }
+
     return (
       <div className="post" ref={ref}>
         {/* && currentUser._id === user._id */}
@@ -160,6 +170,7 @@ const Post = memo(
             post,
             state,
             updateLikes,
+            navigateToUser,
           }}
         />
       </div>
