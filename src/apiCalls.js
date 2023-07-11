@@ -115,6 +115,16 @@ export async function getUser(api, friendId) {
   }
 }
 
+export async function getUser2(api, username) {
+  try {
+    const res = await api.get(`/users/byUsername/${username}`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function getConversation(api, userId, friendId) {
   try {
     const res = await api.get(`conversations/${userId}/${friendId}`);
