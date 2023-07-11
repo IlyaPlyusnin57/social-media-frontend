@@ -13,7 +13,7 @@ function NewPost({ setPosts }) {
   const api = useAxiosConfig2();
   const [subs, setSubs] = useState([]);
   const [queryEnabled, setQueryEnabled] = useState(false);
-  const [taggedUsers, setTaggedUsers] = useState([]);
+  const taggedUsers = useRef([]);
 
   useQuery({
     queryFn: () => getSubs(api, user),
@@ -41,7 +41,7 @@ function NewPost({ setPosts }) {
     try {
       const res = await api.post("posts/", {
         postObject,
-        taggedUsers,
+        taggedUsers: taggedUsers.current,
         sendUser: user,
       });
 
@@ -72,7 +72,7 @@ function NewPost({ setPosts }) {
   function tagUser(user) {
     const username = `${user.first_name} ${user.last_name}`;
     document.querySelector(".input-send").value += username;
-    setTaggedUsers((prev) => [...prev, user]);
+    taggedUsers.current.push(user);
     // const sectionInput = document.querySelector("#new-post-input");
     // sectionInput.innerHTML += `<span id="tagged-user">${user.first_name} ${user.last_name}</span>`;
     document.querySelector(".tag-drop-down").classList.remove("show");
