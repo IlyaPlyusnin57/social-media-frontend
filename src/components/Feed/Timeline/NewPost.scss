@@ -37,7 +37,6 @@
     overflow-y: scroll;
     border: 1px solid $post-border-color;
     z-index: 999;
-    display: none;
 
     ul {
       background-color: $post-bg-color;
@@ -59,9 +58,21 @@
     }
   }
 
+  #tagged-users {
+    display: flex;
+    gap: 0.3rem;
+  }
+
   #tagged-user {
+    display: flex;
+    align-items: center;
     background-color: #7a7b7a;
     padding: 0.3rem;
     border-radius: 7px;
+  }
+
+  #clear-icon {
+    font-size: 20px;
+    cursor: pointer;
   }
 }
