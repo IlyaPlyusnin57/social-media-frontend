@@ -42,6 +42,15 @@
   .post-content {
     .text-content {
       margin-top: 1rem;
+
+      .tagged-user {
+        cursor: pointer;
+        transition: all 0.25s ease-in;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
 
     .img-content {

@@ -11,7 +11,7 @@ import { format } from "timeago.js";
 import { useAuth } from "../../../context/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useAxiosConfig2 from "../../../api/useAxiosConfig2";
-import { getUser } from "../../../apiCalls";
+import { getUser, getUser2 } from "../../../apiCalls";
 import profilePicture from "../../../helper_functions/profilePicture";
 import { useQuery } from "@tanstack/react-query";
 import { PF } from "../../../helper_functions/PF";
@@ -42,7 +42,10 @@ function PostContent({
   state,
   updateLikes,
   navigateToUser,
+  api,
 }) {
+  const arr = post.desc.split(" ");
+
   if (isLoading) {
     return <span>Loading...</span>;
   }
@@ -54,17 +57,42 @@ function PostContent({
   return (
     <>
       <div className="post-title">
-        <img src={profile_picture} alt="" onClick={navigateToUser} />
+        <img
+          src={profile_picture}
+          alt=""
+          onClick={() => navigateToUser(user)}
+        />
         <div className="post-info margin-left">
           <div
             className="username"
-            onClick={navigateToUser}
+            onClick={() => navigateToUser(user)}
           >{`${user?.first_name} ${user?.last_name}`}</div>
           <div className="post-date">{format(post.createdAt)}</div>
         </div>
       </div>
       <div className="post-content">
-        <div className="text-content">{post?.desc + " " + post.userId}</div>
+        <div className="text-content">
+          <p>
+            {arr.map((word, index) => {
+              if (word[0] === "@") {
+                return (
+                  <span
+                    key={index}
+                    className="tagged-user"
+                    onClick={async () => {
+                      const user = await getUser2(api, word.substring(1));
+                      navigateToUser(user);
+                    }}
+                  >
+                    {word + " "}
+                  </span>
+                );
+              }
+
+              return word + " ";
+            })}
+          </p>
+        </div>
         {post?.img && (
           <div className="img-content">
             <img src={PF + post.img} alt="" />
@@ -147,7 +175,7 @@ const Post = memo(
       }
     }
 
-    function navigateToUser() {
+    function navigateToUser(user) {
       navigate("/search-profile", { state: user });
     }
 
@@ -171,6 +199,7 @@ const Post = memo(
             state,
             updateLikes,
             navigateToUser,
+            api,
           }}
         />
       </div>
