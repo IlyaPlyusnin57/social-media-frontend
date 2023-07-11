@@ -269,6 +269,16 @@ export async function getPost(api, postId) {
   }
 }
 
+export async function getTaggedPosts(api, userId) {
+  try {
+    const res = await api.get(`/posts/tagged/${userId}`);
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function getPostLikers(api, postId) {
   try {
     const res = await api.get(`posts/${postId}/postLikers`);

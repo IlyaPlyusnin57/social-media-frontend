@@ -8,6 +8,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import PeopleIcon from "@mui/icons-material/People";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 
 function LeftBar() {
   const { username } = useAuth().user;
@@ -37,6 +38,13 @@ function LeftBar() {
           <li>
             <PeopleIcon className="leftbar-icon" />
             Subs
+          </li>
+        </Link>
+
+        <Link to="/tags">
+          <li>
+            <AlternateEmailIcon className="leftbar-icon" />
+            Tags
           </li>
         </Link>
 

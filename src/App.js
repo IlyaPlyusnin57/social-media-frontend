@@ -10,6 +10,7 @@ import Conversation from "./components/Chat/Conversation";
 import SubList from "./pages/subs/SubList";
 import ShowPost from "./pages/post/ShowPost";
 import NewFeed from "./components/Feed/NewFeed";
+import Tags from "./pages/tags/Tags";
 
 function App() {
   return (
@@ -79,6 +80,14 @@ function App() {
             element={
               <Home>
                 <ShowPost />
+              </Home>
+            }
+          ></Route>
+          <Route
+            path="/tags"
+            element={
+              <Home>
+                <Tags />
               </Home>
             }
           ></Route>
