@@ -11,12 +11,14 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LikerList from "../../components/LikerList/LikerList";
+import { useState } from "react";
 
 function ShowPost() {
   const { state: postId } = useLocation();
   const api = useAxiosConfig2();
   const { user, profile_picture } = useAuth();
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const [showList, setShowList] = useState(false);
 
   const {
     data: post,
@@ -39,11 +41,11 @@ function ShowPost() {
   }
 
   function addDislay() {
-    document.getElementById("liker-list-container").classList.add("display");
+    setShowList(true);
   }
 
   function removeDisplay() {
-    document.getElementById("liker-list-container").classList.remove("display");
+    setShowList(false);
   }
 
   return (
@@ -66,7 +68,7 @@ function ShowPost() {
           )}
         </div>
 
-        <LikerList {...{ removeDisplay, post }} />
+        {showList && <LikerList {...{ removeDisplay, post }} />}
 
         <div className="post-footer">
           <Box className="icon-wrapper post-likes" onMouseEnter={addDislay}>
@@ -79,12 +81,12 @@ function ShowPost() {
             <span>{post.likes.length}</span>
           </Box>
 
-          <Box className="icon-wrapper">
+          {/* <Box className="icon-wrapper">
             <ChatBubbleOutlineIcon className="post-footer-icon" />
           </Box>
           <Box className="icon-wrapper">
             <ShareIcon className="post-footer-icon" />
-          </Box>
+          </Box> */}
         </div>
       </div>
     </div>
