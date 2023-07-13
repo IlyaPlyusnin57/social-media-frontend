@@ -6,6 +6,18 @@ import { createPortal } from "react-dom";
 import LikerListModal from "./LikerListModal";
 import "./LikerList.scss";
 
+function ShowContent({ isLoading, userList, setListModal }) {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div onClick={() => setListModal(true)} className="pointer">
+      Liked by {userList?.length} {userList?.length === 1 ? "user" : "users"}
+    </div>
+  );
+}
+
 function LikedList({ removeDisplay, post }) {
   const api = useAxiosConfig2();
   const [listModal, setListModal] = useState(false);
@@ -20,10 +32,6 @@ function LikedList({ removeDisplay, post }) {
     queryFn: () => getPostLikers(api, post._id),
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (isError) {
     return <div>Error: {error.message}</div>;
   }
@@ -33,9 +41,7 @@ function LikedList({ removeDisplay, post }) {
 
   return (
     <section id="liker-list-container" onMouseLeave={removeDisplay}>
-      <div onClick={() => setListModal(true)} className="pointer">
-        Liked by {userList.length} {userList.length === 1 ? "user" : "users"}
-      </div>
+      <ShowContent {...{ isLoading, userList, setListModal }} />
 
       {listModal &&
         createPortal(

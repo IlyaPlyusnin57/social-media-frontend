@@ -6,7 +6,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import Box from "@mui/material/Box";
-import { useReducer, forwardRef, memo } from "react";
+import { useReducer, forwardRef, memo, useState } from "react";
 import { format } from "timeago.js";
 import { useAuth } from "../../../context/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -16,6 +16,7 @@ import profilePicture from "../../../helper_functions/profilePicture";
 import { useQuery } from "@tanstack/react-query";
 import { PF } from "../../../helper_functions/PF";
 import { useNavigate } from "react-router-dom";
+import LikerList from "../../LikerList/LikerList";
 
 function reducer(state, action) {
   let new_likes = state.isLiked ? state.likes - 1 : state.likes + 1;
@@ -44,6 +45,16 @@ function PostContent({
   navigateToUser,
   api,
 }) {
+  const [showList, setShowList] = useState(false);
+
+  function addDislay() {
+    setShowList(true);
+  }
+
+  function removeDisplay() {
+    setShowList(false);
+  }
+
   const arr = post.desc.split(" ");
 
   if (isLoading) {
@@ -70,52 +81,62 @@ function PostContent({
           <div className="post-date">{format(post.createdAt)}</div>
         </div>
       </div>
-      <div className="post-content">
-        <div className="text-content">
-          <p>
-            {arr.map((word, index) => {
-              if (word[0] === "@") {
-                return (
-                  <span
-                    key={index}
-                    className="tagged-user"
-                    onClick={async () => {
-                      const user = await getUser2(api, word.substring(1));
-                      navigateToUser(user);
-                    }}
-                  >
-                    {word + " "}
-                  </span>
-                );
-              }
 
-              return word + " ";
-            })}
-          </p>
-        </div>
-        {post?.img && (
-          <div className="img-content">
-            <img src={PF + post.img} alt="" />
+      <div onMouseLeave={removeDisplay}>
+        <div className="post-content">
+          <div className="text-content">
+            <p>
+              {arr.map((word, index) => {
+                if (word[0] === "@") {
+                  return (
+                    <span
+                      key={index}
+                      className="tagged-user"
+                      onClick={async () => {
+                        const user = await getUser2(api, word.substring(1));
+                        navigateToUser(user);
+                      }}
+                    >
+                      {word + " "}
+                    </span>
+                  );
+                }
+
+                return word + " ";
+              })}
+            </p>
           </div>
-        )}
-      </div>
-      <div className="post-footer">
-        <Box className="icon-wrapper post-likes" onClick={updateLikes}>
-          {state.isLiked ? (
-            <FavoriteIcon className="post-footer-icon red-heart-icon" />
-          ) : (
-            <FavoriteBorderIcon className="post-footer-icon" />
+          {post?.img && (
+            <div className="img-content">
+              <img src={PF + post.img} alt="" />
+            </div>
           )}
+        </div>
 
-          <span>{state.likes}</span>
-        </Box>
+        {showList && <LikerList {...{ removeDisplay, post }} />}
 
-        {/* <Box className="icon-wrapper">
+        <div className="post-footer">
+          <Box
+            className="icon-wrapper post-likes"
+            onClick={updateLikes}
+            onMouseEnter={addDislay}
+          >
+            {state.isLiked ? (
+              <FavoriteIcon className="post-footer-icon red-heart-icon" />
+            ) : (
+              <FavoriteBorderIcon className="post-footer-icon" />
+            )}
+
+            <span>{state.likes}</span>
+          </Box>
+
+          {/* <Box className="icon-wrapper">
       <ChatBubbleOutlineIcon className="post-footer-icon" />
     </Box>
     <Box className="icon-wrapper">
       <ShareIcon className="post-footer-icon" />
     </Box> */}
+        </div>
       </div>
     </>
   );
