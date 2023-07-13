@@ -15,6 +15,7 @@
 
 .liker-list-modal {
   margin: 70px 1rem 0;
+  padding: 1rem;
   border: 1px solid $post-border-color;
   border-radius: $post-border-radius;
   background-color: $post-bg-color;
@@ -29,7 +30,7 @@
 }
 
 .close-icon-wrapper {
-  padding: 1rem 2rem 1rem;
+  padding: 0.2rem 0.3rem 1rem;
   display: flex;
   justify-content: flex-end;
 }
