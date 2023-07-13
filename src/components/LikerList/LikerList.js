@@ -18,7 +18,7 @@ function ShowContent({ isLoading, userList, setListModal }) {
   );
 }
 
-function LikedList({ removeDisplay, post }) {
+function LikedList({ removeDisplay, post, likes }) {
   const api = useAxiosConfig2();
   const [listModal, setListModal] = useState(false);
 
@@ -28,7 +28,7 @@ function LikedList({ removeDisplay, post }) {
     isError,
     error,
   } = useQuery({
-    queryKey: ["liker-list", post._id],
+    queryKey: ["liker-list", post._id, likes],
     queryFn: () => getPostLikers(api, post._id),
   });
 

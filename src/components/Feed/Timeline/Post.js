@@ -113,7 +113,9 @@ function PostContent({
           )}
         </div>
 
-        {showList && <LikerList {...{ removeDisplay, post }} />}
+        {showList && (
+          <LikerList {...{ removeDisplay, post, likes: state.likes }} />
+        )}
 
         <div className="post-footer">
           <Box
