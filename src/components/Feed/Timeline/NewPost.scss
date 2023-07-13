@@ -2,13 +2,14 @@
 
 .new-post {
   @include post-style;
-
-  img {
-    @include image-styling($width: 50px, $height: 50px);
-  }
+  display: block;
 
   #new-post-input {
-    width: 80%;
+    display: flex;
+
+    img {
+      @include image-styling($width: 50px, $height: 50px);
+    }
 
     input {
       width: 100%;
@@ -24,12 +25,12 @@
 
   .new-post-send-icon {
     cursor: pointer;
-    margin-left: 1.5rem;
+    align-self: center;
   }
 
   .tag-drop-down {
     position: absolute;
-    margin-left: 1rem;
+    margin-left: 3rem;
     background-color: $post-bg-color;
     border-radius: $post-border-radius;
     max-height: 250px;
@@ -58,8 +59,11 @@
   }
 
   #tagged-users {
+    width: 80vw;
     display: flex;
+    flex-wrap: wrap;
     gap: 0.3rem;
+    margin-left: 1rem;
   }
 
   #tagged-user {

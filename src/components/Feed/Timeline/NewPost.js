@@ -122,8 +122,8 @@ function NewPost({ setPosts }) {
 
   return (
     <div className="new-post">
-      <img src={profile_picture} alt="" />
       <section id="new-post-input">
+        <img src={profile_picture} alt="" />
         <input
           type="text"
           placeholder="What's on your mind"
@@ -133,38 +133,41 @@ function NewPost({ setPosts }) {
           onInput={handleInput}
         />
 
-        {subs.length > 0 && (
-          <div className="tag-drop-down">
-            <ul>
-              {subs.map((user) => {
-                return (
-                  <li
-                    key={user._id}
-                    onClick={() => tagUser(user)}
-                  >{`${user.first_name} ${user.last_name} (@${user.username})`}</li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
-
-        <section id="tagged-users">
-          {Array.isArray(taggedUsers) &&
-            taggedUsers.length > 0 &&
-            taggedUsers.map((user) => {
+        <SendIcon
+          className="new-post-send-icon"
+          onClick={handleSendIconClick}
+        />
+      </section>
+      {subs.length > 0 && (
+        <div className="tag-drop-down">
+          <ul>
+            {subs.map((user) => {
               return (
-                <span key={user._id} id="tagged-user">
-                  {user.username}
-                  <ClearIcon
-                    id="clear-icon"
-                    onClick={() => removeTaggedUserFromInput(user.username)}
-                  />
-                </span>
+                <li
+                  key={user._id}
+                  onClick={() => tagUser(user)}
+                >{`${user.first_name} ${user.last_name} (@${user.username})`}</li>
               );
             })}
-        </section>
+          </ul>
+        </div>
+      )}
+
+      <section id="tagged-users">
+        {Array.isArray(taggedUsers) &&
+          taggedUsers.length > 0 &&
+          taggedUsers.map((user) => {
+            return (
+              <span key={user._id} id="tagged-user">
+                {user.username}
+                <ClearIcon
+                  id="clear-icon"
+                  onClick={() => removeTaggedUserFromInput(user.username)}
+                />
+              </span>
+            );
+          })}
       </section>
-      <SendIcon className="new-post-send-icon" onClick={handleSendIconClick} />
     </div>
   );
 }
