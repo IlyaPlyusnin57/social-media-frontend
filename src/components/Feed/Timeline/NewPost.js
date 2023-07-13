@@ -50,6 +50,7 @@ function NewPost({ setPosts }) {
       });
 
       if (res.status === 200) {
+        allSubs.current.push(...taggedUsers);
         setTaggedUsers([]);
         const { newPost, tagObjects } = res.data;
 
