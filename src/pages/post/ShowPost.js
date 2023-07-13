@@ -19,10 +19,6 @@ function ShowPost() {
     },
   });
 
-  if (!post) {
-    return <div className="post">Post does not exist anymore</div>;
-  }
-
   if (isLoading) {
     return <span>Loading...</span>;
   }
