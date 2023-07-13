@@ -66,14 +66,10 @@ function NewPost({ setPosts }) {
   function handleInput() {
     const value = document.querySelector(".input-send").value;
 
-    // check if the input has all of the tagged usernames
+    //check if the input has all of the tagged usernames
     taggedUsers.forEach((user) => {
       if (!value.includes(user.username)) {
-        setTaggedUsers((prev) =>
-          prev.filter((taggedUser) => {
-            return taggedUser._id !== user._id;
-          })
-        );
+        removeTaggedUserFromInput(user.username);
       }
     });
 
@@ -104,6 +100,13 @@ function NewPost({ setPosts }) {
       .value.replace(`@${username}`, "");
 
     document.querySelector(".input-send").value = value;
+
+    const user = taggedUsers.find((user) => {
+      return user.username === username;
+    });
+
+    allSubs.current.push(user);
+
     setTaggedUsers((prev) =>
       prev.filter((user) => {
         return user.username !== username;
@@ -118,6 +121,10 @@ function NewPost({ setPosts }) {
     document.querySelector(".input-send").value += `${user.username}`;
     setTaggedUsers((prev) => [...prev, user]);
     setSubs([]);
+
+    allSubs.current = allSubs.current.filter((subUser) => {
+      return subUser._id !== user._id;
+    });
   }
 
   return (
