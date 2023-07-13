@@ -269,9 +269,9 @@ export async function getPost(api, postId) {
   }
 }
 
-export async function getTaggedPosts(api, userId) {
+export async function getTaggedPosts(api, userId, options = {}) {
   try {
-    const res = await api.get(`/posts/tagged/${userId}`);
+    const res = await api.post(`/posts/tagged/${userId}`, options);
 
     return res.data;
   } catch (error) {
