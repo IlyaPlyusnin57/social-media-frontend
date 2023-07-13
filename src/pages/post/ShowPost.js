@@ -26,11 +26,14 @@ function ShowPost() {
     isError,
     error,
   } = useQuery({
-    queryKey: ["show-post", postId],
+    queryKey: [postId],
     queryFn: () => getPost(api, postId),
+    refetchOnWindowFocus: false,
   });
 
-  const isLiked = post?.likes.includes(user._id);
+  if (!post) {
+    return <div className="post">Post does not exist anymore</div>;
+  }
 
   if (isLoading) {
     return <span>Loading...</span>;
@@ -39,6 +42,8 @@ function ShowPost() {
   if (isError) {
     return <span>Error: {error.message}</span>;
   }
+
+  const isLiked = post?.likes.includes(user._id);
 
   function addDislay() {
     setShowList(true);

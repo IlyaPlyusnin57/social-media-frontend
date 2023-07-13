@@ -265,7 +265,11 @@ export async function getPost(api, postId) {
 
     return res.data;
   } catch (error) {
-    console.log(error);
+    console.log({ error });
+
+    if (error.response.status === 404) {
+      return null;
+    }
   }
 }
 
