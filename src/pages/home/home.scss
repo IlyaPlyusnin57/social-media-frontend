@@ -19,15 +19,18 @@
     font-size: 13px;
   }
 
+  .home-children-section {
+    padding: 0 1rem;
+  }
+
   @media (max-width: 830px) {
     .home-wrapper {
       grid-template-columns: 1fr;
       grid-template-rows: 1fr;
       max-width: 100%;
       width: 100%;
-      padding: 0 1rem;
+      padding: 0;
       margin: 0;
-      //margin-left: 320px;
     }
   }
 }
