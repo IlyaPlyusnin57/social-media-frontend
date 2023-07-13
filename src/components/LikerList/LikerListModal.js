@@ -25,7 +25,7 @@ function LikerListModal({ userList, message, removeModal, userName }) {
           <CloseIcon className="pointer" onClick={removeModal} />
         </div>
         <h2 className="list-modal-header">
-          {userList.length} {userList.length > 1 ? userName + "s" : userName}{" "}
+          {userList.length} {userList.length !== 1 ? userName + "s" : userName}{" "}
           {message}
         </h2>
 
