@@ -1,32 +1,64 @@
 import { getTaggedPosts } from "../../apiCalls";
-import { useQuery } from "@tanstack/react-query";
 import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import { useAuth } from "../../context/AuthContext";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Post from "../../components/Feed/Timeline/Post";
+import usePosts3 from "../../api/usePosts3";
+import { useGetLastRef } from "../../hooks/useGetLastRef";
+
+import "./Tags.scss";
 
 function Tags() {
   const { user } = useAuth();
   const api = useAxiosConfig2();
+  const [lastPostId, setLastPostId] = useState(null);
 
-  const [posts, setPosts] = useState([]);
+  const queryFunction = useCallback(
+    () =>
+      getTaggedPosts(api, user._id, {
+        lastPostId,
+      }),
+    [api, user._id, lastPostId]
+  );
 
-  console.log({ posts });
+  const {
+    isError,
+    error,
+    isFetching,
+    posts,
+    setPosts,
+    hasNextPage,
+    nextPostId,
+  } = usePosts3(user, lastPostId, queryFunction);
 
-  useQuery({
-    queryFn: () => getTaggedPosts(api, user._id),
-    queryKey: [user._id],
-    refetchOnWindowFocus: false,
-    onSuccess: (posts) => {
-      setPosts(posts);
-    },
+  const lastPostRef = useGetLastRef(
+    isFetching,
+    hasNextPage,
+    nextPostId,
+    setLastPostId
+  );
+
+  const postContent = posts?.map((post, i, postArray) => {
+    return (
+      <Post
+        ref={i === postArray.length - 1 ? lastPostRef : null}
+        key={post._id}
+        post={post}
+        user={user}
+        setPosts={setPosts}
+      />
+    );
   });
 
-  const postContent = posts.map((post) => {
-    return <Post key={post._id} post={post} user={user} setPosts={setPosts} />;
-  });
-
-  return <div>{postContent}</div>;
+  return (
+    <section className="tags-container">
+      <div className="post-list-container">
+        <div className="post-list">{postContent}</div>
+        {isFetching && <p className="center">Loading More Posts...</p>}
+        {isError && <span>Error: {error.message}</span>}
+      </div>
+    </section>
+  );
 }
 
 export default Tags;

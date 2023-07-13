@@ -1,0 +1,14 @@
+// margin-top has to be greater than 0 for tags-container and post-list-container has to be flex
+// or else the elements on the page will intersect even if they are not visible. Hmmm weird...
+
+.tags-container {
+  margin: 1rem 0 1rem;
+}
+
+.post-list-container {
+  display: flex;
+}
+
+.post-list {
+  flex-grow: 1;
+}
