@@ -122,7 +122,7 @@ function PostContent({
 }
 
 const Post = memo(
-  forwardRef(({ post, setPosts }, ref) => {
+  forwardRef(function Post({ post, setPosts }, ref) {
     const { user: currentUser, socket } = useAuth();
     const api = useAxiosConfig2();
     const navigate = useNavigate();
