@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getPostLikers } from "../../apiCalls";
 import useAxiosConfig2 from "../../api/useAxiosConfig2";
-import profilePicture from "../../helper_functions/profilePicture";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import LikerListModal from "./LikerListModal";
