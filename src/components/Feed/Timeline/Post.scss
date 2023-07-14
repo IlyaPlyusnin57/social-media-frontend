@@ -1,95 +1,106 @@
 @use "../../../sass_vars/global-vars" as *;
 
-.post {
+.post-wrapper {
   position: relative;
   @include post-border-margin-padding;
+  padding: 0;
 
-  .delete-icon-container {
-    display: flex;
-    justify-content: flex-end;
+  .post {
+    padding: 1rem;
 
-    .delete-icon {
-      font-size: 16px;
-      cursor: pointer;
-    }
-  }
-
-  .post-title {
-    @include post-display;
-    img {
-      @include image-styling($width: 40px, $height: 40px);
-      cursor: pointer;
-    }
-
-    .post-info {
-      .username {
-        font-weight: 700;
-        transition: all 0.35s ease-in;
-
-        &:hover {
-          text-decoration: underline;
-          cursor: pointer;
-        }
-      }
-      .post-date {
-        font-weight: 200;
-        font-size: 12px;
-        margin-top: 0.3rem;
-      }
-    }
-  }
-
-  .post-content {
-    .text-content {
-      margin-top: 1rem;
-
-      .tagged-user {
-        cursor: pointer;
-        transition: all 0.25s ease-in;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
-
-    .img-content {
-      margin-top: 1rem;
-    }
-
-    .img-content img {
-      height: 200px;
-    }
-  }
-
-  .post-footer {
-    margin-top: 0.5rem;
-    display: flex;
-
-    .icon-wrapper {
+    .delete-icon-container {
       display: flex;
-      align-items: center;
-      padding: 8px 20px 5px;
-      background-color: #333;
-      margin-right: 1rem;
-      border-radius: 32px;
-      transition: all 0.2s ease-in;
+      justify-content: flex-end;
 
-      & > *:first-child {
-        margin-right: 0.4rem;
-      }
-
-      &:hover {
-        background-color: $button-highlight-color;
-      }
-
-      .red-heart-icon {
-        color: red;
+      .delete-icon {
+        font-size: 16px;
+        cursor: pointer;
       }
     }
 
-    .post-footer-icon {
-      font-size: 1.2rem;
+    .post-title {
+      @include post-display;
+      img {
+        @include image-styling($width: 40px, $height: 40px);
+        cursor: pointer;
+      }
+
+      .post-info {
+        .username {
+          font-weight: 700;
+          transition: all 0.35s ease-in;
+
+          &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+          }
+        }
+        .post-date {
+          font-weight: 200;
+          font-size: 12px;
+          margin-top: 0.3rem;
+        }
+      }
     }
+
+    .post-content {
+      .text-content {
+        margin-top: 1rem;
+
+        .tagged-user {
+          cursor: pointer;
+          transition: all 0.25s ease-in;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .img-content {
+        margin-top: 1rem;
+      }
+
+      .img-content img {
+        height: 200px;
+      }
+    }
+
+    .post-footer {
+      margin-top: 0.5rem;
+      display: flex;
+      position: relative;
+
+      .icon-wrapper {
+        display: flex;
+        align-items: center;
+        padding: 8px 20px 5px;
+        background-color: #333;
+        margin-right: 1rem;
+        border-radius: 32px;
+        transition: all 0.2s ease-in;
+
+        &:hover {
+          background-color: $button-highlight-color;
+        }
+
+        .red-heart-icon {
+          color: red;
+        }
+
+        .like-count {
+          margin-left: 0.4rem;
+        }
+      }
+
+      .post-footer-icon {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  .comment {
+    padding: 1rem;
+    border-top: 1px solid $post-border-color;
   }
 }

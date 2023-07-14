@@ -17,6 +17,8 @@ import { useQuery } from "@tanstack/react-query";
 import { PF } from "../../../helper_functions/PF";
 import { useNavigate } from "react-router-dom";
 import LikerList from "../../LikerList/LikerList";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import TextInput from "../../TextInput/TextInput";
 
 function reducer(state, action) {
   let new_likes = state.isLiked ? state.likes - 1 : state.likes + 1;
@@ -44,6 +46,7 @@ function PostContent({
   updateLikes,
   navigateToUser,
   api,
+  setShowComments,
 }) {
   const [showList, setShowList] = useState(false);
 
@@ -113,11 +116,10 @@ function PostContent({
           )}
         </div>
 
-        {showList && (
-          <LikerList {...{ removeDisplay, post, likes: state.likes }} />
-        )}
-
         <div className="post-footer">
+          {showList && (
+            <LikerList {...{ removeDisplay, post, likes: state.likes }} />
+          )}
           <Box
             className="icon-wrapper post-likes"
             onClick={updateLikes}
@@ -129,13 +131,16 @@ function PostContent({
               <FavoriteBorderIcon className="post-footer-icon" />
             )}
 
-            <span>{state.likes}</span>
+            <span className="like-count">{state.likes}</span>
           </Box>
 
+          <Box className="icon-wrapper">
+            <ChatBubbleOutlineIcon
+              className="post-footer-icon"
+              onClick={() => setShowComments((prev) => !prev)}
+            />
+          </Box>
           {/* <Box className="icon-wrapper">
-      <ChatBubbleOutlineIcon className="post-footer-icon" />
-    </Box>
-    <Box className="icon-wrapper">
       <ShareIcon className="post-footer-icon" />
     </Box> */}
         </div>
@@ -149,6 +154,8 @@ const Post = memo(
     const { user: currentUser, socket } = useAuth();
     const api = useAxiosConfig2();
     const navigate = useNavigate();
+    const [showComments, setShowComments] = useState(false);
+    const [parent] = useAutoAnimate();
 
     const [state, dispatch] = useReducer(reducer, {
       likes: post.likes.length,
@@ -203,28 +210,38 @@ const Post = memo(
     }
 
     return (
-      <div className="post" ref={ref}>
-        {/* && currentUser._id === user._id */}
-        {currentUser._id === post.userId && (
-          <div className="delete-icon-container">
-            <DeleteIcon className="delete-icon" onClick={handleDelete} />
-          </div>
-        )}
+      <div className="post-wrapper" ref={ref}>
+        <section className="post">
+          {/* && currentUser._id === user._id */}
+          {currentUser._id === post.userId && (
+            <div className="delete-icon-container">
+              <DeleteIcon className="delete-icon" onClick={handleDelete} />
+            </div>
+          )}
+          <PostContent
+            {...{
+              isLoading,
+              isError,
+              error,
+              profile_picture,
+              user,
+              post,
+              state,
+              updateLikes,
+              navigateToUser,
+              api,
+              setShowComments,
+            }}
+          />
+        </section>
 
-        <PostContent
-          {...{
-            isLoading,
-            isError,
-            error,
-            profile_picture,
-            user,
-            post,
-            state,
-            updateLikes,
-            navigateToUser,
-            api,
-          }}
-        />
+        {showComments && (
+          <section className="comment">
+            <TextInput
+              {...{ profile_picture, placeholder: "Leave a comment" }}
+            />
+          </section>
+        )}
       </div>
     );
   })
