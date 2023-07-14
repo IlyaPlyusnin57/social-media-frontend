@@ -3,79 +3,79 @@
 .new-post {
   @include post-style;
   display: block;
+}
 
-  #new-post-input {
-    display: flex;
+#new-post-input {
+  display: flex;
 
-    img {
-      @include image-styling($width: 50px, $height: 50px);
-    }
-
-    input {
-      width: 100%;
-      margin: 1rem;
-      background-color: transparent;
-      border: none;
-      border-bottom: 1px solid $post-border-color;
-      outline: none;
-      color: white;
-      padding: 0.3rem;
-    }
+  img {
+    @include image-styling($width: 50px, $height: 50px);
   }
 
-  .new-post-send-icon {
-    cursor: pointer;
-    align-self: center;
-  }
-
-  .tag-drop-down {
-    position: absolute;
-    margin-left: 3rem;
-    background-color: $post-bg-color;
-    border-radius: $post-border-radius;
-    max-height: 250px;
-    overflow-y: scroll;
-    border: 1px solid $post-border-color;
-    z-index: 999;
-
-    ul {
-      background-color: $post-bg-color;
-    }
-
-    li {
-      list-style: none;
-      padding: 1rem 1.5rem;
-      color: $button-text-color;
-      cursor: pointer;
-
-      &:not(:last-child) {
-        border-bottom: 1px solid $post-border-color;
-      }
-    }
-
-    .show {
-      display: block;
-    }
-  }
-
-  #tagged-users {
-    width: 80%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    margin-left: 1rem;
-  }
-
-  #tagged-user {
-    display: flex;
-    align-items: center;
-    background-color: #7a7b7a;
+  input {
+    width: 100%;
+    margin: 1rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid $post-border-color;
+    outline: none;
+    color: white;
     padding: 0.3rem;
-    border-radius: 7px;
+  }
+}
+
+.new-post-send-icon {
+  cursor: pointer;
+  align-self: center;
+}
+
+.tag-drop-down {
+  position: absolute;
+  margin-left: 3rem;
+  background-color: $post-bg-color;
+  border-radius: $post-border-radius;
+  max-height: 250px;
+  overflow-y: scroll;
+  border: 1px solid $post-border-color;
+  z-index: 999;
+
+  ul {
+    background-color: $post-bg-color;
   }
 
-  #clear-icon {
-    font-size: 20px;
+  li {
+    list-style: none;
+    padding: 1rem 1.5rem;
+    color: $button-text-color;
     cursor: pointer;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $post-border-color;
+    }
   }
+
+  .show {
+    display: block;
+  }
+}
+
+#tagged-users {
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-left: 1rem;
+}
+
+#tagged-user {
+  display: flex;
+  align-items: center;
+  background-color: #7a7b7a;
+  padding: 0.3rem;
+  border-radius: 7px;
+}
+
+#clear-icon {
+  font-size: 20px;
+  cursor: pointer;
 }
