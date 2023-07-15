@@ -302,3 +302,23 @@ export async function getUsersFeedForADay(api, userId, options = {}) {
     console.log(error);
   }
 }
+
+export async function createComment(api, options) {
+  try {
+    const res = await api.post("comments/", options);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getComment(api, options) {
+  try {
+    const res = await api.post("comments/getComment", options);
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
