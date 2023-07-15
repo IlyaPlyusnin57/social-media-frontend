@@ -1,0 +1,9 @@
+@use "../../sass_vars/global-vars.scss" as *;
+
+.comment {
+  margin-top: 1rem;
+
+  img {
+    @include image-styling($width: 30px, $height: 30px);
+  }
+}
