@@ -6,7 +6,14 @@ import ShareIcon from "@mui/icons-material/Share";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import Box from "@mui/material/Box";
-import { useReducer, forwardRef, memo, useState } from "react";
+import {
+  useReducer,
+  forwardRef,
+  memo,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import { format } from "timeago.js";
 import { useAuth } from "../../../context/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -19,6 +26,9 @@ import { useNavigate } from "react-router-dom";
 import LikerList from "../../LikerList/LikerList";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import TextInput from "../../TextInput/TextInput";
+import Comment from "../../Comment/Comment";
+import { createComment, getComment } from "../../../apiCalls";
+import usePosts3 from "../../../api/usePosts3";
 
 function reducer(state, action) {
   let new_likes = state.isLiked ? state.likes - 1 : state.likes + 1;
@@ -156,6 +166,24 @@ const Post = memo(
     const navigate = useNavigate();
     const [showComments, setShowComments] = useState(false);
     const [parent] = useAutoAnimate();
+    const commentValue = useRef(null);
+    const [lastCommentId, setLastCommentId] = useState(null);
+
+    const queryFunction = useCallback(() => {
+      return getComment(api, {
+        postId: post._id,
+        lastCommentId,
+      });
+    }, [api, post._id, lastCommentId]);
+
+    const {
+      isError: isCommentError,
+      error: commentError,
+      isFetching: isCommentFetching,
+      posts: comments,
+      hasNextPage,
+      nextPostId,
+    } = usePosts3(currentUser, lastCommentId, queryFunction);
 
     const [state, dispatch] = useReducer(reducer, {
       likes: post.likes.length,
@@ -209,6 +237,33 @@ const Post = memo(
       navigate("/search-profile", { state: user });
     }
 
+    async function handleSendIconClick() {
+      console.log({ commentValue: commentValue.current.value });
+
+      try {
+        const res = await createComment(api, {
+          type: "comment",
+          commentBody: {
+            userId: currentUser._id,
+            text: commentValue.current.value,
+            postId: post._id,
+            username: currentUser.username,
+            profilePicture: profilePicture(currentUser),
+          },
+        });
+
+        if (res.status === 200) {
+          console.log({ comment: res.data });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    const commentList = comments.map((comment) => {
+      return <Comment key={comment._id} {...comment} />;
+    });
+
     return (
       <div className="post-wrapper" ref={ref}>
         <section className="post">
@@ -236,10 +291,18 @@ const Post = memo(
         </section>
 
         {showComments && (
-          <section className="comment">
+          <section className="comment-wrapper">
             <TextInput
-              {...{ profile_picture, placeholder: "Leave a comment" }}
+              {...{
+                profile_picture,
+                placeholder: "Leave a comment",
+                size: 30,
+                post_content: commentValue,
+                handleSendIconClick,
+              }}
             />
+
+            {commentList}
           </section>
         )}
       </div>
