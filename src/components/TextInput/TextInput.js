@@ -8,10 +8,11 @@ function TextInput({
   handleInput,
   handleSendIconClick,
   placeholder,
+  size,
 }) {
   return (
     <section id="new-post-input">
-      <img src={profile_picture} alt="" />
+      <img style={{ height: size, width: size }} src={profile_picture} alt="" />
       <input
         type="text"
         placeholder={placeholder}
