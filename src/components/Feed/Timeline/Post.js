@@ -183,7 +183,7 @@ const Post = memo(
       posts: comments,
       hasNextPage,
       nextPostId,
-    } = usePosts3(currentUser, lastCommentId, queryFunction);
+    } = usePosts3(post, lastCommentId, queryFunction, 5);
 
     const [state, dispatch] = useReducer(reducer, {
       likes: post.likes.length,

@@ -29,7 +29,7 @@ function Tags() {
     setPosts,
     hasNextPage,
     nextPostId,
-  } = usePosts3(user, lastPostId, queryFunction);
+  } = usePosts3(user, lastPostId, queryFunction, 10);
 
   const lastPostRef = useGetLastRef(
     isFetching,
