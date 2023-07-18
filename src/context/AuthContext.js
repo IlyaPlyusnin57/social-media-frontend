@@ -104,6 +104,10 @@ function AuthContextProvider({ children }) {
       socket.current.on("getLikeNotification", (likeObject) => {
         dispatch({ type: "SET_VARIOUS_NOTIFICATION", payload: likeObject });
       });
+
+      socket.current.on("getCommentNotification", (commentObject) => {
+        dispatch({ type: "SET_VARIOUS_NOTIFICATION", payload: commentObject });
+      });
     }
   }, [state.user?._id, state.viewingConversation, api]);
 
