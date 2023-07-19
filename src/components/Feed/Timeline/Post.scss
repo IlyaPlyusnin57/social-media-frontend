@@ -24,23 +24,6 @@
         @include image-styling($width: 40px, $height: 40px);
         cursor: pointer;
       }
-
-      .post-info {
-        .username {
-          font-weight: 700;
-          transition: all 0.35s ease-in;
-
-          &:hover {
-            text-decoration: underline;
-            cursor: pointer;
-          }
-        }
-        .post-date {
-          font-weight: 200;
-          font-size: 12px;
-          margin-top: 0.3rem;
-        }
-      }
     }
 
     .post-content {
@@ -103,4 +86,19 @@
     padding: 1rem;
     border-top: 1px solid $post-border-color;
   }
+}
+
+.username {
+  font-weight: 700;
+  transition: all 0.35s ease-in;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+.post-date {
+  font-weight: 200;
+  font-size: 12px;
+  margin-top: 0.3rem;
 }
