@@ -54,11 +54,11 @@
 }
 
 #tagged-users {
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   gap: 0.3rem;
-  margin-left: 1rem;
+  margin: 0.5rem 0 0 0;
 }
 
 #tagged-user {
