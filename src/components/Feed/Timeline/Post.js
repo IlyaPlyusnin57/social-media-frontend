@@ -190,7 +190,14 @@ const Post = memo(
       setPosts: setComments,
       hasNextPage,
       nextPostId,
-    } = usePosts3(post, lastCommentId, queryFunction, 5, isEnabled);
+    } = usePosts3(
+      post,
+      lastCommentId,
+      queryFunction,
+      5,
+      isEnabled,
+      removePostFromPage
+    );
 
     const [state, dispatch] = useReducer(reducer, {
       likes: post.likes.length,
@@ -223,14 +230,19 @@ const Post = memo(
         dispatch({ type: "update_likes" });
       } else if (res.status === 404) {
         alert("Post does not exist anymore!");
+        removePostFromPage();
       }
     }
 
+    function removePostFromPage() {
+      setPosts((prev) => prev.filter((p) => p._id !== post._id));
+    }
+
     async function handleDelete() {
-      const userId = { data: { userId: currentUser._id } };
+      const userId = { data: { userId: currentUser._id, postId: post._id } };
       try {
         await api.delete(`posts/${post._id}`, userId);
-        setPosts((prev) => prev.filter((p) => p._id !== post._id));
+        removePostFromPage();
       } catch (error) {
         console.log(error);
       }
@@ -254,34 +266,33 @@ const Post = memo(
     }
 
     async function handleSendIconClick() {
-      try {
-        const res = await createComment(api, {
-          type: "comment",
-          postUserId: post.userId,
-          commenter: currentUser,
-          commentBody: {
-            userId: currentUser._id,
-            text: commentValue.current.value,
-            postId: post._id,
-            username: currentUser.username,
-            profilePicture: profilePicture(currentUser),
-          },
-        });
+      const res = await createComment(api, {
+        type: "comment",
+        postUserId: post.userId,
+        commenter: currentUser,
+        commentBody: {
+          userId: currentUser._id,
+          text: commentValue.current.value,
+          postId: post._id,
+          username: currentUser.username,
+          profilePicture: profilePicture(currentUser),
+        },
+      });
 
-        commentValue.current.value = "";
+      commentValue.current.value = "";
 
-        if (res.status === 200) {
-          const { newComment, commentObject } = res.data;
+      if (res.status === 200) {
+        const { newComment, commentObject } = res.data;
 
-          if (currentUser._id !== post.userId) {
-            socket?.emit("sendComment", commentObject);
-          }
-
-          setCommentNum((prev) => ++prev);
-          setComments((prev) => [newComment, ...prev]);
+        if (currentUser._id !== post.userId) {
+          socket?.emit("sendComment", commentObject);
         }
-      } catch (error) {
-        console.log(error);
+
+        setCommentNum((prev) => ++prev);
+        setComments((prev) => [newComment, ...prev]);
+      } else if (res.status === 404) {
+        alert("Post does not exist anymore!");
+        removePostFromPage();
       }
     }
 
@@ -292,6 +303,7 @@ const Post = memo(
         setComments,
         setCommentNum,
         post,
+        removePostFromPage,
       };
 
       return <Comment key={comment._id} {...props} />;

@@ -281,6 +281,7 @@ export async function likePost(api, postId, currentUser) {
 
     return res;
   } catch (error) {
+    console.log(error);
     const res = { status: 0 };
 
     if (error.response.status === 404) {
@@ -327,6 +328,12 @@ export async function createComment(api, options) {
     return res;
   } catch (error) {
     console.log(error);
+    const res = { status: 0 };
+
+    if (error.response.status === 404) {
+      res["status"] = 404;
+      return res;
+    }
   }
 }
 
@@ -337,6 +344,12 @@ export async function getComment(api, options) {
     return res.data;
   } catch (error) {
     console.log(error);
+    const res = { status: 0 };
+
+    if (error.response.status === 404) {
+      res["status"] = 404;
+      return res;
+    }
   }
 }
 
@@ -347,17 +360,29 @@ export async function editComment(api, options = {}) {
     return res;
   } catch (error) {
     console.log(error);
+    const res = { status: 0 };
+
+    if (error.response.status === 404) {
+      res["status"] = 404;
+      return res;
+    }
   }
 }
 
-export async function deleteComment(api, commentId, commenter, userId) {
+export async function deleteComment(api, commentId, commenter, post) {
   try {
-    const body = { data: { commenter, userId } }; // to send a request body in axios, you have to send it as an object with a data property
+    const body = { data: { commenter, userId: post.userId, postId: post._id } }; // to send a request body in axios, you have to send it as an object with a data property
 
     const res = await api.delete(`comments/${commentId}`, body);
 
     return res;
   } catch (error) {
     console.log(error);
+    const res = { status: 0 };
+
+    if (error.response.status === 404) {
+      res["status"] = 404;
+      return res;
+    }
   }
 }

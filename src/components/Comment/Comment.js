@@ -19,6 +19,7 @@ const Comment = memo(function Comment({
   setComments,
   setCommentNum,
   post,
+  removePostFromPage,
 }) {
   const api = useAxiosConfig2();
   const [dropDown, setDropDown] = useState(false);
@@ -40,16 +41,20 @@ const Comment = memo(function Comment({
       commentId: _id,
       text: value,
       type: "comment",
+      postId: post._id,
     });
 
     if (res.status === 200) {
       setCommentText(value);
       setEdit(false);
+    } else if (res.status === 404) {
+      alert("Post does not exist anymore!");
+      removePostFromPage();
     }
   }
 
   async function handleDeleteComment() {
-    const res = await deleteComment(api, _id, currentUser, post.userId);
+    const res = await deleteComment(api, _id, currentUser, post);
 
     if (res.status === 200) {
       setComments((comments) => {
@@ -63,6 +68,9 @@ const Comment = memo(function Comment({
       if (currentUser._id !== post.userId) {
         socket?.emit("sendComment", res.data);
       }
+    } else if (res.status === 404) {
+      alert("Post does not exist anymore!");
+      removePostFromPage();
     }
   }
 

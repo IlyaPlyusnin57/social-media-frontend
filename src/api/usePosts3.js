@@ -1,7 +1,14 @@
 import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-function usePosts3(user, lastPostId, queryFunction, length, isEnabled) {
+function usePosts3(
+  user,
+  lastPostId,
+  queryFunction,
+  length,
+  isEnabled,
+  removePost
+) {
   const hasNextPage = useRef(false);
   const [posts, setPosts] = useState([]);
   const nextPostId = useRef(null);
@@ -11,6 +18,13 @@ function usePosts3(user, lastPostId, queryFunction, length, isEnabled) {
     queryFn: queryFunction,
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
+      if (data?.status === 404) {
+        alert("Post does not exist");
+        setPosts([]);
+        removePost();
+        return;
+      }
+
       console.log({ receivedData: data });
       setPosts((prev) => [...prev, ...data]);
       console.log("success!");
