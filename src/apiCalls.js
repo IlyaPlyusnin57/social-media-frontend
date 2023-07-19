@@ -273,6 +273,23 @@ export async function getPost(api, postId) {
   }
 }
 
+export async function likePost(api, postId, currentUser) {
+  try {
+    const res = await api.put(`posts/${postId}/like`, {
+      user: currentUser,
+    });
+
+    return res;
+  } catch (error) {
+    const res = { status: 0 };
+
+    if (error.response.status === 404) {
+      res["status"] = 404;
+      return res;
+    }
+  }
+}
+
 export async function getTaggedPosts(api, userId, options = {}) {
   try {
     const res = await api.post(`/posts/tagged/${userId}`, options);
@@ -318,6 +335,28 @@ export async function getComment(api, options) {
     const res = await api.post("comments/getComment", options);
 
     return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function editComment(api, options = {}) {
+  try {
+    const res = await api.post("comments/edit", options);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteComment(api, commentId, commenter, userId) {
+  try {
+    const body = { data: { commenter, userId } }; // to send a request body in axios, you have to send it as an object with a data property
+
+    const res = await api.delete(`comments/${commentId}`, body);
+
+    return res;
   } catch (error) {
     console.log(error);
   }
