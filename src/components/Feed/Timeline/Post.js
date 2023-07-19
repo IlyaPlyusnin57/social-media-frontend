@@ -286,8 +286,6 @@ const Post = memo(
     }
 
     const commentList = comments.map((comment) => {
-      console.log({ comment });
-
       const props = {
         ...comment,
         navigateToUser,
