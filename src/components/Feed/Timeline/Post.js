@@ -11,6 +11,7 @@ import {
   forwardRef,
   memo,
   useState,
+  useEffect,
   useCallback,
   useRef,
 } from "react";
@@ -18,7 +19,15 @@ import { format } from "timeago.js";
 import { useAuth } from "../../../context/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useAxiosConfig2 from "../../../api/useAxiosConfig2";
-import { getUser, getUser2 } from "../../../apiCalls";
+import {
+  getUser,
+  getUser2,
+  createComment,
+  getComment,
+  likePost,
+  getPost,
+} from "../../../apiCalls";
+
 import profilePicture from "../../../helper_functions/profilePicture";
 import { useQuery } from "@tanstack/react-query";
 import { PF } from "../../../helper_functions/PF";
@@ -26,7 +35,6 @@ import { useNavigate } from "react-router-dom";
 import LikerList from "../../LikerList/LikerList";
 import TextInput from "../../TextInput/TextInput";
 import Comment from "../../Comment/Comment";
-import { createComment, getComment, likePost } from "../../../apiCalls";
 import usePosts3 from "../../../api/usePosts3";
 
 function reducer(state, action) {
@@ -198,6 +206,15 @@ const Post = memo(
       isEnabled,
       removePostFromPage
     );
+
+    useEffect(() => {
+      const fetchPost = async () => {
+        const result = await getPost(api, post._id);
+        setCommentNum(result.comments);
+      };
+
+      fetchPost();
+    }, [comments, api, post._id]);
 
     const [state, dispatch] = useReducer(reducer, {
       likes: post.likes.length,
