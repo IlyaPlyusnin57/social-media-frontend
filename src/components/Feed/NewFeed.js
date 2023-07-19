@@ -88,8 +88,10 @@ function NewFeed() {
           {isLoading && <span>Loading...</span>}
           {isError && <span>Error: {error.message}</span>}
           {currentUser.current.hasFinished && (
-            <div className="post" style={{ textAlign: "center" }}>
-              You have seen all posts from past 3 days
+            <div className="post-wrapper">
+              <div className="post" style={{ textAlign: "center" }}>
+                You have seen all posts from past 3 days
+              </div>
             </div>
           )}
         </div>
