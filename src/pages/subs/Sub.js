@@ -51,9 +51,7 @@ function Sub({ friend }) {
     <div className="sub">
       <div className="left-sub" onClick={() => handleSub(friend)}>
         <OnlineUser profilePicture={profile_picture} userId={friend._id} />
-        <div className="vertical-center margin-left">
-          {friend.first_name} {friend.last_name}
-        </div>
+        <div className="vertical-center margin-left">{friend.username}</div>
       </div>
 
       <div className="vertical-center">
