@@ -24,10 +24,9 @@ import { useQuery } from "@tanstack/react-query";
 import { PF } from "../../../helper_functions/PF";
 import { useNavigate } from "react-router-dom";
 import LikerList from "../../LikerList/LikerList";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import TextInput from "../../TextInput/TextInput";
 import Comment from "../../Comment/Comment";
-import { createComment, getComment } from "../../../apiCalls";
+import { createComment, getComment, likePost } from "../../../apiCalls";
 import usePosts3 from "../../../api/usePosts3";
 
 function reducer(state, action) {
@@ -57,6 +56,7 @@ function PostContent({
   navigateToUser,
   api,
   setShowComments,
+  commentNum,
 }) {
   const [showList, setShowList] = useState(false);
 
@@ -144,11 +144,12 @@ function PostContent({
             <span className="like-count">{state.likes}</span>
           </Box>
 
-          <Box className="icon-wrapper">
-            <ChatBubbleOutlineIcon
-              className="post-footer-icon"
-              onClick={() => setShowComments((prev) => !prev)}
-            />
+          <Box
+            className="icon-wrapper"
+            onClick={() => setShowComments((prev) => !prev)}
+          >
+            <ChatBubbleOutlineIcon className="post-footer-icon" />
+            <span className="like-count">{commentNum}</span>
           </Box>
           {/* <Box className="icon-wrapper">
       <ShareIcon className="post-footer-icon" />
@@ -165,7 +166,7 @@ const Post = memo(
     const api = useAxiosConfig2();
     const navigate = useNavigate();
     const [showComments, setShowComments] = useState(false);
-    const [parent] = useAutoAnimate();
+    const [commentNum, setCommentNum] = useState(post.comments);
     const commentValue = useRef(null);
     const [lastCommentId, setLastCommentId] = useState(null);
 
@@ -181,6 +182,7 @@ const Post = memo(
       error: commentError,
       isFetching: isCommentFetching,
       posts: comments,
+      setPosts: setComments,
       hasNextPage,
       nextPostId,
     } = usePosts3(post, lastCommentId, queryFunction, 5);
@@ -204,22 +206,18 @@ const Post = memo(
     const profile_picture = profilePicture(user);
 
     async function updateLikes() {
-      try {
-        const res = await api.put(`posts/${post._id}/like`, {
-          user: currentUser,
-        });
+      const res = await likePost(api, post._id, currentUser);
 
-        if (res?.status === 200) {
-          const { liker, likedUser } = res.data;
+      if (res?.status === 200) {
+        const { liker, likedUser } = res.data;
 
-          if (liker._id !== likedUser) {
-            socket?.emit("sendLike", res.data);
-          }
+        if (liker._id !== likedUser) {
+          socket?.emit("sendLike", res.data);
         }
 
         dispatch({ type: "update_likes" });
-      } catch (error) {
-        console.log(error);
+      } else if (res.status === 404) {
+        alert("Post does not exist anymore!");
       }
     }
 
@@ -237,12 +235,25 @@ const Post = memo(
       navigate("/search-profile", { state: user });
     }
 
-    async function handleSendIconClick() {
-      console.log({ commentValue: commentValue.current.value });
+    function handleKeyPress(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSendIconClick();
+      }
+    }
 
+    function loadComments() {
+      if (hasNextPage) {
+        setLastCommentId(nextPostId);
+      }
+    }
+
+    async function handleSendIconClick() {
       try {
         const res = await createComment(api, {
           type: "comment",
+          postUserId: post.userId,
+          commenter: currentUser,
           commentBody: {
             userId: currentUser._id,
             text: commentValue.current.value,
@@ -252,8 +263,17 @@ const Post = memo(
           },
         });
 
+        commentValue.current.value = "";
+
         if (res.status === 200) {
-          console.log({ comment: res.data });
+          const { newComment, commentObject } = res.data;
+
+          if (currentUser._id !== post.userId) {
+            socket?.emit("sendComment", commentObject);
+          }
+
+          setCommentNum((prev) => ++prev);
+          setComments((prev) => [newComment, ...prev]);
         }
       } catch (error) {
         console.log(error);
@@ -261,7 +281,15 @@ const Post = memo(
     }
 
     const commentList = comments.map((comment) => {
-      return <Comment key={comment._id} {...comment} />;
+      const props = {
+        ...comment,
+        navigateToUser,
+        setComments,
+        setCommentNum,
+        post,
+      };
+
+      return <Comment key={comment._id} {...props} />;
     });
 
     return (
@@ -286,6 +314,7 @@ const Post = memo(
               navigateToUser,
               api,
               setShowComments,
+              commentNum,
             }}
           />
         </section>
@@ -299,10 +328,16 @@ const Post = memo(
                 size: 30,
                 post_content: commentValue,
                 handleSendIconClick,
+                handleKeyPress,
               }}
             />
 
             {commentList}
+            {hasNextPage && (
+              <div className="username margin-top" onClick={loadComments}>
+                Load more comments...
+              </div>
+            )}
           </section>
         )}
       </div>
