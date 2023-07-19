@@ -20,8 +20,15 @@ $button-highlight-color: #555555;
     cursor: pointer;
     transition: all 0.2s ease-in;
   }
-  .btn:hover {
+  .button:hover {
     background-color: $button-highlight-color;
+  }
+}
+
+@mixin btn-disabled() {
+  .button[disabled] {
+    background-color: #aaa0a0 !important;
+    cursor: not-allowed;
   }
 }
 
@@ -54,4 +61,16 @@ $button-highlight-color: #555555;
 
 @mixin margin-left() {
   margin-left: 1rem;
+}
+
+@mixin input-style() {
+  input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid $post-border-color;
+    outline: none;
+    color: white;
+    padding: 0.3rem;
+  }
 }
