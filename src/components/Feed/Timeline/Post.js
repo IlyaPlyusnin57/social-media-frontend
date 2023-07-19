@@ -57,6 +57,7 @@ function PostContent({
   api,
   setShowComments,
   commentNum,
+  setEnabled,
 }) {
   const [showList, setShowList] = useState(false);
 
@@ -146,7 +147,10 @@ function PostContent({
 
           <Box
             className="icon-wrapper"
-            onClick={() => setShowComments((prev) => !prev)}
+            onClick={() => {
+              setShowComments((prev) => !prev);
+              setEnabled(true);
+            }}
           >
             <ChatBubbleOutlineIcon className="post-footer-icon" />
             <span className="like-count">{commentNum}</span>
@@ -169,6 +173,7 @@ const Post = memo(
     const [commentNum, setCommentNum] = useState(post.comments);
     const commentValue = useRef(null);
     const [lastCommentId, setLastCommentId] = useState(null);
+    const [isEnabled, setEnabled] = useState(false);
 
     const queryFunction = useCallback(() => {
       return getComment(api, {
@@ -185,7 +190,7 @@ const Post = memo(
       setPosts: setComments,
       hasNextPage,
       nextPostId,
-    } = usePosts3(post, lastCommentId, queryFunction, 5);
+    } = usePosts3(post, lastCommentId, queryFunction, 5, isEnabled);
 
     const [state, dispatch] = useReducer(reducer, {
       likes: post.likes.length,
@@ -281,6 +286,8 @@ const Post = memo(
     }
 
     const commentList = comments.map((comment) => {
+      console.log({ comment });
+
       const props = {
         ...comment,
         navigateToUser,
@@ -315,6 +322,7 @@ const Post = memo(
               api,
               setShowComments,
               commentNum,
+              setEnabled,
             }}
           />
         </section>

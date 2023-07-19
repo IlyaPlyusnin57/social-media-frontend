@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-function usePosts3(user, lastPostId, queryFunction, length) {
+function usePosts3(user, lastPostId, queryFunction, length, isEnabled) {
   const hasNextPage = useRef(false);
   const [posts, setPosts] = useState([]);
   const nextPostId = useRef(null);
@@ -18,6 +18,7 @@ function usePosts3(user, lastPostId, queryFunction, length) {
       nextPostId.current =
         data.length === length ? data[data.length - 1]._id : null;
     },
+    enabled: isEnabled,
   });
 
   return {
