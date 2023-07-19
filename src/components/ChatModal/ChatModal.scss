@@ -47,10 +47,7 @@
         margin-top: 1rem;
       }
 
-      .button[disabled] {
-        background-color: #aaa0a0 !important;
-        cursor: not-allowed;
-      }
+      @include btn-disabled;
     }
   }
 }
