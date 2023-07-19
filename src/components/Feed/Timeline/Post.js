@@ -91,7 +91,7 @@ function PostContent({
           <div
             className="username"
             onClick={() => navigateToUser(user)}
-          >{`${user?.first_name} ${user?.last_name}`}</div>
+          >{`${user?.first_name} ${user?.last_name} (${user.username})`}</div>
           <div className="post-date">{format(post.createdAt)}</div>
         </div>
       </div>
