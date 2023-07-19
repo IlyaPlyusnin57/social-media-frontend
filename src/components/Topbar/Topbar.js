@@ -289,7 +289,7 @@ function Topbar() {
                               className="navigate-user"
                               onClick={() => navigateToSearchProfile(follower)}
                             >
-                              {` ${follower.first_name} ${follower.last_name}`}
+                              {` ${follower.username}`}
                             </span>
                           </div>
 
@@ -318,7 +318,7 @@ function Topbar() {
                               onClick={() =>
                                 navigateToSearchProfile(message.senderUser)
                               }
-                            >{`${message.senderUser.first_name} ${message.senderUser.last_name}`}</span>
+                            >{`${message.senderUser.username}`}</span>
                             {" sent you a message"}
                           </div>
 
@@ -365,7 +365,7 @@ function Topbar() {
                                 className="navigate-user"
                                 onClick={() => navigateToSearchProfile(liker)}
                               >
-                                {`${liker.first_name} ${liker.last_name}`}
+                                {`${liker.username}`}
                               </span>
                               {` ${message}`}
                               <span
