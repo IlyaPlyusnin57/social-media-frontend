@@ -15,7 +15,7 @@ function ShowPost() {
     queryFn: () => getPost(api, postId),
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
-      setPost((prev) => [...prev, data]);
+      setPost([data]);
     },
   });
 
@@ -30,8 +30,8 @@ function ShowPost() {
   const myPost = post.map((post) => {
     if (post == null) {
       return (
-        <div key={"unique-key"} className="post">
-          Post does not exist anymore
+        <div key={"unique-key"} className="post-wrapper">
+          <div className="post">Post does not exist anymore</div>
         </div>
       );
     }
