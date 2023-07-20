@@ -38,14 +38,24 @@ import Comment from "../../Comment/Comment";
 import usePosts3 from "../../../api/usePosts3";
 
 function reducer(state, action) {
-  let new_likes = state.isLiked ? state.likes - 1 : state.likes + 1;
-
   switch (action.type) {
-    case "update_likes":
+    case "update_likes": {
+      const new_likes = state.isLiked ? state.likes - 1 : state.likes + 1;
+
       return {
         likes: new_likes,
         isLiked: !state.isLiked,
       };
+    }
+    case "set_likes": {
+      const likes = action.payload;
+
+      return {
+        ...state,
+        likes: likes,
+      };
+    }
+
     default: {
       throw Error("Unknown action: " + action.type);
     }
@@ -66,6 +76,8 @@ function PostContent({
   setShowComments,
   commentNum,
   setEnabled,
+  removePostFromPage,
+  dispatch,
 }) {
   const [showList, setShowList] = useState(false);
 
@@ -137,7 +149,15 @@ function PostContent({
 
         <div className="post-footer">
           {showList && (
-            <LikerList {...{ removeDisplay, post, likes: state.likes }} />
+            <LikerList
+              {...{
+                removeDisplay,
+                post,
+                likes: state.likes,
+                removePost: removePostFromPage,
+                dispatch,
+              }}
+            />
           )}
           <Box
             className="icon-wrapper post-likes"
@@ -350,6 +370,8 @@ const Post = memo(
               setShowComments,
               commentNum,
               setEnabled,
+              removePostFromPage,
+              dispatch,
             }}
           />
         </section>

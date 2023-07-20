@@ -18,18 +18,24 @@ function ShowContent({ isLoading, userList, setListModal }) {
   );
 }
 
-function LikedList({ removeDisplay, post, likes }) {
+function LikerList({ removeDisplay, post, likes, removePost, dispatch }) {
   const api = useAxiosConfig2();
   const [listModal, setListModal] = useState(false);
+  const [userList, setUserList] = useState([]);
 
-  const {
-    data: userList,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { isLoading, isError, error } = useQuery({
     queryKey: ["liker-list", post._id, likes],
     queryFn: () => getPostLikers(api, post._id),
+    onSuccess: (data) => {
+      if (data.status === 404) {
+        alert("Post does not exist anymore!");
+        if (removePost) removePost();
+        return;
+      }
+
+      dispatch({ type: "set_likes", payload: data.length });
+      setUserList(data);
+    },
   });
 
   if (isError) {
@@ -62,4 +68,4 @@ function LikedList({ removeDisplay, post, likes }) {
   );
 }
 
-export default LikedList;
+export default LikerList;
