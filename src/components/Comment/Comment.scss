@@ -69,4 +69,21 @@
       }
     }
   }
+
+  .thumbs-container {
+    margin-top: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+
+    .icon {
+      cursor: pointer;
+      padding: 0.3rem;
+      border-radius: $post-border-radius;
+
+      &:hover {
+        background-color: $button-highlight-color;
+      }
+    }
+  }
 }

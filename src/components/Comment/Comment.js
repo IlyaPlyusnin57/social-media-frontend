@@ -7,6 +7,10 @@ import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { editComment, deleteComment } from "../../apiCalls";
 import { useAuth } from "../../context/AuthContext";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 
 const Comment = memo(function Comment({
   _id,
@@ -28,6 +32,8 @@ const Comment = memo(function Comment({
   const [isDisabled, setDisabled] = useState(true);
   const [commentText, setCommentText] = useState(text);
   const { user: currentUser, socket } = useAuth();
+  const [isThumbUp, setThumbUp] = useState(false);
+  const [isThumbDown, setThumbDown] = useState(false);
 
   async function goToUser() {
     const user = await getUser(api, userId);
@@ -78,6 +84,26 @@ const Comment = memo(function Comment({
     setDisabled(text === editValue.current.value);
   }
 
+  function handleThumbUp() {
+    if (isThumbUp) {
+      setThumbUp(false);
+      setThumbDown(false);
+    } else {
+      setThumbUp(true);
+      setThumbDown(false);
+    }
+  }
+
+  function handleThumbDown() {
+    if (isThumbDown) {
+      setThumbUp(false);
+      setThumbDown(false);
+    } else {
+      setThumbUp(false);
+      setThumbDown(true);
+    }
+  }
+
   return (
     <section className="comment">
       <img src={profilePicture} alt="" />
@@ -110,7 +136,27 @@ const Comment = memo(function Comment({
             </div>
           </>
         ) : (
-          <p className="comment-text">{commentText}</p>
+          <>
+            <p className="comment-text">{commentText}</p>
+            <div className="thumbs-container">
+              {isThumbUp ? (
+                <ThumbUpAltIcon className="icon" onClick={handleThumbUp} />
+              ) : (
+                <ThumbUpOffAltIcon className="icon" onClick={handleThumbUp} />
+              )}
+
+              {isThumbDown ? (
+                <ThumbDownAltIcon className="icon" onClick={handleThumbDown} />
+              ) : (
+                <ThumbDownOffAltIcon
+                  className="icon"
+                  onClick={handleThumbDown}
+                />
+              )}
+
+              <span className="icon">Reply</span>
+            </div>
+          </>
         )}
       </div>
       {currentUser._id === userId && (
