@@ -279,12 +279,12 @@ function Topbar() {
             {notifications?.follows.length > 0 && (
               <div className="search-drop-down" id="follow-drop-down">
                 <ul>
-                  {notifications.follows?.map(({ id, follower }) => {
+                  {notifications.follows?.map(({ id, follower, message }) => {
                     return (
                       <li key={id}>
                         <section className="notification">
                           <div className="notification-sender">
-                            You have been followed by
+                            {message}
                             <span
                               className="navigate-user"
                               onClick={() => navigateToSearchProfile(follower)}

@@ -63,7 +63,7 @@ function Header({ user, profile_picture }) {
               ) : isFollowing ? (
                 <div
                   onClick={() => {
-                    unfollowUser(api, user, currentUser, refetch);
+                    unfollowUser(api, user, currentUser, refetch, socket);
                     dispatch({ type: "REMOVE_FOLLOW", payload: user._id });
                   }}
                 >

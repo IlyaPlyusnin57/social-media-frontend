@@ -237,11 +237,15 @@ export async function followUser(api, user, currentUser, refetch, socket) {
   }
 }
 
-export async function unfollowUser(api, user, currentUser, refetch) {
+export async function unfollowUser(api, user, currentUser, refetch, socket) {
   try {
-    await api.patch(`/users/${user._id}/unfollow`, {
+    const res = await api.patch(`/users/${user._id}/unfollow`, {
       userId: currentUser._id,
     });
+
+    if (res?.status === 200) {
+      socket?.emit("sendFollow", res.data);
+    }
 
     refetch();
   } catch (error) {
