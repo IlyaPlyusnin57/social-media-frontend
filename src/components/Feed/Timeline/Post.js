@@ -78,11 +78,14 @@ function PostContent({
   setEnabled,
   removePostFromPage,
   dispatch,
+  currentUser,
 }) {
   const [showList, setShowList] = useState(false);
 
   function addDislay() {
-    setShowList(true);
+    if (post.userId === currentUser._id) {
+      setShowList(true);
+    }
   }
 
   function removeDisplay() {
@@ -372,6 +375,7 @@ const Post = memo(
               setEnabled,
               removePostFromPage,
               dispatch,
+              currentUser,
             }}
           />
         </section>
