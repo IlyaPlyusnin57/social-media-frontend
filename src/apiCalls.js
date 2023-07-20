@@ -308,6 +308,13 @@ export async function getPostLikers(api, postId) {
     return res.data;
   } catch (error) {
     console.log(error);
+
+    const res = { status: 0 };
+
+    if (error.response.status === 404) {
+      res["status"] = 404;
+      return res;
+    }
   }
 }
 
