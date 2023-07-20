@@ -75,6 +75,7 @@ function NewFeed() {
         key={post._id}
         post={post}
         ref={i === postArray.length - 1 ? lastPostRef : null}
+        setPosts={setPosts}
       />
     );
   });
