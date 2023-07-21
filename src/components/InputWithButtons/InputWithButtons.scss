@@ -1,0 +1,11 @@
+@use "../../sass_vars/global-vars.scss" as *;
+
+@include input-style;
+@include btn-styling;
+
+.edit-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  justify-content: flex-end;
+}
