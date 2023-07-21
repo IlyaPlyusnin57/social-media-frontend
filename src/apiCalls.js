@@ -397,3 +397,29 @@ export async function deleteComment(api, commentId, commenter, post) {
     }
   }
 }
+
+export async function likeDislikeComment(
+  api,
+  post,
+  commentId,
+  currentUser,
+  isLiking
+) {
+  try {
+    const res = await api.put(`comments/${commentId}/likeDislike`, {
+      user: currentUser,
+      post,
+      isLiking,
+    });
+
+    return res;
+  } catch (error) {
+    console.log(error);
+    const res = { status: 0 };
+
+    if (error.response.status === 404) {
+      res["status"] = 404;
+      return res;
+    }
+  }
+}
