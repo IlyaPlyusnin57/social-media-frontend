@@ -11,6 +11,7 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+import InputWithButtons from "../InputWithButtons/InputWithButtons";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -77,6 +78,7 @@ const Comment = memo(function Comment({
   const { user: currentUser, socket } = useAuth();
   const [isThumbUp, setThumbUp] = useState(false);
   const [isThumbDown, setThumbDown] = useState(false);
+  const [showReplyInput, setShowReplyInput] = useState(false);
 
   const [state, dispatch] = useReducer(reducer, {
     likes: likes.length,
@@ -234,33 +236,47 @@ const Comment = memo(function Comment({
                 <span className="counter">{state.dislikes}</span>
               </div>
 
-              <span className="icon">Reply</span>
+              <span className="icon" onClick={() => setShowReplyInput(true)}>
+                Reply
+              </span>
             </div>
+
+            {showReplyInput && (
+              <InputWithButtons
+                {...{
+                  inputPlaceholder: "Add a Reply",
+                  actionType: "Reply",
+                  handleCancel: () => setShowReplyInput(false),
+                }}
+              />
+            )}
           </>
         )}
       </div>
       {currentUser._id === userId && (
         <div className="vert-icon-container">
-          <MoreVertIcon
-            className="vert-icon"
-            onClick={() => setDropDown((prev) => !prev)}
-          />
-          {dropDown && (
-            <section className="comment-drop-down">
-              <ul>
-                <li
-                  onClick={() => {
-                    setDropDown(false);
-                    setEdit(true);
-                  }}
-                >
-                  Edit
-                </li>
+          <section className="icon-wrapper">
+            <MoreVertIcon
+              className="vert-icon"
+              onClick={() => setDropDown((prev) => !prev)}
+            />
+            {dropDown && (
+              <section className="comment-drop-down">
+                <ul>
+                  <li
+                    onClick={() => {
+                      setDropDown(false);
+                      setEdit(true);
+                    }}
+                  >
+                    Edit
+                  </li>
 
-                <li onClick={handleDeleteComment}>Delete</li>
-              </ul>
-            </section>
-          )}
+                  <li onClick={handleDeleteComment}>Delete</li>
+                </ul>
+              </section>
+            )}
+          </section>
         </div>
       )}
     </section>
