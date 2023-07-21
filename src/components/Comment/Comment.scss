@@ -18,23 +18,17 @@
     margin-left: 0.2rem;
   }
 
-  @include input-style;
-
   @include btn-styling;
 
   @include btn-disabled;
 
-  .edit-buttons {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-    justify-content: flex-end;
-  }
-
   .vert-icon-container {
-    position: relative;
     display: flex;
     align-items: center;
+
+    .icon-wrapper {
+      position: relative;
+    }
 
     .vert-icon {
       font-size: 18px;
@@ -43,7 +37,7 @@
 
     .comment-drop-down {
       position: absolute;
-      top: 30px;
+      top: 100%;
       right: -15px;
       z-index: 999;
 
