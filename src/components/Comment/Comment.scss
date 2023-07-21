@@ -76,6 +76,11 @@
     align-items: center;
     gap: 0.3rem;
 
+    .thumb {
+      display: flex;
+      align-items: center;
+    }
+
     .icon {
       cursor: pointer;
       padding: 0.3rem;

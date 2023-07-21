@@ -1,8 +1,8 @@
 import "./Comment.scss";
 import "../Feed/Timeline/Post.scss";
 import { format } from "timeago.js";
-import { memo, useState, useRef } from "react";
-import { getUser } from "../../apiCalls";
+import { memo, useState, useRef, useReducer } from "react";
+import { getUser, likeDislikeComment } from "../../apiCalls";
 import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { editComment, deleteComment } from "../../apiCalls";
@@ -12,6 +12,47 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 
+function reducer(state, action) {
+  switch (action.type) {
+    case "update_likes": {
+      const new_dislikes = state.isDisliked
+        ? state.dislikes - 1
+        : state.dislikes;
+      const new_likes = state.isLiked ? state.likes - 1 : state.likes + 1;
+
+      return {
+        dislikes: new_dislikes,
+        likes: new_likes,
+        isLiked: !state.isLiked,
+      };
+    }
+    case "update_dislikes": {
+      const likes = state.isLiked ? state.likes - 1 : state.likes;
+      const new_dislikes = state.isDisliked
+        ? state.dislikes - 1
+        : state.dislikes + 1;
+
+      return {
+        likes: likes,
+        dislikes: new_dislikes,
+        isDisliked: !state.isDisliked,
+      };
+    }
+    case "set_likes": {
+      const likes = action.payload;
+
+      return {
+        ...state,
+        likes: likes,
+      };
+    }
+
+    default: {
+      throw Error("Unknown action: " + action.type);
+    }
+  }
+}
+
 const Comment = memo(function Comment({
   _id,
   text,
@@ -20,6 +61,8 @@ const Comment = memo(function Comment({
   createdAt,
   navigateToUser,
   userId,
+  likes,
+  dislikes,
   setComments,
   setCommentNum,
   post,
@@ -34,6 +77,13 @@ const Comment = memo(function Comment({
   const { user: currentUser, socket } = useAuth();
   const [isThumbUp, setThumbUp] = useState(false);
   const [isThumbDown, setThumbDown] = useState(false);
+
+  const [state, dispatch] = useReducer(reducer, {
+    likes: likes.length,
+    dislikes: dislikes.length,
+    isLiked: likes.includes(currentUser._id),
+    isDisliked: dislikes.includes(currentUser._id),
+  });
 
   async function goToUser() {
     const user = await getUser(api, userId);
@@ -104,6 +154,26 @@ const Comment = memo(function Comment({
     }
   }
 
+  async function likeDislike(isLiking) {
+    const res = await likeDislikeComment(api, post, _id, currentUser, isLiking);
+    if (res.status === 200) {
+      if (currentUser._id !== _id) {
+        console.log({ data: res.data });
+        console.log("should emit event");
+        socket?.emit("sendLike", res.data);
+      }
+
+      if (isLiking) {
+        dispatch({ type: "update_likes" });
+      } else {
+        dispatch({ type: "update_dislikes" });
+      }
+    } else if (res.status === 404) {
+      alert("Post does not exist anymore!");
+      removePostFromPage();
+    }
+  }
+
   return (
     <section className="comment">
       <img src={profilePicture} alt="" />
@@ -139,20 +209,30 @@ const Comment = memo(function Comment({
           <>
             <p className="comment-text">{commentText}</p>
             <div className="thumbs-container">
-              {isThumbUp ? (
-                <ThumbUpAltIcon className="icon" onClick={handleThumbUp} />
-              ) : (
-                <ThumbUpOffAltIcon className="icon" onClick={handleThumbUp} />
-              )}
+              <div className="thumb" onClick={() => likeDislike(true)}>
+                {state.isLiked ? (
+                  <ThumbUpAltIcon className="icon" onClick={handleThumbUp} />
+                ) : (
+                  <ThumbUpOffAltIcon className="icon" onClick={handleThumbUp} />
+                )}
 
-              {isThumbDown ? (
-                <ThumbDownAltIcon className="icon" onClick={handleThumbDown} />
-              ) : (
-                <ThumbDownOffAltIcon
-                  className="icon"
-                  onClick={handleThumbDown}
-                />
-              )}
+                <span className="counter">{state.likes}</span>
+              </div>
+
+              <div className="thumb" onClick={() => likeDislike(false)}>
+                {state.isDisliked ? (
+                  <ThumbDownAltIcon
+                    className="icon"
+                    onClick={handleThumbDown}
+                  />
+                ) : (
+                  <ThumbDownOffAltIcon
+                    className="icon"
+                    onClick={handleThumbDown}
+                  />
+                )}
+                <span className="counter">{state.dislikes}</span>
+              </div>
 
               <span className="icon">Reply</span>
             </div>
