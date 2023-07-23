@@ -364,6 +364,22 @@ export async function getComment(api, options) {
   }
 }
 
+export async function getCommentReply(api, options) {
+  try {
+    const res = await api.post("comments/getCommentReply", options);
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    const res = { status: 0 };
+
+    if (error.response.status === 404) {
+      res["status"] = 404;
+      return res;
+    }
+  }
+}
+
 export async function editComment(api, options = {}) {
   try {
     const res = await api.post("comments/edit", options);
@@ -403,13 +419,15 @@ export async function likeDislikeComment(
   post,
   commentId,
   currentUser,
-  isLiking
+  isLiking,
+  type
 ) {
   try {
     const res = await api.put(`comments/${commentId}/likeDislike`, {
       user: currentUser,
       post,
       isLiking,
+      type,
     });
 
     return res;
