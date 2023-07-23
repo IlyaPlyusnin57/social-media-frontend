@@ -3,30 +3,34 @@ import "./InputWithButtons.scss";
 
 function InputWithButtons({
   inputPlaceholder,
-  editValue,
+  inputRef,
   handleChangeInput,
   handleCancel,
   isDisabled,
-  finishEditing,
+  handleAction,
   actionType,
 }) {
+  function handleKeyPress(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAction();
+    }
+  }
+
   return (
     <>
       <input
         type="text"
         placeholder={inputPlaceholder}
-        ref={editValue}
+        ref={inputRef}
         onChange={handleChangeInput}
+        onKeyDown={handleKeyPress}
       />
       <div className="edit-buttons">
         <button className="button" onClick={handleCancel}>
           Cancel
         </button>
-        <button
-          className="button"
-          onClick={finishEditing}
-          disabled={isDisabled}
-        >
+        <button className="button" onClick={handleAction} disabled={isDisabled}>
           {actionType}
         </button>
       </div>
