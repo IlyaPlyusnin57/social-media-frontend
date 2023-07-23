@@ -222,7 +222,7 @@ const Post = memo(
       hasNextPage,
       nextPostId,
     } = usePosts3(
-      post,
+      post._id,
       lastCommentId,
       queryFunction,
       5,
