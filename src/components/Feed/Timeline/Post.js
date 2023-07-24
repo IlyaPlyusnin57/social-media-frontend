@@ -344,6 +344,7 @@ const Post = memo(
         setCommentNum,
         post,
         removePostFromPage,
+        commentType: "comment",
       };
 
       return <Comment key={comment._id} {...props} />;
