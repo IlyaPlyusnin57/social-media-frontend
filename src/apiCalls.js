@@ -396,9 +396,24 @@ export async function editComment(api, options = {}) {
   }
 }
 
-export async function deleteComment(api, commentId, commenter, post) {
+export async function deleteComment(
+  api,
+  commentId,
+  commenter,
+  post,
+  type,
+  parentCommentId
+) {
   try {
-    const body = { data: { commenter, userId: post.userId, postId: post._id } }; // to send a request body in axios, you have to send it as an object with a data property
+    const body = {
+      data: {
+        commenter,
+        userId: post.userId,
+        postId: post._id,
+        type,
+        parentCommentId,
+      },
+    }; // to send a request body in axios for a delete method, you have to send it as an object with a data property
 
     const res = await api.delete(`comments/${commentId}`, body);
 
