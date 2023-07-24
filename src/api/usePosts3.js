@@ -1,8 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 function usePosts3(
-  user,
+  userId,
   lastPostId,
   queryFunction,
   length,
@@ -13,8 +13,12 @@ function usePosts3(
   const [posts, setPosts] = useState([]);
   const nextPostId = useRef(null);
 
+  useEffect(() => {
+    setPosts([]);
+  }, [isEnabled]);
+
   const { isError, error, isFetching } = useQuery({
-    queryKey: [user._id, lastPostId],
+    queryKey: [userId, lastPostId],
     queryFn: queryFunction,
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
