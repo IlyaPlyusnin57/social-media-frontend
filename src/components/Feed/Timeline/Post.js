@@ -329,7 +329,7 @@ const Post = memo(
         }
 
         setCommentNum((prev) => ++prev);
-        setComments((prev) => [newComment, ...prev]);
+        setComments((prev) => [...prev, newComment]);
       } else if (res.status === 404) {
         alert("Post does not exist anymore!");
         removePostFromPage();
