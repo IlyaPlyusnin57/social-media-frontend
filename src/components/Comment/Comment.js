@@ -88,7 +88,7 @@ const Comment = memo(function Comment({
   const [showReplyInput, setShowReplyInput] = useState(false);
   const replyValue = useRef(null);
   const [showReplies, setShowReplies] = useState(false);
-  const [repleNum, setReplyNum] = useState(replies);
+  const [replyNum, setReplyNum] = useState(replies);
 
   const [state, dispatch] = useReducer(reducer, {
     likes: likes.length,
@@ -103,7 +103,7 @@ const Comment = memo(function Comment({
   const queryFunction = useCallback(() => {
     return getCommentReply(api, {
       commentId: _id,
-      lastReplyCommentId,
+      lastCommentReplyId: lastReplyCommentId,
     });
   }, [api, lastReplyCommentId, _id]);
 
@@ -255,14 +255,12 @@ const Comment = memo(function Comment({
   }
 
   async function handleReply() {
-    if (commentType === "commentReply") return;
-
     const res = await createComment(api, {
       type: "commentReply",
       postUserId: post.userId,
       commenter: currentUser,
       commentBody: {
-        commentId: _id,
+        commentId: commentType === "commentReply" ? parentId : _id,
         userId: currentUser._id,
         text: replyValue.current.value,
         postId: post._id,
@@ -283,7 +281,13 @@ const Comment = memo(function Comment({
       setReplyNum((prev) => ++prev);
 
       setCommentNum((prev) => ++prev);
-      setCommentReplies((prev) => [newComment, ...prev]);
+
+      if (commentType === "commentReply") {
+        setComments((prev) => [...prev, newComment]);
+        setReplyNumParent((prev) => ++prev);
+      } else {
+        setCommentReplies((prev) => [...prev, newComment]);
+      }
     }
   }
 
@@ -363,7 +367,7 @@ const Comment = memo(function Comment({
                       Reply
                     </span>
                   </div>
-                  {repleNum > 0 && (
+                  {replyNum > 0 && (
                     <div
                       className="icon view-replies"
                       onClick={() => {
@@ -371,7 +375,7 @@ const Comment = memo(function Comment({
                         setShowReplies((prev) => !prev);
                       }}
                     >
-                      View {repleNum} {repleNum === 1 ? "reply" : "replies"}
+                      View {replyNum} {replyNum === 1 ? "reply" : "replies"}
                       {showReplies ? (
                         <KeyboardArrowUpIcon />
                       ) : (
@@ -423,6 +427,11 @@ const Comment = memo(function Comment({
             )}
           </div>
           {<section id="replies">{showReplies && comments}</section>}
+          {hasNextPage && commentType === "comment" && (
+            <div className="username margin-top" onClick={loadComments}>
+              Load more comments...
+            </div>
+          )}
         </div>
       </section>
     </>
