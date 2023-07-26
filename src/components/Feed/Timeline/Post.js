@@ -294,6 +294,7 @@ const Post = memo(
         type: "comment",
         postUserId: post.userId,
         commenter: currentUser,
+        parentUserId: null,
         commentBody: {
           userId: currentUser._id,
           text: commentValue.current.value,
