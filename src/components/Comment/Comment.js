@@ -15,6 +15,7 @@ import InputWithButtons from "../InputWithButtons/InputWithButtons";
 import usePosts3 from "../../api/usePosts3";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import TaggedUser from "../TaggedUser.js/TaggedUser";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -255,14 +256,21 @@ const Comment = memo(function Comment({
   }
 
   async function handleReply() {
+    const commentText = replyValue.current.value;
+    const finalContent =
+      currentUser.username === username
+        ? commentText
+        : `@${username} ${commentText}`;
+
     const res = await createComment(api, {
       type: "commentReply",
       postUserId: post.userId,
       commenter: currentUser,
+      parentUserId: userId,
       commentBody: {
         commentId: commentType === "commentReply" ? parentId : _id,
         userId: currentUser._id,
-        text: replyValue.current.value,
+        text: finalContent,
         postId: post._id,
         username: currentUser.username,
         profilePicture,
@@ -288,6 +296,9 @@ const Comment = memo(function Comment({
       } else {
         setCommentReplies((prev) => [...prev, newComment]);
       }
+    } else if (res?.status === 404) {
+      alert("Post does not exist anymore!");
+      removePostFromPage();
     }
   }
 
@@ -327,7 +338,14 @@ const Comment = memo(function Comment({
                 </>
               ) : (
                 <>
-                  <p className="comment-text">{commentText}</p>
+                  <p className="comment-text">
+                    <TaggedUser
+                      {...{
+                        api,
+                        contentArr: commentText.split(" "),
+                      }}
+                    />
+                  </p>
                   <div className="thumbs-container">
                     <div className="thumb" onClick={() => likeDislike(true)}>
                       {state.isLiked ? (
