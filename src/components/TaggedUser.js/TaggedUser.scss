@@ -1,0 +1,8 @@
+.tagged-user {
+  cursor: pointer;
+  transition: all 0.25s ease-in;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
