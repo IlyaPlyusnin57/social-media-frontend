@@ -36,6 +36,7 @@ import LikerList from "../../LikerList/LikerList";
 import TextInput from "../../TextInput/TextInput";
 import Comment from "../../Comment/Comment";
 import usePosts3 from "../../../api/usePosts3";
+import TaggedUser from "../../TaggedUser.js/TaggedUser";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -92,7 +93,7 @@ function PostContent({
     setShowList(false);
   }
 
-  const arr = post.desc.split(" ");
+  const textContentArr = post.desc.split(" ");
 
   if (isLoading) {
     return <span>Loading...</span>;
@@ -123,24 +124,7 @@ function PostContent({
         <div className="post-content">
           <div className="text-content">
             <p>
-              {arr.map((word, index) => {
-                if (word[0] === "@") {
-                  return (
-                    <span
-                      key={index}
-                      className="tagged-user"
-                      onClick={async () => {
-                        const user = await getUser2(api, word.substring(1));
-                        navigateToUser(user);
-                      }}
-                    >
-                      {word + " "}
-                    </span>
-                  );
-                }
-
-                return word + " ";
-              })}
+              <TaggedUser {...{ contentArr: textContentArr, api }} />
             </p>
           </div>
           {post?.img && (
