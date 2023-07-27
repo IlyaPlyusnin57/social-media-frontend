@@ -374,10 +374,12 @@ function Topbar() {
                               >{` ${type}`}</span>
                             </div>
 
-                            <CheckIcon
-                              className="cursor-icon"
-                              onClick={() => handleMarkAsRead(id, "various")}
-                            />
+                            <div className="icon-container">
+                              <CheckIcon
+                                className="cursor-icon"
+                                onClick={() => handleMarkAsRead(id, "various")}
+                              />
+                            </div>
                           </section>
                         </li>
                       );
