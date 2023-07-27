@@ -1,7 +1,14 @@
 import "./Comment.scss";
 import "../Feed/Timeline/Post.scss";
 import { format } from "timeago.js";
-import { memo, useState, useRef, useReducer, useCallback } from "react";
+import {
+  memo,
+  useState,
+  useRef,
+  useReducer,
+  useCallback,
+  useMemo,
+} from "react";
 import { getUser, likeDislikeComment, getCommentReply } from "../../apiCalls";
 import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -91,6 +98,24 @@ const Comment = memo(function Comment({
   const [showReplies, setShowReplies] = useState(false);
   const [replyNum, setReplyNum] = useState(replies);
 
+  const { taggedUser, untaggedText } = useMemo(() => {
+    if (commentText.at(0) !== "@") {
+      return {
+        taggedUser: null,
+        untaggedText: commentText,
+      };
+    }
+
+    const textArray = commentText.split(" ");
+    const taggedUser = textArray[0];
+    textArray.shift();
+
+    return {
+      taggedUser,
+      untaggedText: textArray.join(" "),
+    };
+  }, [commentText]);
+
   const [state, dispatch] = useReducer(reducer, {
     likes: likes.length,
     dislikes: dislikes.length,
@@ -146,8 +171,17 @@ const Comment = memo(function Comment({
     navigateToUser(user);
   }
 
+  function handleFinishEditing(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      finishEditing();
+    }
+  }
+
   async function finishEditing() {
-    const value = editValue.current.value;
+    let value = taggedUser ? `${taggedUser} ` : "";
+
+    value += editValue.current.value;
 
     const res = await editComment(api, {
       commentId: _id,
@@ -327,9 +361,10 @@ const Comment = memo(function Comment({
                 <>
                   <input
                     type="text"
-                    defaultValue={text}
+                    defaultValue={untaggedText}
                     ref={editValue}
                     onChange={changeComment}
+                    onKeyDown={handleFinishEditing}
                   />
                   <div className="edit-buttons">
                     <button className="button" onClick={() => setEdit(false)}>
