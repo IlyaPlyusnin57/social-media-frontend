@@ -7,7 +7,7 @@ import SearchResults from "./pages/search-results/SearchResults";
 import Feed from "./components/Feed/Feed";
 import ChatList from "./pages/chats/ChatList";
 import Conversation from "./components/Chat/Conversation";
-import SubList from "./pages/subs/SubList";
+import UserList from "./pages/users/UserList";
 import ShowPost from "./pages/post/ShowPost";
 import NewFeed from "./components/Feed/NewFeed";
 import Tags from "./pages/tags/Tags";
@@ -63,7 +63,7 @@ function App() {
             path="/subs"
             element={
               <Home>
-                <SubList />
+                <UserList />
               </Home>
             }
           ></Route>

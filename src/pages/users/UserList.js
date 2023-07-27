@@ -1,24 +1,24 @@
-import "./SubList.scss";
+import "./UserList.scss";
 
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../context/AuthContext";
 import { getSubs } from "../../apiCalls";
 import useAxiosConfig2 from "../../api/useAxiosConfig2";
-import UnknowUser from "../../components/Helpers/UnknownUser";
+import UnknownUser from "../../components/Helpers/UnknownUser";
 
-import Sub from "./Sub";
+import User from "./User";
 
-function SubList() {
-  const { user } = useAuth();
+function UserList() {
+  const { user: currentUser } = useAuth();
   const api = useAxiosConfig2();
 
   const {
     status,
-    data: subs,
+    data: users,
     error,
   } = useQuery({
-    queryKey: ["subs"],
-    queryFn: () => getSubs(api, user),
+    queryKey: ["users"],
+    queryFn: () => getSubs(api, currentUser),
     refetchOnWindowFocus: false,
   });
 
@@ -30,17 +30,17 @@ function SubList() {
     return <span>Error: {error.message}</span>;
   }
 
-  console.log({ subAre: subs });
-
   return (
     <div className="sub-container">
-      {subs.map((sub, i) => {
-        if (!sub)
-          return <UnknowUser key={i} message={"User does not exist anymore"} />;
-        return <Sub key={sub?._id} friend={sub} />;
+      {users.map((user, i) => {
+        if (!user)
+          return (
+            <UnknownUser key={i} message={"User does not exist anymore"} />
+          );
+        return <User key={user?._id} friend={user} />;
       })}
     </div>
   );
 }
 
-export default SubList;
+export default UserList;

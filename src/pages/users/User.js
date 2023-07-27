@@ -9,14 +9,14 @@ import { getConversation } from "../../apiCalls";
 import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import OnlineUser from "../../components/Online User/OnlineUser";
 
-function Sub({ friend }) {
+function User({ friend }) {
   const navigate = useNavigate();
   const [chatModal, setChatModal] = useState(false);
   const profile_picture = profilePicture(friend);
   const { user: currentUser } = useAuth();
   const api = useAxiosConfig2();
 
-  function handleSub(friend) {
+  function handleUser(friend) {
     navigate("/search-profile", { state: friend });
   }
 
@@ -49,7 +49,7 @@ function Sub({ friend }) {
 
   return (
     <div className="sub">
-      <div className="left-sub" onClick={() => handleSub(friend)}>
+      <div className="left-sub" onClick={() => handleUser(friend)}>
         <OnlineUser profilePicture={profile_picture} userId={friend._id} />
         <div className="vertical-center margin-left underline">
           {friend.username}
@@ -80,4 +80,4 @@ function Sub({ friend }) {
   );
 }
 
-export default Sub;
+export default User;

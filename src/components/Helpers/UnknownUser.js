@@ -1,7 +1,7 @@
 import "./unknownuser.scss";
 
-function UnknowUser({ message }) {
+function UnknownUser({ message }) {
   return <div className="unknown">{message}</div>;
 }
 
-export default UnknowUser;
+export default UnknownUser;
