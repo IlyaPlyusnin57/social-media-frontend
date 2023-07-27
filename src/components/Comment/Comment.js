@@ -280,7 +280,7 @@ const Comment = memo(function Comment({
     if (res?.status === 200) {
       replyValue.current.value = "";
       setShowReplyInput(false);
-      const { newComment, commentObject } = res.data;
+      const { newComment, commentObject, replyObject } = res.data;
 
       if (showReplies === false) {
         setShowReplies(true);
@@ -295,6 +295,14 @@ const Comment = memo(function Comment({
         setReplyNumParent((prev) => ++prev);
       } else {
         setCommentReplies((prev) => [...prev, newComment]);
+      }
+
+      if (replyObject && currentUser._id !== userId) {
+        socket?.emit("sendComment", replyObject);
+      }
+
+      if (currentUser._id !== post.userId) {
+        socket?.emit("sendComment", commentObject);
       }
     } else if (res?.status === 404) {
       alert("Post does not exist anymore!");
