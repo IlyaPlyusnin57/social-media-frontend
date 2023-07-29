@@ -8,13 +8,17 @@ import { createPortal } from "react-dom";
 import { getConversation } from "../../apiCalls";
 import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import OnlineUser from "../../components/Online User/OnlineUser";
+import { blockUnblockUser } from "../../apiCalls";
 
 function User({ friend }) {
   const navigate = useNavigate();
   const [chatModal, setChatModal] = useState(false);
   const profile_picture = profilePicture(friend);
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, dispatch, socket } = useAuth();
   const api = useAxiosConfig2();
+  const [blocked, setBlocked] = useState(
+    currentUser?.blocked?.includes(friend._id)
+  );
 
   function handleUser(friend) {
     navigate("/search-profile", { state: friend });
@@ -26,6 +30,25 @@ function User({ friend }) {
 
   function handleChat() {
     setChatModal(true);
+  }
+
+  async function handleBlockUnblock(isBlocking) {
+    const res = await blockUnblockUser(api, {
+      isBlocking,
+      blocker: currentUser,
+      blockedId: friend._id,
+    });
+
+    if (res.status === 200) {
+      socket?.emit("sendBlockNotification", friend._id, res.data, isBlocking);
+      setBlocked(isBlocking);
+
+      if (isBlocking) {
+        dispatch({ type: "ADD_BLOCKED_USER", payload: friend._id });
+      } else {
+        dispatch({ type: "REMOVE_BLOCKED_USER", payload: friend._id });
+      }
+    }
   }
 
   const {
@@ -56,7 +79,7 @@ function User({ friend }) {
         </div>
       </div>
 
-      <div className="vertical-center">
+      <div className="vertical-center margin-right">
         {conv === null ? (
           <button onClick={handleChat} className="button">
             Start a Chat
@@ -64,6 +87,17 @@ function User({ friend }) {
         ) : (
           <button className="button" onClick={() => handleConversation()}>
             View Chat
+          </button>
+        )}
+      </div>
+      <div className="vertical-center">
+        {blocked ? (
+          <button className="button" onClick={() => handleBlockUnblock(false)}>
+            Unblock User
+          </button>
+        ) : (
+          <button className="button" onClick={() => handleBlockUnblock(true)}>
+            Block User
           </button>
         )}
       </div>
