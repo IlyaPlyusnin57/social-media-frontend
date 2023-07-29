@@ -41,6 +41,13 @@ function LeftBar() {
           </li>
         </Link>
 
+        <Link to="/followers">
+          <li>
+            <PeopleIcon className="leftbar-icon" />
+            Followers
+          </li>
+        </Link>
+
         <Link to="/tags">
           <li>
             <AlternateEmailIcon className="leftbar-icon" />

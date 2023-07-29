@@ -2,13 +2,12 @@ import "./UserList.scss";
 
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../context/AuthContext";
-import { getSubs } from "../../apiCalls";
 import useAxiosConfig2 from "../../api/useAxiosConfig2";
 import UnknownUser from "../../components/Helpers/UnknownUser";
 
 import User from "./User";
 
-function UserList() {
+function UserList({ queryFunction, queryKey }) {
   const { user: currentUser } = useAuth();
   const api = useAxiosConfig2();
 
@@ -17,8 +16,8 @@ function UserList() {
     data: users,
     error,
   } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => getSubs(api, currentUser),
+    queryKey: [queryKey],
+    queryFn: () => queryFunction(api, currentUser),
     refetchOnWindowFocus: false,
   });
 

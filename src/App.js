@@ -12,6 +12,8 @@ import ShowPost from "./pages/post/ShowPost";
 import NewFeed from "./components/Feed/NewFeed";
 import Tags from "./pages/tags/Tags";
 
+import { getSubs, getFollowers } from "./apiCalls";
+
 function App() {
   return (
     <>
@@ -63,7 +65,15 @@ function App() {
             path="/subs"
             element={
               <Home>
-                <UserList />
+                <UserList queryFunction={getSubs} queryKey={"subs"} />
+              </Home>
+            }
+          ></Route>
+          <Route
+            path="/followers"
+            element={
+              <Home>
+                <UserList queryFunction={getFollowers} queryKey={"followers"} />
               </Home>
             }
           ></Route>
