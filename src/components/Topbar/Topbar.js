@@ -368,10 +368,12 @@ function Topbar() {
                                 {`${liker.username}`}
                               </span>
                               {` ${message}`}
-                              <span
-                                className="navigate-user"
-                                onClick={() => navigateToPost(typeId)}
-                              >{` ${type}`}</span>
+                              {type && (
+                                <span
+                                  className="navigate-user"
+                                  onClick={() => navigateToPost(typeId)}
+                                >{` ${type}`}</span>
+                              )}
                             </div>
 
                             <div className="icon-container">
