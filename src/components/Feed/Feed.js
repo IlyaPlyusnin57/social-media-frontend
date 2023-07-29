@@ -14,12 +14,11 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import usePosts from "../../api/usePosts";
 import { useGetLastRef } from "../../hooks/useGetLastRef";
 
-function Feed({ profile }) {
+function Feed({ profile, search }) {
   const matchesMediaQuery = useMediaQuery("(min-width: 440px)");
   const { state: searchedUser } = useLocation();
   const [parent] = useAutoAnimate();
-
-  let { user, profile_picture } = useAuth();
+  let { user, profile_picture, blocks } = useAuth();
 
   const api = useAxiosConfig2();
 
@@ -49,6 +48,20 @@ function Feed({ profile }) {
     nextPostId.current,
     setLastPostId
   );
+
+  if (search && blocks.includes(searchedUser._id)) {
+    return (
+      <div className="feed">
+        {profile && (
+          <Header
+            user={currentUser}
+            profile_picture={profile_picture}
+            blocked={true}
+          />
+        )}
+      </div>
+    );
+  }
 
   const postContent = posts?.map((post, i, postArray) => {
     return (

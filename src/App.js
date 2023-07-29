@@ -33,7 +33,7 @@ function App() {
             path="/profile/:username"
             element={
               <Home>
-                <Feed profile={true} />
+                <Feed profile={true} search={false} />
               </Home>
             }
           ></Route>
@@ -49,7 +49,7 @@ function App() {
             path="/search-profile"
             element={
               <Home>
-                <Feed profile={true} />
+                <Feed profile={true} search={true} />
               </Home>
             }
           ></Route>

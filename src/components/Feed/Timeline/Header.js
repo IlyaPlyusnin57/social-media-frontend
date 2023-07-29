@@ -14,7 +14,7 @@ import {
 } from "../../../apiCalls";
 import { CircularProgress } from "@mui/material";
 
-function Header({ user, profile_picture }) {
+function Header({ user, profile_picture, blocked }) {
   const { user: currentUser, socket, dispatch } = useAuth();
 
   const onlineUser = user._id === currentUser._id ? currentUser : user;
@@ -37,19 +37,30 @@ function Header({ user, profile_picture }) {
 
   return (
     <section className="header">
-      <OnlineUser profilePicture={profile_picture} userId={onlineUser._id} />
+      {!blocked && (
+        <OnlineUser profilePicture={profile_picture} userId={onlineUser._id} />
+      )}
       <div className="header-info">
         <div className="user-name">{user.username}</div>
-        <div className="user-info">
-          <div className="user-info-item">
-            <PlaceIcon className="user-icon" />
-            <div className="location">Athens</div>
+        {blocked ? (
+          <div className="user-info">
+            <div className="user-info-item">
+              <p>This user had blocked you</p>
+            </div>
           </div>
-          <div className="user-info-item">
-            <SchoolIcon className="user-icon" />
-            <div className="school">University of Sparta</div>
+        ) : (
+          <div className="user-info">
+            <div className="user-info-item">
+              <PlaceIcon className="user-icon" />
+              <div className="location">Athens</div>
+            </div>
+            <div className="user-info-item">
+              <SchoolIcon className="user-icon" />
+              <div className="school">University of Sparta</div>
+            </div>
           </div>
-        </div>
+        )}
+
         {user._id !== currentUser._id && (
           <div className="user-contact">
             <button className="btn">
