@@ -92,6 +92,11 @@
   border-radius: 0.5rem;
   appearance: none;
   outline: none;
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: black;
+  }
 }
 
 .send-icon {

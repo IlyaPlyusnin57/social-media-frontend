@@ -21,7 +21,7 @@ import { getMonthAndDay } from "../../helper_functions/monthAndDay";
 import decryptMessage from "../../helper_functions/decryptMessage";
 
 function Conversation() {
-  const { user, socket, dispatch } = useAuth();
+  const { user, socket, dispatch, blocks } = useAuth();
 
   const input = useRef(null); // ref for the input
   const [messages, setMessages] = useState([]);
@@ -37,10 +37,8 @@ function Conversation() {
 
   const [unseenMessages, setUnseenMessages] = useState(0);
   const arrivedRef = useWatchRef(setUnseenMessages);
-
+  const blocked = blocks.includes(friend._id);
   const monthArray = useRef([]);
-
-  console.log({ unseenMessages });
 
   useEffect(() => {
     socket?.on("getMessage", (message) => {
@@ -55,13 +53,6 @@ function Conversation() {
       setMessages((prev) => [arrivalMsg, ...prev]);
     }
   }, [arrivalMsg, friend._id, dispatch]);
-
-  // useEffect(() => {
-  //   socket.current.emit("getUserId", userId);
-  //   socket.current.on("getUsers", (users) => {
-  //     //console.log(users);
-  //   });
-  // }, [userId]);
 
   useEffect(() => {
     scrollBottom();
@@ -258,7 +249,8 @@ function Conversation() {
           ref={input}
           className="message-input"
           type="text"
-          placeholder="Send a message"
+          placeholder={blocked ? "You are blocked" : "Send a message"}
+          disabled={blocked}
         />
         <SendIcon onClick={sendMessage} className="send-icon" />
       </div>
