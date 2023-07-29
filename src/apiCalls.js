@@ -252,6 +252,25 @@ export async function unfollowUser(api, user, currentUser, refetch, socket) {
     console.log(error);
   }
 }
+export async function blockUnblockUser(api, options = {}) {
+  try {
+    const res = await api.patch(`/users/block`, options);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getBlockObject(api, userId) {
+  try {
+    const res = await api.get(`users/blockObject/${userId}`);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export async function removeNotification(api, userId, options = {}) {
   try {
