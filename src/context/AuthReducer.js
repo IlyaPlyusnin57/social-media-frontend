@@ -268,6 +268,52 @@ export default function AuthReducer(state, action) {
 
       return { ...state, user: { ...state.user, following: newFollowingArr } };
     }
+    case "ADD_BLOCKED_USER": {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          blocked: [...state.user.blocked, action.payload],
+        },
+      };
+    }
+    case "REMOVE_BLOCKED_USER": {
+      const newblockedArray = state.user.blocked.filter(
+        (userId) => userId !== action.payload
+      );
+
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          blocked: newblockedArray,
+        },
+      };
+    }
+    case "SET_BLOCK_OBJECT": {
+      return {
+        ...state,
+        blocks: action.payload,
+      };
+    }
+    case "ADD_TO_BLOCK_OBJECT": {
+      const newArray = [state.blocks, action.payload];
+
+      return {
+        ...state,
+        blocks: newArray,
+      };
+    }
+    case "REMOVE_FROM_BLOCK_OBJECT": {
+      const newArray = state.blocks.filter(
+        (userId) => userId !== action.payload
+      );
+
+      return {
+        ...state,
+        blocks: newArray,
+      };
+    }
     default:
       return state;
   }

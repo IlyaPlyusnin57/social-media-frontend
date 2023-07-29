@@ -9,7 +9,7 @@ import { io } from "socket.io-client";
 import AuthReducer from "./AuthReducer";
 import profilePicture from "../helper_functions/profilePicture";
 import useAxiosConfig from "../api/useAxiosConfig";
-import { getNotifications } from "../apiCalls";
+import { getNotifications, getBlockObject } from "../apiCalls";
 
 const INITIAL_STATE = {
   user: JSON.parse(sessionStorage.getItem("user")) || null,
@@ -23,6 +23,7 @@ const INITIAL_STATE = {
     variousNotifications: [],
   },
   viewingConversation: false,
+  blocks: [],
 };
 
 const AuthContext = createContext(INITIAL_STATE);
@@ -108,8 +109,24 @@ function AuthContextProvider({ children }) {
       socket.current.on("getCommentNotification", (commentObject) => {
         dispatch({ type: "SET_VARIOUS_NOTIFICATION", payload: commentObject });
       });
+
+      socket.current.on("getBlockNotification", (blockObject, isBlocking) => {
+        if (isBlocking) {
+          dispatch({
+            type: "ADD_TO_BLOCK_OBJECT",
+            payload: blockObject.liker._id,
+          });
+        } else {
+          dispatch({
+            type: "REMOVE_FROM_BLOCK_OBJECT",
+            payload: blockObject.liker._id,
+          });
+        }
+
+        dispatch({ type: "SET_VARIOUS_NOTIFICATION", payload: blockObject });
+      });
     }
-  }, [state.user?._id, state.viewingConversation, api]);
+  }, [state.user?._id, state.viewingConversation]);
 
   useEffect(() => {
     const getNotificationObject = async () => {
@@ -120,7 +137,17 @@ function AuthContextProvider({ children }) {
     };
 
     state.user && getNotificationObject();
-  }, [api, state.user]);
+
+    const getBlock = async () => {
+      const res = await getBlockObject(api, state.user._id);
+
+      if (res.status === 200) {
+        dispatch({ type: "SET_BLOCK_OBJECT", payload: res.data });
+      }
+    };
+
+    state.user && getBlock();
+  }, [api, state?.user]);
 
   return (
     <AuthContext.Provider
@@ -134,6 +161,7 @@ function AuthContextProvider({ children }) {
         socket: state.socket,
         notifications: state.notifications,
         viewingConversation: state.viewingConversation,
+        blocks: state.blocks,
       }}
     >
       {children}
