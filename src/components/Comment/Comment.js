@@ -80,6 +80,7 @@ const Comment = memo(function Comment({
   post,
   removePostFromPage,
   replies,
+  edited,
   commentType,
   setReplyNumParent,
   parentId,
@@ -97,6 +98,7 @@ const Comment = memo(function Comment({
   const replyValue = useRef(null);
   const [showReplies, setShowReplies] = useState(false);
   const [replyNum, setReplyNum] = useState(replies);
+  const [isEdited, setEdited] = useState(edited);
 
   const { taggedUser, untaggedText } = useMemo(() => {
     if (commentText.at(0) !== "@") {
@@ -185,14 +187,20 @@ const Comment = memo(function Comment({
 
     const res = await editComment(api, {
       commentId: _id,
+      commenter: currentUser,
       text: value,
       type: commentType,
       postId: post._id,
+      postUserId: post.userId,
     });
 
     if (res.status === 200) {
       setCommentText(value);
       setEdit(false);
+      !isEdited && setEdited(true);
+      if (currentUser._id !== post.userId) {
+        socket?.emit("sendComment", res.data);
+      }
     } else if (res.status === 404) {
       alert("Post does not exist anymore!");
       removePostFromPage();
@@ -355,7 +363,9 @@ const Comment = memo(function Comment({
                 <span className="username margin-right" onClick={goToUser}>
                   {username}
                 </span>
-                <span className="post-date">{format(createdAt)}</span>
+                <span className="post-date">
+                  {format(createdAt)} {isEdited && "(edited)"}
+                </span>
               </div>
               {edit ? (
                 <>
